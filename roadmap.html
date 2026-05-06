@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Day-by-Day Roadmap — DevOps Onboarding</title>
+<style>
+  :root {
+    --bg: #0b0d14;
+    --surface: #13161f;
+    --surface2: #1c2030;
+    --surface3: #242840;
+    --border: #2a2f45;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --green: #22c55e;
+    --green-dim: #14532d;
+    --yellow: #f59e0b;
+    --yellow-dim: #78350f;
+    --red: #ef4444;
+    --red-dim: #450a0a;
+    --blue: #38bdf8;
+    --blue-dim: #0c4a6e;
+    --purple: #a78bfa;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.65;
+  }
+
+  /* ── Topbar ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .logo h2 { font-size: 15px; font-weight: 700; }
+  .logo span { font-size: 12px; color: var(--muted); }
+  .topbar-right a {
+    color: var(--muted2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+  .topbar-right a:hover { background: var(--surface2); color: var(--text); }
+
+  /* ── Layout ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    max-width: 1180px;
+    margin: 0 auto;
+    gap: 32px;
+    padding: 32px 24px 80px;
+  }
+
+  /* ── Sidebar ── */
+  aside {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  aside h3 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 18px 0 8px;
+    padding-left: 12px;
+  }
+  aside h3:first-child { margin-top: 0; }
+  aside a {
+    display: block;
+    padding: 7px 12px;
+    color: var(--muted2);
+    text-decoration: none;
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  aside a:hover { color: var(--text); background: var(--surface); }
+  aside a.active { color: var(--accent2); border-left-color: var(--accent); background: var(--surface); }
+
+  /* ── Main ── */
+  main { min-width: 0; }
+  .hero { margin-bottom: 40px; }
+  .badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+  .hero .sub { color: var(--muted2); font-size: 15px; }
+
+  /* ── Sections ── */
+  section { margin-bottom: 48px; scroll-margin-top: 80px; }
+  section > h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  section p { margin-bottom: 12px; color: var(--muted2); font-size: 14.5px; }
+  section ul { margin: 8px 0 16px 20px; }
+  section ul li { margin-bottom: 6px; color: var(--muted2); font-size: 14.5px; }
+  section strong { color: var(--text); }
+  section em { color: var(--accent2); font-style: normal; font-weight: 500; }
+
+  /* ── Quote ── */
+  blockquote {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 18px;
+    margin: 12px 0 18px;
+    color: var(--text);
+    font-size: 15px;
+  }
+  blockquote strong { color: var(--accent2); }
+
+  /* ── Code ── */
+  code {
+    background: var(--surface2);
+    color: var(--accent2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+  blockquote code { background: var(--surface3); }
+
+  /* ── Tables ── */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--surface2);
+    font-weight: 600;
+    color: var(--text);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  td { color: var(--muted2); }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { font-weight: 600; color: var(--text); }
+
+  /* ── Day card ── */
+  .day {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 18px;
+    scroll-margin-top: 80px;
+  }
+  .day-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .day-num {
+    flex-shrink: 0;
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: var(--surface2);
+    border: 1.5px solid var(--accent);
+    color: var(--accent2);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .day-num strong { font-size: 18px; color: var(--text); margin-top: 3px; }
+  .day-title { flex: 1; }
+  .day-title h3 { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
+  .day-title p { font-size: 13px; color: var(--muted); margin: 0; }
+  .day.capstone .day-num { border-color: var(--green); background: var(--green-dim); color: var(--green); }
+  .day.capstone .day-num strong { color: #fff; }
+
+  .day h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 18px 0 10px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .day h4:first-of-type { margin-top: 14px; }
+  .day ul, .day ol { margin: 8px 0 12px 20px; }
+  .day ul li, .day ol li { margin-bottom: 5px; color: var(--muted2); font-size: 14px; }
+
+  .ai-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--purple);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 8px 0 14px;
+  }
+  .ai-box .ai-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .ai-box p { font-size: 14px; color: var(--muted2); margin-bottom: 8px; }
+  .ai-box p:last-child { margin-bottom: 0; }
+  .ai-box .prompt {
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-style: italic;
+    font-size: 14px;
+    margin: 8px 0;
+  }
+
+  .checkpoint {
+    background: var(--green-dim);
+    border-left: 3px solid var(--green);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-top: 12px;
+  }
+  .checkpoint .check-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .checkpoint ul { margin-bottom: 0; }
+  .checkpoint li { color: var(--text); font-size: 13.5px; }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    margin-top: 40px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer a { color: var(--accent2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── Mobile ── */
+  @media (max-width: 880px) {
+    .layout { grid-template-columns: 1fr; padding: 24px 16px 60px; }
+    aside {
+      position: static;
+      max-height: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 24px;
+      background: var(--surface);
+    }
+    aside h3 { padding-left: 0; }
+    aside a { padding: 6px 8px; border-left: none; border-radius: 6px; }
+    aside a.active { border-left: none; }
+    .hero h1 { font-size: 24px; }
+    .day { padding: 20px; }
+    .topbar { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">📋</div>
+    <div>
+      <h2>Day-by-Day Roadmap</h2>
+      <span>2-week sprint · practice first</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a href="index.html">← Home</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <aside>
+    <h3>Overview</h3>
+    <a href="#philosophy">Philosophy</a>
+    <a href="#skillmap">Skill Map</a>
+
+    <h3>10-Day Sprint</h3>
+    <a href="#day1">Day 1 · Linux & Shell</a>
+    <a href="#day2">Day 2 · Networking</a>
+    <a href="#day3">Day 3 · Docker</a>
+    <a href="#day4">Day 4 · Kubernetes</a>
+    <a href="#day5">Day 5 · K8s Advanced + Helm</a>
+    <a href="#day6">Day 6 · Cloud Foundations</a>
+    <a href="#day7">Day 7 · Terraform</a>
+    <a href="#day8">Day 8 · CI/CD</a>
+    <a href="#day9">Day 9 · Monitoring</a>
+    <a href="#day10">Day 10 · Capstone</a>
+
+    <h3>Reference</h3>
+    <a href="#dsa">Problem-Solving</a>
+    <a href="#ai-prompts">AI Prompts</a>
+    <a href="#trainer-notes">Trainer Notes</a>
+    <a href="#resources">Resources</a>
+  </aside>
+
+  <main>
+
+    <div class="hero">
+      <div class="badge">2-Week Sprint · Practice First · AI-Accelerated</div>
+      <h1>DevOps & Cloud — Onboarding Roadmap</h1>
+      <p class="sub">Use this as a reference alongside the EcoTrack story training. Each day = one concept, one lab, one AI challenge.</p>
+    </div>
+
+    <section id="philosophy">
+      <h2>Philosophy</h2>
+      <blockquote><strong>Do &gt; Read &gt; Memorize.</strong> Break things. Fix things. Ask AI why it broke.</blockquote>
+      <ul>
+        <li>Every day = 1 core concept + 1 real hands-on lab + 1 AI challenge</li>
+        <li>Theory is the minimum needed to start doing — go deeper only when blocked</li>
+        <li>Use AI tools (Claude, Copilot, ChatGPT) as a senior pair-programmer, not as a copy-paste machine</li>
+        <li>You must be able to explain what you did and why — not just show it works</li>
+      </ul>
+      <p><strong>AI Rule of Thumb:</strong></p>
+      <ul>
+        <li>✅ Use AI to explain an error you don't understand</li>
+        <li>✅ Use AI to generate boilerplate — then read every line and modify it</li>
+        <li>✅ Use AI to quiz you at the end of each day</li>
+        <li>❌ Do not use AI to skip the lab — the muscle memory is the point</li>
+      </ul>
+    </section>
+
+    <section id="skillmap">
+      <h2>Skill Map</h2>
+      <table>
+        <thead><tr><th>Area</th><th>Tools</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td>OS & Shell</td><td>Linux (Ubuntu), Bash</td><td>🔴 Must</td></tr>
+          <tr><td>Containers</td><td>Docker, Docker Compose</td><td>🔴 Must</td></tr>
+          <tr><td>Orchestration</td><td>Kubernetes, Helm</td><td>🔴 Must</td></tr>
+          <tr><td>Cloud</td><td>AWS + GCP/Azure</td><td>🔴 Must</td></tr>
+          <tr><td>IaC</td><td>Terraform</td><td>🔴 Must</td></tr>
+          <tr><td>Monitoring</td><td>Prometheus, Grafana, CloudWatch</td><td>🟡 Important</td></tr>
+          <tr><td>CI/CD</td><td>GitHub Actions</td><td>🟡 Important</td></tr>
+          <tr><td>Problem-Solving</td><td>DSA mindset, debugging loops</td><td>🟢 Good to have</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <h2 style="font-size:24px; margin: 40px 0 20px;">Day-by-Day Sprint</h2>
+
+    <div class="day" id="day1">
+      <div class="day-head">
+        <div class="day-num">Day<strong>1</strong></div>
+        <div class="day-title"><h3>Linux OS & Shell Survival Kit</h3><p>Navigate any Linux machine confidently. Understand processes, permissions, and logs.</p></div>
+      </div>
+      <h4>Core Concepts (30 min)</h4>
+      <ul>
+        <li>File system hierarchy: <code>/</code>, <code>/etc</code>, <code>/var</code>, <code>/tmp</code>, <code>/home</code></li>
+        <li>Permissions: <code>rwx</code>, <code>chmod</code>, <code>chown</code>, <code>sudo</code></li>
+        <li>Processes: <code>ps</code>, <code>top</code>, <code>htop</code>, <code>kill</code>, <code>systemctl</code></li>
+        <li>Logs: <code>journalctl</code>, <code>/var/log/</code>, <code>tail -f</code></li>
+        <li>Text tools: <code>grep</code>, <code>awk</code>, <code>sed</code>, <code>cat</code>, <code>less</code>, <code>find</code></li>
+      </ul>
+      <h4>Hands-on Lab</h4>
+      <ol>
+        <li>Spin up a fresh Ubuntu VM (local or cloud)</li>
+        <li>Create a user, assign it a group, restrict sudo access</li>
+        <li>Write a bash script that monitors disk usage every 10s and logs to a file when usage &gt; 80%</li>
+        <li>Simulate a "high CPU" process, find it with <code>ps</code>/<code>htop</code>, and kill it gracefully then forcefully</li>
+        <li>Use <code>grep</code> + <code>awk</code> to extract the last 50 error lines from <code>/var/log/syslog</code></li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge</div>
+        <p>Paste a real error from your lab into Claude and ask:</p>
+        <div class="prompt">"Explain this Linux error to me. What caused it? How do I fix it? What should I know to prevent it?"</div>
+        <p>Then fix it yourself — no copy-pasting the solution directly.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Checkpoint — can you answer these?</div>
+        <ul>
+          <li>What's the difference between <code>kill</code> and <code>kill -9</code>?</li>
+          <li>A service is failing at startup. How do you diagnose it?</li>
+          <li>You don't have permission to read a file. What are your options?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day" id="day2">
+      <div class="day-head">
+        <div class="day-num">Day<strong>2</strong></div>
+        <div class="day-title"><h3>Networking Fundamentals for DevOps</h3><p>Understand how traffic flows. Diagnose connectivity issues without guessing.</p></div>
+      </div>
+      <h4>Core Concepts (30 min)</h4>
+      <ul>
+        <li>IP, subnets, CIDR notation (e.g. <code>10.0.0.0/24</code>)</li>
+        <li>DNS: how resolution works, <code>/etc/hosts</code>, <code>dig</code>, <code>nslookup</code></li>
+        <li>TCP vs UDP, ports, sockets</li>
+        <li>HTTP/HTTPS basics: status codes, headers, request/response</li>
+        <li>Firewall: <code>ufw</code>, <code>iptables</code> basics, security groups</li>
+      </ul>
+      <h4>Hands-on Lab</h4>
+      <ol>
+        <li>Use <code>curl -v</code> to inspect an HTTP request/response end-to-end</li>
+        <li>Set up a simple Python HTTP server (<code>python3 -m http.server</code>), hit it with curl, watch with <code>tcpdump</code></li>
+        <li>Configure <code>ufw</code> to allow only port 22 and 8080, block everything else — verify it works</li>
+        <li>Use <code>dig</code> to trace how <code>google.com</code> resolves. Then add a fake DNS entry in <code>/etc/hosts</code> and observe the override</li>
+        <li>Map out what happens network-wise when you run <code>kubectl apply</code> (conceptual — draw or describe)</li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge</div>
+        <p>Give Claude this prompt:</p>
+        <div class="prompt">"Quiz me on networking concepts a DevOps engineer must know. Ask 5 questions, one at a time. Tell me if I'm right or wrong and explain why."</div>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Checkpoint</div>
+        <ul>
+          <li>A pod can't reach another service. What are your first 3 debugging steps?</li>
+          <li>What does a <code>502 Bad Gateway</code> tell you?</li>
+          <li>Your DNS change isn't propagating. What do you check?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day" id="day3">
+      <div class="day-head">
+        <div class="day-num">Day<strong>3</strong></div>
+        <div class="day-title"><h3>Docker: Containers from Scratch</h3><p>Build, run, debug, and compose containers. Understand what Docker actually does under the hood.</p></div>
+      </div>
+      <h4>Core Concepts (30 min)</h4>
+      <ul>
+        <li>Container vs VM — what's actually different</li>
+        <li>Image layers, caching, Dockerfile best practices</li>
+        <li>Networking: bridge, host, none</li>
+        <li>Volumes and bind mounts</li>
+        <li><code>docker-compose</code> for multi-container apps</li>
+      </ul>
+      <h4>Hands-on Lab</h4>
+      <ol>
+        <li>Pull <code>nginx</code>, run it, expose port 80, visit it in browser</li>
+        <li>Write a Dockerfile for a simple Node.js or Python app from scratch — no base bloat, multi-stage build</li>
+        <li>Use <code>docker exec</code> to get inside a running container and inspect it</li>
+        <li>Intentionally break the Dockerfile (wrong port, missing dependency) — fix it using logs</li>
+        <li>Write a <code>docker-compose.yml</code> with: app + Postgres + Redis. Make them communicate. Verify with <code>docker network inspect</code></li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge</div>
+        <p>Ask Claude:</p>
+        <div class="prompt">"Review my Dockerfile and tell me: any security issues? Any layer cache inefficiencies? How would you improve it?"</div>
+        <p>Paste your Dockerfile and apply at least 2 of its suggestions — then explain why those suggestions matter.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Checkpoint</div>
+        <ul>
+          <li>What happens to data when a container is removed? How do you persist it?</li>
+          <li>Why use multi-stage builds?</li>
+          <li>Your container exits immediately after starting. How do you debug it?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day" id="day4">
+      <div class="day-head">
+        <div class="day-num">Day<strong>4</strong></div>
+        <div class="day-title"><h3>Kubernetes Fundamentals</h3><p>Deploy and manage workloads on Kubernetes. Understand the control loop model.</p></div>
+      </div>
+      <h4>Core Concepts (30 min)</h4>
+      <ul>
+        <li>Architecture: control plane vs worker nodes, API server, etcd, kubelet</li>
+        <li>Core objects: Pod, Deployment, ReplicaSet, Service, Namespace</li>
+        <li><code>kubectl</code> essential commands</li>
+        <li>Labels, selectors, and why they matter</li>
+        <li>Desired state vs actual state — the reconciliation loop</li>
+      </ul>
+      <h4>Hands-on Lab</h4>
+      <p>Setup: use <code>minikube</code> or a free cluster (kind, k3s, or a cloud sandbox)</p>
+      <ol>
+        <li>Deploy nginx as a Deployment with 3 replicas. Verify pods are running</li>
+        <li>Expose it as a <code>ClusterIP</code> service, then a <code>NodePort</code> — test both</li>
+        <li>Scale it to 5 replicas. Then force-delete one pod. Watch what happens</li>
+        <li>Roll out an update (new image tag). Then roll it back</li>
+        <li>Create two Namespaces (<code>staging</code>, <code>production</code>). Deploy the same app in both with different env vars using ConfigMaps</li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge</div>
+        <p>Copy a failing <code>kubectl describe pod</code> output and ask Claude:</p>
+        <div class="prompt">"This Kubernetes pod is failing. Walk me through what each section of this output means and what the likely cause is."</div>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Checkpoint</div>
+        <ul>
+          <li>What's the difference between a Pod and a Deployment?</li>
+          <li>A pod is stuck in <code>CrashLoopBackOff</code>. What do you do?</li>
+          <li>How does a Service find the right pods?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day" id="day5">
+      <div class="day-head">
+        <div class="day-num">Day<strong>5</strong></div>
+        <div class="day-title"><h3>Kubernetes Advanced + Helm</h3><p>Manage real-world Kubernetes configs. Package and template with Helm.</p></div>
+      </div>
+      <h4>Core Concepts (30 min)</h4>
+      <ul>
+        <li>ConfigMaps and Secrets (and why you don't commit secrets to git)</li>
+        <li>Resource requests and limits</li>
+        <li>Liveness and readiness probes</li>
+        <li>Helm: charts, values, templates, release lifecycle</li>
+        <li><code>helm install</code>, <code>upgrade</code>, <code>rollback</code>, <code>uninstall</code></li>
+      </ul>
+      <h4>Hands-on Lab</h4>
+      <ol>
+        <li>Add liveness and readiness probes to your Day 4 deployment. Intentionally misconfigure one to see what happens</li>
+        <li>Mount a ConfigMap as environment variables AND as a file volume</li>
+        <li>Create a Secret for a database password. Mount it as an env var. Never hardcode it</li>
+        <li>Install a public Helm chart (e.g. <code>bitnami/postgresql</code>). Inspect its values, override 2 settings</li>
+        <li>Write your own minimal Helm chart for the app from Day 3 — with configurable replicas and image tag in <code>values.yaml</code></li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge</div>
+        <p>Ask Claude:</p>
+        <div class="prompt">"Generate a production-ready Helm chart for a Node.js app with: configurable replicas, resource limits, liveness/readiness probes, and a secret for DB password. Then explain what each template file does."</div>
+        <p>Read the output line by line. Modify the values to match your setup.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Checkpoint</div>
+        <ul>
+          <li>Why are readiness probes critical in production?</li>
+          <li>What's the difference between a ConfigMap and a Secret in terms of security?</li>
+          <li>Your Helm upgrade broke production. How do you recover in under 2 minutes?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day" id="day6">
+      <div class="day-head">
+        <div class="day-num">Day<strong>6</strong></div>
+        <div class="day-title"><h3>Cloud Foundations (AWS + GCP/Azure)</h3><p>Understand core cloud primitives. Navigate IAM, networking, compute, and storage without the console.</p></div>
+      </div>
+      <h4>Core Concepts (30 min)</h4>
+      <ul>
+        <li>IAM: users, roles, policies, least privilege principle</li>
+        <li>VPC/VNet: subnets, routing tables, NAT gateways, security groups</li>
+        <li>Compute: EC2/GCE/VM — instance types, SSH, user data scripts</li>
+        <li>Storage: S3/GCS/Blob — buckets, permissions, lifecycle policies</li>
+        <li>CLI-first mindset: <code>aws</code> CLI, <code>gcloud</code> CLI, <code>az</code> CLI</li>
+      </ul>
+      <h4>Hands-on Lab</h4>
+      <p>Pick AWS + one of GCP/Azure (your team's actual stack)</p>
+      <ol>
+        <li>Create an IAM user with least-privilege access. Configure CLI. Never use root</li>
+        <li>Launch an EC2 (or GCE) instance via CLI only — no console. SSH into it</li>
+        <li>Create a VPC with public and private subnets. Deploy something in each. Verify the private one can't be reached from outside</li>
+        <li>Create an S3 bucket. Upload a file via CLI. Make it public. Then lock it down and verify access denied</li>
+        <li>Write a user data script that auto-installs nginx on instance launch — verify it's running on boot</li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge</div>
+        <p>Ask Claude:</p>
+        <div class="prompt">"I'm setting up AWS for a new DevOps team. What IAM policies, VPC design, and S3 configurations would you recommend as a secure baseline? Explain the reasoning behind each decision."</div>
+        <p>Compare with what you built. What would you change?</p>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Checkpoint</div>
+        <ul>
+          <li>You accidentally expose an S3 bucket publicly. What's your response plan?</li>
+          <li>What's the difference between a Security Group and a NACL on AWS?</li>
+          <li>A new developer needs read access to S3 and nothing else. How do you set that up?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day" id="day7">
+      <div class="day-head">
+        <div class="day-num">Day<strong>7</strong></div>
+        <div class="day-title"><h3>Infrastructure as Code with Terraform</h3><p>Provision and manage real infrastructure with code. Understand state, drift, and the plan/apply loop.</p></div>
+      </div>
+      <h4>Core Concepts (30 min)</h4>
+      <ul>
+        <li>Providers, resources, data sources, variables, outputs</li>
+        <li>State file: what it is, why it matters, remote backends</li>
+        <li><code>terraform init</code>, <code>plan</code>, <code>apply</code>, <code>destroy</code></li>
+        <li>Modules: reusability and structure</li>
+        <li>Drift: what happens when someone changes infra manually</li>
+      </ul>
+      <h4>Hands-on Lab</h4>
+      <ol>
+        <li>Write Terraform to provision: 1 VPC + 2 subnets + 1 EC2 instance + 1 security group</li>
+        <li>Run <code>terraform plan</code> — read the output carefully before applying</li>
+        <li>Change the instance type in code. Run plan. See what changes before applying</li>
+        <li>Manually change a tag in the AWS console. Run <code>terraform plan</code> — observe drift</li>
+        <li>Extract the EC2 + security group into a reusable module. Call it twice for two environments</li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge</div>
+        <p>Ask Claude:</p>
+        <div class="prompt">"Write a Terraform module for a secure EC2 instance with: SSH access restricted to my IP, an attached EBS volume, and outputs for public IP and instance ID."</div>
+        <p>Read every resource block. Then add: an S3 backend for remote state storage.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Checkpoint</div>
+        <ul>
+          <li>Why should you never edit the state file manually?</li>
+          <li>What's the risk of running <code>terraform apply</code> without reading <code>plan</code> first?</li>
+          <li>How do you handle secrets (like DB passwords) in Terraform without committing them?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day" id="day8">
+      <div class="day-head">
+        <div class="day-num">Day<strong>8</strong></div>
+        <div class="day-title"><h3>CI/CD Pipeline with GitHub Actions</h3><p>Automate build, test, and deploy. Understand the pipeline as infrastructure.</p></div>
+      </div>
+      <h4>Core Concepts (30 min)</h4>
+      <ul>
+        <li>Triggers: <code>push</code>, <code>pull_request</code>, <code>schedule</code>, manual dispatch</li>
+        <li>Jobs, steps, runners, environments</li>
+        <li>Secrets in GitHub Actions</li>
+        <li>Build → Test → Push image → Deploy to K8s flow</li>
+        <li>Artifacts and caching</li>
+      </ul>
+      <h4>Hands-on Lab</h4>
+      <ol>
+        <li>Create a workflow that runs on every push to <code>main</code>: lint + test + build Docker image</li>
+        <li>Push the image to Docker Hub or ECR on successful build — use GitHub Secrets for credentials</li>
+        <li>Add a manual approval gate before deploying to "production"</li>
+        <li>Intentionally break the test step. See the pipeline fail. Fix it</li>
+        <li>Add a Slack (or email) notification on pipeline failure — use a marketplace action</li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge</div>
+        <p>Give Claude your workflow YAML and ask:</p>
+        <div class="prompt">"Review this GitHub Actions workflow. What are the security risks? Are there any inefficiencies? What would make this production-grade?"</div>
+        <p>Apply at least 3 suggestions.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Checkpoint</div>
+        <ul>
+          <li>A pipeline has been running for 45 minutes. It's usually done in 5. What do you do?</li>
+          <li>How do you prevent secrets from being exposed in pipeline logs?</li>
+          <li>What's the difference between a job and a step?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day" id="day9">
+      <div class="day-head">
+        <div class="day-num">Day<strong>9</strong></div>
+        <div class="day-title"><h3>Monitoring & Observability</h3><p>Know what's happening in production before users tell you something's wrong.</p></div>
+      </div>
+      <h4>Core Concepts (30 min)</h4>
+      <ul>
+        <li>The three pillars: Metrics, Logs, Traces</li>
+        <li>Prometheus: scraping, metrics types (counter, gauge, histogram)</li>
+        <li>Grafana: dashboards, alerting</li>
+        <li>CloudWatch / Cloud Monitoring for cloud-native metrics</li>
+        <li>The golden signals: Latency, Traffic, Errors, Saturation (LTES)</li>
+      </ul>
+      <h4>Hands-on Lab</h4>
+      <ol>
+        <li>Deploy Prometheus + Grafana on your K8s cluster (use Helm: <code>kube-prometheus-stack</code>)</li>
+        <li>Build a Grafana dashboard showing: CPU, memory, pod restarts, request rate</li>
+        <li>Set up an alert that fires when any pod restarts more than 3 times in 5 minutes</li>
+        <li>Deploy a sample app that has a <code>/metrics</code> endpoint. Scrape it with Prometheus. Graph it</li>
+        <li>Simulate a problem (high CPU, memory leak, OOM kill). Catch it using your dashboard before "a user reports it"</li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge</div>
+        <p>Ask Claude:</p>
+        <div class="prompt">"I'm setting up monitoring for a Kubernetes cluster running a Node.js API. What Prometheus metrics should I track? What alert thresholds would you recommend? Build me a Grafana dashboard JSON for the 5 most important panels."</div>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Checkpoint</div>
+        <ul>
+          <li>Latency p99 suddenly spikes. Where do you look first?</li>
+          <li>What's the difference between a metric and a log?</li>
+          <li>Your alert fires every night at 3am and auto-resolves by 3:10am. What do you investigate?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day capstone" id="day10">
+      <div class="day-head">
+        <div class="day-num">Day<strong>10</strong></div>
+        <div class="day-title"><h3>Capstone: Ship a Real Thing</h3><p>Integrate everything. Deploy a real app end-to-end with cloud, IaC, containers, CI/CD, and monitoring.</p></div>
+      </div>
+      <h4>The Challenge</h4>
+      <p>Deploy a simple web app (Node.js, Python, or Go) with:</p>
+      <table>
+        <thead><tr><th>Requirement</th><th>Tool</th></tr></thead>
+        <tbody>
+          <tr><td>Containerized</td><td>Docker + multi-stage build</td></tr>
+          <tr><td>Deployed on K8s</td><td>Deployment + Service + Helm chart</td></tr>
+          <tr><td>Infrastructure provisioned</td><td>Terraform (VPC, cluster, or VM)</td></tr>
+          <tr><td>Automated deploy</td><td>GitHub Actions pipeline</td></tr>
+          <tr><td>Observable</td><td>Prometheus metrics + Grafana dashboard + 1 alert</td></tr>
+          <tr><td>Config managed properly</td><td>ConfigMap + Secrets (no hardcoded values)</td></tr>
+          <tr><td>Cloud storage</td><td>S3/GCS bucket via Terraform</td></tr>
+        </tbody>
+      </table>
+      <h4>Rules</h4>
+      <ul>
+        <li>Everything as code — nothing clicked manually</li>
+        <li>If it breaks, debug it yourself first (10 min rule), then use AI</li>
+        <li>Document your runbook: "How to deploy, how to scale, how to roll back"</li>
+      </ul>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI Challenge — Problem-Solving Mindset</div>
+        <p>After deploying, ask Claude:</p>
+        <div class="prompt">"Here's my architecture [describe it]. What are the top 3 single points of failure? What would happen if the database pod crashes? Walk me through a disaster recovery plan."</div>
+        <p>Then actually test one failure scenario.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="check-label">✅ Final Checkpoint — present to your trainer</div>
+        <ul>
+          <li>Walk through the full deployment flow from <code>git push</code> to live traffic</li>
+          <li>Show a Grafana dashboard with real data</li>
+          <li>Simulate one failure and recover from it live</li>
+          <li>Explain: what would you do differently in a real production setup?</li>
+        </ul>
+      </div>
+    </div>
+
+    <section id="dsa">
+      <h2>DSA & Problem-Solving Mindset</h2>
+      <p>You don't need LeetCode hard. You need the thinking pattern.</p>
+      <p><strong>What DevOps engineers actually solve:</strong></p>
+      <ul>
+        <li>"This pipeline is slow — where's the bottleneck?" → profiling, binary search on steps</li>
+        <li>"The cluster is OOM — what's consuming memory?" → top-down elimination</li>
+        <li>"Deploy works locally but fails in CI" → environment diff analysis</li>
+      </ul>
+      <p><strong>Build the habit:</strong></p>
+      <ul>
+        <li>When something breaks: form a hypothesis first, then test it</li>
+        <li>When debugging: reproduce in isolation before adding complexity</li>
+        <li>When optimizing: measure first, never guess</li>
+      </ul>
+      <p><strong>One exercise per week:</strong> Pick any real incident from your team (or a public postmortem). Read it. Then answer:</p>
+      <ol>
+        <li>What was the root cause?</li>
+        <li>What signals were missed?</li>
+        <li>What would you have done differently?</li>
+      </ol>
+      <div class="ai-box">
+        <div class="ai-label">🤖 AI for problem-solving</div>
+        <div class="prompt">"Walk me through debugging this production issue step by step. I want to think through it — don't give me the answer, ask me guiding questions."</div>
+      </div>
+    </section>
+
+    <section id="ai-prompts">
+      <h2>How to Use AI to Speed Up Learning</h2>
+      <table>
+        <thead><tr><th>Scenario</th><th>Prompt to use</th></tr></thead>
+        <tbody>
+          <tr><td>Stuck on an error</td><td>"Explain this error: [paste]. What caused it, how do I fix it, and what does it teach me?"</td></tr>
+          <tr><td>Don't understand a concept</td><td>"Explain [concept] using a real-world analogy. Then give me a 5-minute hands-on exercise to try it."</td></tr>
+          <tr><td>Want to go deeper</td><td>"I know [topic] at a basic level. What are the 3 most important things I'm probably missing?"</td></tr>
+          <tr><td>Verify understanding</td><td>"I'm going to explain [topic] to you. Tell me what I got wrong or oversimplified."</td></tr>
+          <tr><td>Code review</td><td>"Review this [Dockerfile/Terraform/YAML]. Security issues? Improvements? Why?"</td></tr>
+          <tr><td>Quiz yourself</td><td>"Quiz me on [topic]. 5 questions, one at a time. Don't reveal the answer until I answer."</td></tr>
+          <tr><td>Prepare for real work</td><td>"Simulate a production incident involving [topic]. I'm the on-call engineer. Go."</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="trainer-notes">
+      <h2>Trainer Notes</h2>
+      <p><strong>Your job is not to teach — it's to unblock.</strong></p>
+      <ul>
+        <li>Check in once per day: "What broke today? How did you debug it?"</li>
+        <li>Don't give answers immediately — ask "what have you tried?" first</li>
+        <li>Encourage the 10-minute rule: struggle alone for 10 minutes, then ask</li>
+        <li>After Day 10 capstone: do a short debrief on what they'd do differently</li>
+        <li>Watch for the "it works but I don't know why" pattern — that's where to probe</li>
+      </ul>
+      <p><strong>Good questions to ask trainees:</strong></p>
+      <ul>
+        <li>"Walk me through what happens when you run <code>kubectl apply</code>"</li>
+        <li>"Your Terraform plan shows a resource will be destroyed. Is that expected?"</li>
+        <li>"How would you explain this monitoring alert to a non-technical stakeholder?"</li>
+      </ul>
+    </section>
+
+    <section id="resources">
+      <h2>Resources</h2>
+      <ul>
+        <li><strong>Linux:</strong> <a href="https://linuxcommand.org" target="_blank" rel="noopener" style="color:var(--accent2);">linuxcommand.org</a>, <code>man</code> pages</li>
+        <li><strong>Docker:</strong> <a href="https://docs.docker.com" target="_blank" rel="noopener" style="color:var(--accent2);">docs.docker.com</a></li>
+        <li><strong>Kubernetes:</strong> <a href="https://kubernetes.io/docs" target="_blank" rel="noopener" style="color:var(--accent2);">kubernetes.io/docs</a>, killer.sh for practice</li>
+        <li><strong>Terraform:</strong> <a href="https://developer.hashicorp.com/terraform/docs" target="_blank" rel="noopener" style="color:var(--accent2);">developer.hashicorp.com/terraform</a></li>
+        <li><strong>AWS:</strong> <a href="https://docs.aws.amazon.com" target="_blank" rel="noopener" style="color:var(--accent2);">docs.aws.amazon.com</a>, AWS Free Tier</li>
+        <li><strong>GCP:</strong> <a href="https://cloud.google.com/docs" target="_blank" rel="noopener" style="color:var(--accent2);">cloud.google.com/docs</a>, GCP Free Tier</li>
+        <li><strong>Monitoring:</strong> Prometheus docs, Grafana Labs docs</li>
+        <li><strong>Postmortems to read:</strong> <a href="https://sre.google/sre-book/table-of-contents/" target="_blank" rel="noopener" style="color:var(--accent2);">sre.google/sre-book</a>, <a href="https://github.com/danluu/post-mortems" target="_blank" rel="noopener" style="color:var(--accent2);">github.com/danluu/post-mortems</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <p><a href="index.html">← Back home</a> · <a href="ecotrack-story-training.html">EcoTrack story training</a></p>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // Highlight active section in sidebar as user scrolls
+  const links = document.querySelectorAll('aside a');
+  const targets = Array.from(links).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-80px 0px -60% 0px' });
+  targets.forEach(t => observer.observe(t));
+</script>
+
+</body>
+</html>

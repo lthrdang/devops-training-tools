@@ -2,6 +2,8 @@
 
 > **Practice over theory. Doing over memorizing. AI as a tool, not a shortcut.**
 
+> 🌐 **Open [`index.html`](index.html) in a browser** for the visual landing page. This README is the same content for GitHub viewers.
+
 This repository is a complete onboarding system for new DevOps and Cloud team members — from their first day to their first real task. Everything lives here: the learning path, the story-driven labs, the pre-assessment, and the trainer's evaluation guide.
 
 ---
@@ -75,7 +77,7 @@ Also includes: a full [AI usage guide](#) showing which prompts to use for each 
 
 ---
 
-### 📋 [Trainer Assessment Rubric](trainer-assessment-rubric.html)
+### 📋 [Trainer Assessment Rubric](trainer/assessment-rubric.html)
 **For trainers only — used at the Day 10 capstone.**
 
 A structured evaluation guide the trainer fills in during the final presentation. Covers all 8 skill areas with specific probe questions and a 0–3 rating scale. Includes a live demo checklist and a final recommendation (ready for independent work / needs pairing / second sprint).
@@ -84,7 +86,7 @@ Scores auto-calculate, state saves in the browser, and there's a Print to PDF bu
 
 ---
 
-### 📊 [Trainer Dashboard](trainer-dashboard.html)
+### 📊 [Trainer Dashboard](trainer/dashboard.html)
 **For trainers — cohort overview across all trainees.**
 
 Open the `progress/` folder to instantly see every trainee's pre-test score, chapter progress, top skill gap, and assessment result in one table. Click any row for a full breakdown. Supports drag-and-drop of individual files too.
@@ -105,10 +107,10 @@ Each trainee's progress is stored as a single JSON file in the `progress/` folde
 5. `git commit` your progress file so the trainer can see it
 
 **For trainers:**
-1. Open [Trainer Dashboard](trainer-dashboard.html)
+1. Open [Trainer Dashboard](trainer/dashboard.html)
 2. Click **Open progress/ folder** and select the `progress/` folder from this repo
 3. See the full cohort at a glance — pre-test scores, chapters done, assessment status
-4. After the Day 10 capstone, export the completed [Assessment Rubric](trainer-assessment-rubric.html) and update the trainee's JSON with the results
+4. After the Day 10 capstone, export the completed [Assessment Rubric](trainer/assessment-rubric.html) and update the trainee's JSON with the results
 
 ### JSON schema
 
@@ -187,7 +189,7 @@ Your role is to **unblock, not to teach**. The story and labs do the teaching. Y
 - Check in once per day: *"What broke today? How did you debug it?"*
 - Ask "what have you tried?" before giving answers
 - Watch for **"it works but I don't know why"** — that's where to probe
-- Run the [Day 10 assessment](trainer-assessment-rubric.html) as the final gate
+- Run the [Day 10 assessment](trainer/assessment-rubric.html) as the final gate
 
 **The 10-minute rule:** trainees struggle alone for 10 minutes before asking. Productive struggle builds the instinct. Immediate answers prevent it.
 
@@ -198,11 +200,14 @@ Your role is to **unblock, not to teach**. The story and labs do the teaching. Y
 ```
 training-tools/
 ├── README.md                           ← you are here
+├── index.html                          ← trainee landing page
 ├── devops-pretest.html                 ← step 1: pre-assessment
 ├── ecotrack-story-training.html        ← step 2: story-driven labs
 ├── devops-cloud-onboarding-roadmap.md  ← reference alongside the story
-├── trainer-assessment-rubric.html      ← trainer only, Day 10 capstone
-├── trainer-dashboard.html             ← trainer only, cohort overview
+├── trainer/                            ← separate trainer-only site
+│   ├── index.html                      ← trainer console landing page
+│   ├── dashboard.html                  ← cohort overview
+│   └── assessment-rubric.html          ← Day 10 capstone
 └── progress/
     ├── _template.json                  ← blank schema for a new trainee
     ├── example-trainee.json            ← filled example

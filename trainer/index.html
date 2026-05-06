@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trainer Console — DevOps Onboarding</title>
+<style>
+  :root {
+    --bg: #0b0d14;
+    --surface: #13161f;
+    --surface2: #1c2030;
+    --surface3: #242840;
+    --border: #2a2f45;
+    --accent: #38bdf8;
+    --accent2: #7dd3fc;
+    --accent-dim: #0c4a6e;
+    --green: #22c55e;
+    --green-dim: #14532d;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── Topbar ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), #1e40af);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo h2 { font-size: 16px; font-weight: 700; }
+  .logo span { font-size: 12px; color: var(--muted); }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .topbar-right a {
+    color: var(--muted2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .topbar-right a:hover { background: var(--surface2); color: var(--text); }
+  .role-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-dim);
+    color: var(--accent2);
+    border: 1px solid var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  /* ── Wrap ── */
+  .wrap { max-width: 980px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ── Hero ── */
+  .hero { margin-bottom: 48px; }
+  .hero h1 { font-size: 34px; font-weight: 800; margin-bottom: 10px; }
+  .hero p { color: var(--muted2); font-size: 16px; max-width: 640px; }
+
+  /* ── Section ── */
+  section { margin-bottom: 56px; }
+  .section-header { margin-bottom: 20px; }
+  .section-header h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .section-header p { color: var(--muted); font-size: 13px; }
+
+  /* ── Tool cards ── */
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+  }
+  .tool {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, transform 0.15s;
+    display: flex;
+    flex-direction: column;
+  }
+  .tool:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .tool-icon {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: var(--accent-dim);
+    color: var(--accent2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  .tool h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .tool p { color: var(--muted2); font-size: 14px; line-height: 1.55; flex: 1; }
+  .tool-cta {
+    margin-top: 18px;
+    color: var(--accent2);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* ── Workflow steps ── */
+  .steps {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 0;
+  }
+  .step {
+    display: flex;
+    gap: 18px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    color: var(--accent2);
+    border: 1px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .step-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .step-body p { font-size: 13px; color: var(--muted2); }
+  .step-body code {
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--accent2);
+  }
+
+  /* ── Principles ── */
+  .principles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .principle {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+  }
+  .principle h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--accent2); }
+  .principle p { font-size: 13px; color: var(--muted2); line-height: 1.6; }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer a { color: var(--accent2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── Responsive ── */
+  @media (max-width: 720px) {
+    .hero h1 { font-size: 26px; }
+    .principles { grid-template-columns: 1fr; }
+    .topbar { padding: 14px 16px; }
+    .topbar-right a { display: none; }
+    .topbar-right .role-pill { display: inline-flex; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">📋</div>
+    <div>
+      <h2>Trainer Console</h2>
+      <span>DevOps onboarding</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a href="../index.html">← Trainee site</a>
+    <span class="role-pill">Trainer</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Run the cohort.</h1>
+    <p>Track every trainee's progress, run the Day-10 capstone evaluation, and decide whether they're ready for independent work.</p>
+  </div>
+
+  <section>
+    <div class="section-header">
+      <h2>Tools</h2>
+      <p>Two self-contained apps. State persists in your browser; trainee data lives as JSON in <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:12px;color:var(--accent2);">progress/</code>.</p>
+    </div>
+    <div class="tools">
+
+      <a class="tool" href="dashboard.html">
+        <div class="tool-icon">📊</div>
+        <h3>Cohort Dashboard</h3>
+        <p>Open the <code style="background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:12px;">progress/</code> folder to see every trainee's pre-test score, chapter progress, top skill gap, and assessment status — all in one table. Click any row for the full breakdown.</p>
+        <div class="tool-cta">Open dashboard →</div>
+      </a>
+
+      <a class="tool" href="assessment-rubric.html">
+        <div class="tool-icon">🎯</div>
+        <h3>Assessment Rubric</h3>
+        <p>Day-10 capstone evaluation. 8 skill areas with probe questions and a 0–3 rating scale. Auto-calculated total, live demo checklist, recommendation field, and Print to PDF.</p>
+        <div class="tool-cta">Open rubric →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>Day-10 Workflow</h2>
+      <p>What to do during and after the capstone.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Open the dashboard before the session</h4>
+          <p>Review the trainee's pre-test result and chapter completions so you know which areas to probe deeper.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Run the capstone with the rubric open</h4>
+          <p>Score each skill area as the trainee demonstrates it. The rubric saves to <code>localStorage</code> automatically — refresh-safe.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Set the final recommendation</h4>
+          <p><em>Ready for independent work</em> · <em>Needs pairing</em> · <em>Second sprint</em>. Add notes for the trainee's record.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Print to PDF and update the JSON</h4>
+          <p>Print the rubric for the trainee's file, then update <code>progress/&lt;name&gt;.json</code> with the assessment results and commit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>Trainer Principles</h2>
+      <p>Your role is to <strong>unblock, not to teach</strong>. The story and labs do the teaching.</p>
+    </div>
+    <div class="principles">
+      <div class="principle">
+        <h4>Daily check-in</h4>
+        <p>One question: <em>"What broke today? How did you debug it?"</em> Listen for "it works but I don't know why" — that's where to probe.</p>
+      </div>
+      <div class="principle">
+        <h4>The 10-minute rule</h4>
+        <p>Trainees struggle alone for 10 minutes before asking. Productive struggle builds the instinct. Immediate answers prevent it.</p>
+      </div>
+      <div class="principle">
+        <h4>"What have you tried?"</h4>
+        <p>Always ask this before giving an answer. It surfaces gaps and forces them to articulate their mental model.</p>
+      </div>
+      <div class="principle">
+        <h4>Watch the AI usage</h4>
+        <p>If a trainee can't explain code line-by-line, they leaned on AI as a vending machine. Send them back to the lab.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Trainer-only console · <a href="../index.html">Trainee site</a> · <a href="../README.md">README</a> · <a href="../progress/_template.json">Progress schema</a></p>
+  </footer>
+
+</div>
+
+</body>
+</html>
