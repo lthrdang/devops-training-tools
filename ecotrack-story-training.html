@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EcoTrack — DevOps Story Training</title>
+<style>
+:root {
+  --bg: #0b0d14;
+  --surface: #13161f;
+  --surface2: #1c2030;
+  --surface3: #242840;
+  --border: #2a2f45;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --green: #22c55e;
+  --green-dim: #14532d;
+  --yellow: #f59e0b;
+  --yellow-dim: #78350f;
+  --red: #ef4444;
+  --red-dim: #450a0a;
+  --blue: #38bdf8;
+  --blue-dim: #0c4a6e;
+  --purple: #a78bfa;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --muted2: #94a3b8;
+  --radius: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+/* ── Top bar ── */
+.topbar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:16px 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.logo-text h2{font-size:16px;font-weight:700;line-height:1.2;}
+.logo-text span{font-size:12px;color:var(--muted);}
+.progress-summary{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);}
+.progress-mini{width:120px;height:4px;background:var(--surface3);border-radius:999px;overflow:hidden;}
+.progress-mini-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:999px;transition:width 0.4s;}
+
+/* ── Hero ── */
+.hero{
+  padding:60px 32px 48px;
+  max-width:860px;
+  margin:0 auto;
+  text-align:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:5px 14px;
+  font-size:12px;font-weight:600;
+  color:var(--green);
+  letter-spacing:0.06em;text-transform:uppercase;
+  margin-bottom:20px;
+}
+.hero h1{font-size:36px;font-weight:800;line-height:1.2;margin-bottom:16px;}
+.hero h1 em{font-style:normal;color:var(--green);}
+.hero p{font-size:16px;color:var(--muted2);line-height:1.7;max-width:580px;margin:0 auto 32px;}
+
+/* Company card */
+.company-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px 28px;
+  text-align:left;
+  margin-bottom:12px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:20px;
+}
+.cc-item h4{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:6px;}
+.cc-item p{font-size:14px;color:var(--muted2);line-height:1.5;}
+.cc-item code{
+  background:var(--surface2);color:var(--accent2);
+  padding:1px 6px;border-radius:4px;font-size:12px;
+}
+
+/* ── Timeline ── */
+.timeline-wrap{
+  max-width:860px;margin:0 auto;
+  padding:0 32px 80px;
+}
+.timeline-title{
+  font-size:13px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.1em;color:var(--muted);
+  margin-bottom:24px;
+  display:flex;align-items:center;gap:10px;
+}
+.timeline-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* Chapter card */
+.chapter{
+  position:relative;
+  padding-left:52px;
+  margin-bottom:6px;
+}
+.chapter::before{
+  content:'';
+  position:absolute;left:18px;top:52px;bottom:-6px;
+  width:2px;background:var(--border);
+}
+.chapter:last-child::before{display:none;}
+.chapter-dot{
+  position:absolute;left:0;top:24px;
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--surface2);
+  border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+  transition:all 0.2s;
+  z-index:1;
+}
+.chapter.done .chapter-dot{
+  background:var(--green-dim);
+  border-color:var(--green);
+}
+.chapter.active .chapter-dot{
+  background:var(--surface3);
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(99,102,241,0.15);
+}
+
+.chapter-header{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px 24px;
+  cursor:pointer;
+  transition:border-color 0.15s,background 0.15s;
+  display:flex;align-items:center;gap:16px;
+}
+.chapter-header:hover{border-color:var(--accent);}
+.chapter.open .chapter-header{
+  border-color:var(--accent);
+  background:var(--surface2);
+  border-bottom-left-radius:0;
+  border-bottom-right-radius:0;
+  border-bottom-color:transparent;
+}
+.ch-meta{flex:1;}
+.ch-day{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px;}
+.ch-title{font-size:16px;font-weight:700;margin-bottom:4px;}
+.ch-summary{font-size:13px;color:var(--muted2);}
+.ch-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.tag{
+  font-size:11px;font-weight:600;padding:2px 8px;
+  border-radius:999px;border:1px solid;
+}
+.tag-tool{color:#a5b4fc;border-color:#3730a3;background:#1e1b4b;}
+.tag-alert{color:#fde68a;border-color:#78350f;background:#2d1f04;}
+.ch-chevron{color:var(--muted);transition:transform 0.2s;font-size:18px;}
+.chapter.open .ch-chevron{transform:rotate(180deg);}
+.ch-status{
+  font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:999px;
+  white-space:nowrap;flex-shrink:0;
+}
+.status-done{background:var(--green-dim);color:#86efac;}
+.status-up{background:#1e1b4b;color:#a5b4fc;}
+.status-locked{background:var(--surface2);color:var(--muted);}
+
+/* Chapter body */
+.chapter-body{
+  background:var(--surface2);
+  border:1px solid var(--accent);
+  border-top:none;
+  border-bottom-left-radius:var(--radius);
+  border-bottom-right-radius:var(--radius);
+  overflow:hidden;
+  display:none;
+}
+.chapter.open .chapter-body{display:block;}
+
+/* Sections inside body */
+.body-section{
+  padding:24px 28px;
+  border-bottom:1px solid var(--border);
+}
+.body-section:last-child{border-bottom:none;}
+.bs-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.1em;color:var(--muted);
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.bs-label span{font-size:14px;}
+
+/* Story box */
+.story-box{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:3px solid var(--yellow);
+  border-radius:0 10px 10px 0;
+  padding:16px 20px;
+  font-size:14px;
+  color:var(--muted2);
+  line-height:1.8;
+}
+.story-box .slack-msg{
+  background:var(--surface3);
+  border-radius:8px;
+  padding:12px 16px;
+  margin:12px 0 0;
+  font-size:13px;
+  border-left:3px solid var(--accent);
+}
+.slack-author{font-weight:700;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.slack-author .avatar{
+  width:22px;height:22px;border-radius:4px;
+  background:linear-gradient(135deg,#6366f1,#818cf8);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;color:#fff;
+}
+
+/* Mission list */
+.mission-list{display:flex;flex-direction:column;gap:10px;}
+.mission-item{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+  font-size:14px;
+  line-height:1.5;
+}
+.mission-num{
+  width:24px;height:24px;border-radius:6px;
+  background:var(--surface3);
+  color:var(--accent2);
+  font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.mission-check{
+  width:24px;height:24px;
+  cursor:pointer;
+  border:2px solid var(--border);
+  border-radius:6px;
+  flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;
+  transition:all 0.15s;
+  background:var(--surface3);
+}
+.mission-check:hover{border-color:var(--green);}
+.mission-check.checked{background:var(--green-dim);border-color:var(--green);color:#86efac;}
+.mission-text{flex:1;}
+
+/* Success criteria */
+.success-box{
+  background:var(--green-dim);
+  border:1px solid #166534;
+  border-radius:10px;
+  padding:16px 20px;
+  font-size:14px;
+  color:#bbf7d0;
+  line-height:1.7;
+}
+.success-box strong{color:#86efac;}
+
+/* AI challenge */
+.ai-box{
+  background:#0f0d1f;
+  border:1px solid #3730a3;
+  border-radius:10px;
+  padding:18px 20px;
+}
+.ai-prompt{
+  background:#13104a;
+  border:1px solid #312e81;
+  border-radius:8px;
+  padding:14px 16px;
+  font-size:13px;
+  font-family:'Courier New',monospace;
+  color:#c4b5fd;
+  line-height:1.7;
+  margin-top:12px;
+  white-space:pre-wrap;
+}
+.ai-note{font-size:13px;color:#818cf8;margin-top:10px;line-height:1.5;}
+
+/* Complete button */
+.complete-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:14px;
+  background:var(--accent);
+  color:#fff;
+  border:none;border-radius:10px;
+  font-size:14px;font-weight:700;
+  cursor:pointer;
+  transition:opacity 0.15s;
+  margin-top:20px;
+}
+.complete-btn:hover{opacity:0.9;}
+.complete-btn.done-btn{
+  background:var(--green-dim);
+  color:#86efac;
+  border:1px solid #166534;
+  cursor:default;
+}
+
+/* Continuity thread */
+.thread-box{
+  display:flex;align-items:flex-start;gap:10px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:3px solid var(--blue);
+  border-radius:0 10px 10px 0;
+  padding:14px 16px;
+  font-size:13px;
+  color:var(--muted2);
+  line-height:1.6;
+}
+.thread-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* Responsive */
+@media(max-width:640px){
+  .hero{padding:40px 16px 32px;}
+  .company-card{grid-template-columns:1fr;gap:12px;}
+  .timeline-wrap{padding:0 16px 60px;}
+  .topbar{padding:12px 16px;}
+  .chapter{padding-left:44px;}
+  .body-section{padding:18px 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">🌿</div>
+    <div class="logo-text">
+      <h2>EcoTrack</h2>
+      <span>DevOps Story Training</span>
+    </div>
+  </div>
+  <div class="progress-summary">
+    <span id="done-count">0</span>&nbsp;/ 10 chapters
+    <div class="progress-mini"><div class="progress-mini-fill" id="topbar-fill" style="width:0%"></div></div>
+    <button onclick="saveProgressFile()" title="Save progress to JSON file"
+      style="padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--muted2);font-size:12px;font-weight:600;cursor:pointer;transition:border-color 0.15s;"
+      onmouseover="this.style.borderColor='#6366f1'" onmouseout="this.style.borderColor='var(--border)'">💾 Save</button>
+    <button onclick="triggerLoad()" title="Load progress from JSON file"
+      style="padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--muted2);font-size:12px;font-weight:600;cursor:pointer;transition:border-color 0.15s;"
+      onmouseover="this.style.borderColor='#6366f1'" onmouseout="this.style.borderColor='var(--border)'">📂 Load</button>
+    <input type="file" id="story-load-input" accept=".json" style="display:none" onchange="loadProgressFile(event)"/>
+  </div>
+</div>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="hero-badge">🎯 Continuous Story · 10 Days</div>
+  <h1>You just joined <em>EcoTrack</em>.<br/>Now fix it.</h1>
+  <p>One company. One broken system. Ten escalating real-world problems — each one unlocked by solving the previous. Every skill you learn is the solution to the next chapter.</p>
+
+  <div class="company-card">
+    <div class="cc-item">
+      <h4>The Company</h4>
+      <p>EcoTrack — B2B SaaS for corporate CO₂ tracking. 4-person team, 80 paying customers, Series A pending.</p>
+    </div>
+    <div class="cc-item">
+      <h4>The Stack</h4>
+      <p><code>Node.js</code> API · <code>React</code> frontend · <code>PostgreSQL</code> · hosted on AWS & GCP</p>
+    </div>
+    <div class="cc-item">
+      <h4>Your Role</h4>
+      <p>First DevOps engineer. The founders built it fast. Your job is to make it production-grade.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Timeline ── -->
+<div class="timeline-wrap">
+  <div class="timeline-title">The Story</div>
+
+  <!-- ──────────────────────────────────────────
+       Chapter 1
+  ─────────────────────────────────────────── -->
+  <div class="chapter" id="ch-1" data-chapter="1">
+    <div class="chapter-dot">🐧</div>
+    <div class="chapter-header" onclick="toggleChapter(1)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 1 · Linux & Shell</div>
+        <div class="ch-title">"The Server is Sick"</div>
+        <div class="ch-summary">Production keeps crashing. Nobody knows why. You have SSH access and 4 hours.</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">bash</span>
+          <span class="tag tag-tool">systemd</span>
+          <span class="tag tag-tool">journalctl</span>
+          <span class="tag tag-alert">🔴 Production issue</span>
+        </div>
+      </div>
+      <span class="ch-status status-up" id="status-1">Up next</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          It's your first morning at EcoTrack. Before you've even finished setting up your laptop, the CTO Minh sends you a message.
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">M</div> Minh (CTO) · 9:03 AM</div>
+            Hey! Welcome aboard 🎉 Quick heads up — the production server has been "acting weird" for two days. The app crashes every few hours, we just SSH in and restart it manually. I have no idea what's actually wrong. Here are the credentials: <code>ssh deploy@prod-1.ecotrack.io</code>. Can you take a look when you get a chance? (No rush... well, maybe some rush. Two customers emailed already.)
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">SSH in. Get a full picture: uptime, disk, CPU, memory. Something is wrong — find what it is before touching anything.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Find the process that's leaking memory. Use <code>top</code>, <code>htop</code>, or <code>ps aux --sort=-%mem</code>. Identify it by name and PID.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Read the crash logs. The app runs as a systemd service named <code>ecotrack-api</code>. Use <code>journalctl</code> to find the actual error that caused the last 3 crashes.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">The disk is 94% full. Find what's eating it (<code>du -sh /* 2>/dev/null | sort -rh | head -15</code>) and clean it up safely without deleting anything important.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Write a bash script <code>watch-memory.sh</code> that runs every 5 minutes via cron, and appends a warning line to <code>/var/log/ecotrack-memory.log</code> if memory usage exceeds 85%.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          <strong>You can tell Minh:</strong> "The crash was caused by [X]. The disk was full because of [Y], I cleaned it. I've set up a cron job that will warn us before memory becomes critical again." — and you can prove each claim with a command or log output.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge</div>
+        <div class="ai-box">
+          <div class="ai-note">Paste the actual journalctl output into Claude and use this prompt:</div>
+          <div class="ai-prompt">"Here are the crash logs from our Node.js app running on Linux:
+
+[paste your journalctl output]
+
+Walk me through what each line means. What is the root cause? What would you check next? Don't fix it for me — ask me guiding questions so I can figure it out."</div>
+          <div class="ai-note">Rule: Claude is your mentor, not your answer machine. You must explain the fix to your trainer in your own words.</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="thread-box"><div class="thread-icon">🔗</div><div>Next chapter: A security researcher emails the company. The reason they found the server? Your PostgreSQL port is open to the entire internet.</div></div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(1)">✓ Mark Chapter 1 Complete</button>
+    </div>
+  </div>
+
+  <!-- Chapter 2 -->
+  <div class="chapter" id="ch-2" data-chapter="2">
+    <div class="chapter-dot">🌐</div>
+    <div class="chapter-header" onclick="toggleChapter(2)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 2 · Networking</div>
+        <div class="ch-title">"Our Database is on the Internet"</div>
+        <div class="ch-summary">A security researcher emails: "Your PostgreSQL is publicly reachable. I could read your entire customer database."</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">ufw</span>
+          <span class="tag tag-tool">netstat / ss</span>
+          <span class="tag tag-tool">curl</span>
+          <span class="tag tag-alert">🔴 Security incident</span>
+        </div>
+      </div>
+      <span class="ch-status status-locked" id="status-2">Locked</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          Day 2. You fixed the crashes — good. But Minh forwards you an email with a pale face.
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">M</div> Minh (CTO) · 8:47 AM</div>
+            We got an email from someone claiming to be a security researcher. They said port 5432 (Postgres) is open on our server and they accessed it using the default credentials they found in our old GitHub repo. They sent a screenshot of our <code>customers</code> table. I think they're telling the truth. What do we do??
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Verify it yourself first. From your local machine, try <code>nc -zv prod-1.ecotrack.io 5432</code>. Understand what you see and why it's dangerous.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Immediately lock down PostgreSQL: configure it to bind to <code>127.0.0.1</code> only (edit <code>postgresql.conf</code> and <code>pg_hba.conf</code>). Restart and verify it's no longer reachable externally.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Audit all open ports on the server with <code>ss -tlnp</code>. The only ports that should be reachable from the internet are 22 (SSH) and 443 (HTTPS). Close everything else with <code>ufw</code>.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Change the database password immediately. Update the app's config. Verify the app still works after the change.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Write a 5-line security incident summary for Minh: what was exposed, for how long (check server access logs), what you did to fix it, and what to do differently in future.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          <strong>From the internet:</strong> port 5432 connection refused ✓ · Only ports 22 and 443 reachable ✓ · App still works with the new credentials ✓ · Incident summary written ✓
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge</div>
+        <div class="ai-box">
+          <div class="ai-note">Ask Claude to be the security auditor:</div>
+          <div class="ai-prompt">"Act as a penetration tester. I'm a DevOps engineer who just locked down a Linux server. I've allowed only ports 22 and 443 via ufw, and moved PostgreSQL to localhost-only. What else would you check to make sure this server is properly hardened? Give me a checklist."</div>
+          <div class="ai-note">Go through the checklist. Try to implement at least 2 more items beyond what was in the mission.</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="thread-box"><div class="thread-icon">🔗</div><div>Next chapter: With the server secure, the backend dev Sara deploys a new feature. It crashes immediately on the server. "But it works on my laptop!"</div></div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(2)">✓ Mark Chapter 2 Complete</button>
+    </div>
+  </div>
+
+  <!-- Chapter 3 -->
+  <div class="chapter" id="ch-3" data-chapter="3">
+    <div class="chapter-dot">🐳</div>
+    <div class="chapter-header" onclick="toggleChapter(3)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 3 · Docker</div>
+        <div class="ch-title">"It Works on My Laptop"</div>
+        <div class="ch-summary">Sara deploys a new feature. It crashes on the server. The cause: different Node.js versions, a missing native dependency, and zero reproducibility.</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">docker</span>
+          <span class="tag tag-tool">Dockerfile</span>
+          <span class="tag tag-tool">docker-compose</span>
+        </div>
+      </div>
+      <span class="ch-status status-locked" id="status-3">Locked</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          The server is locked down. You're feeling good. Then Sara, the backend dev, pings you.
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">S</div> Sara (Backend) · 2:14 PM</div>
+            Hey, I deployed the new emissions chart feature. It works perfectly on my machine but the server is throwing: <code>Error: Cannot find module 'canvas' — was compiled against a different Node.js version</code>. I've been stuck for 3 hours. Minh is watching. Help?
+          </div>
+          <br/>
+          You check. The server is running Node 16. Sara's MacBook has Node 20. The <code>canvas</code> native module compiled for her machine doesn't run on the server. This will happen again. And again. The only real fix is to make the environment identical everywhere.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Write a <code>Dockerfile</code> for the EcoTrack API. Start from <code>node:20-alpine</code>. Copy only what's needed. Install dependencies. Expose the right port. Use a non-root user.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Make it a multi-stage build: a <code>builder</code> stage that compiles native modules, and a lean <code>runtime</code> stage that only has the final app. Compare image sizes before and after.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Write a <code>docker-compose.yml</code> with three services: <code>api</code>, <code>db</code> (postgres:15), and <code>redis</code>. The API should start only after the DB is healthy. Use a named volume for the DB data.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Test it: <code>docker-compose down -v &amp;&amp; docker-compose up --build</code>. The app should start cleanly with no manual steps. Verify Sara can run this on her Mac with zero setup.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Add a <code>.dockerignore</code> file. Make sure node_modules, .git, and local .env files are excluded from the image.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          Sara runs <code>docker-compose up</code> on her MacBook and the app works — <strong>without installing Node, Postgres, or Redis manually.</strong> The image is under 200MB. There are no root processes. <code>docker-compose down -v</code> cleans up completely.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge</div>
+        <div class="ai-box">
+          <div class="ai-note">Paste your Dockerfile into Claude and ask:</div>
+          <div class="ai-prompt">"Review this Dockerfile for a Node.js API:
+
+[paste your Dockerfile]
+
+Check for: security issues (running as root?), image size inefficiencies, layer cache problems, and missing best practices. Don't rewrite it — explain what's wrong and why, then let me fix it."</div>
+          <div class="ai-note">Apply all valid feedback. Then ask Claude: "What would a production-grade Dockerfile add that mine doesn't have yet?"</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="thread-box"><div class="thread-icon">🔗</div><div>Next chapter: EcoTrack gets featured in TechCrunch. Traffic spikes 40x in 20 minutes. One container is not enough.</div></div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(3)">✓ Mark Chapter 3 Complete</button>
+    </div>
+  </div>
+
+  <!-- Chapter 4 -->
+  <div class="chapter" id="ch-4" data-chapter="4">
+    <div class="chapter-dot">☸️</div>
+    <div class="chapter-header" onclick="toggleChapter(4)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 4 · Kubernetes</div>
+        <div class="ch-title">"We're on TechCrunch. We're Also Down."</div>
+        <div class="ch-summary">A viral article sends 40x normal traffic. The single container crashes under load. Potential investors are watching the app fail in real-time.</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">kubectl</span>
+          <span class="tag tag-tool">Deployment</span>
+          <span class="tag tag-tool">Service</span>
+          <span class="tag tag-alert">🔴 High traffic incident</span>
+        </div>
+      </div>
+      <span class="ch-status status-locked" id="status-4">Locked</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          A journalist wrote about EcoTrack in a climate tech newsletter. It got picked up by TechCrunch. Traffic went from 200 req/min to 8,000 req/min in under 20 minutes. The single Docker container hit its memory limit and died. The app is down. Minh is on a call with two potential Series A investors who are watching the site not load.
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">M</div> Minh (CTO) · 11:32 AM</div>
+            THE APP IS DOWN. TechCrunch article just went live. Investors on a call RIGHT NOW and the site is timing out. Can you fix this?? I know we talked about Kubernetes last week — now is the time.
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Set up a local Kubernetes cluster (<code>minikube</code> or <code>kind</code>) to test against. Push the Docker image from Day 3 to a registry (Docker Hub or local).</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Write a <code>Deployment</code> manifest for the EcoTrack API: 3 replicas, correct image, resource requests and limits, environment variables from a ConfigMap.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Expose it with a <code>Service</code> (ClusterIP first, then NodePort so you can test it). Verify all 3 pods are running and traffic is load-balanced across them.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Simulate a pod crash: <code>kubectl delete pod [one-of-the-pods]</code>. Verify Kubernetes brings a replacement up automatically and the app stays reachable the whole time.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Deploy a v2 of the app (change something visible, e.g. an API response field). Use a rolling update. Watch the rollout with <code>kubectl rollout status</code>. Then roll it back.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          <strong>3 replicas running.</strong> Kill one — app stays up, Kubernetes self-heals. Deploy v2 with zero downtime. Roll back in under 30 seconds. You can explain to Minh what Kubernetes is doing and why this is better than one container.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge</div>
+        <div class="ai-box">
+          <div class="ai-note">Paste a <code>kubectl describe pod</code> output for a pod that's not behaving, then ask:</div>
+          <div class="ai-prompt">"Here's the output of kubectl describe pod for my EcoTrack API pod:
+
+[paste output]
+
+Walk me through what each section means. What's the current state? What do the Events tell me? What should I check next?"</div>
+          <div class="ai-note">Intentionally misconfigure your deployment (wrong image tag, too-low memory limit) to get an interesting describe output to analyze.</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="thread-box"><div class="thread-icon">🔗</div><div>Next chapter: The app runs on K8s, but staging and production share the same config. Sara deployed to prod thinking it was staging. You need proper environments.</div></div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(4)">✓ Mark Chapter 4 Complete</button>
+    </div>
+  </div>
+
+  <!-- Chapter 5 -->
+  <div class="chapter" id="ch-5" data-chapter="5">
+    <div class="chapter-dot">⎈</div>
+    <div class="chapter-header" onclick="toggleChapter(5)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 5 · Helm + K8s Advanced</div>
+        <div class="ch-title">"Sara Deployed to Prod Again"</div>
+        <div class="ch-summary">No staging environment, configs copy-pasted between envs, one mistake breaks customers. The team needs proper environment management.</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">Helm</span>
+          <span class="tag tag-tool">Namespaces</span>
+          <span class="tag tag-tool">Secrets</span>
+          <span class="tag tag-tool">Probes</span>
+        </div>
+      </div>
+      <span class="ch-status status-locked" id="status-5">Locked</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          Sara was testing a new API endpoint. She applied her Kubernetes manifests, checked the app, everything looked good. Then Minh gets a support email: "Our production dashboard is showing test data." Sara had applied to the wrong namespace — there effectively wasn't one. Staging and prod were sharing the same cluster config.
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">S</div> Sara (Backend) · 4:01 PM</div>
+            I'm so sorry. I thought I was in staging. Can we please have a proper staging environment? I'm scared to deploy anything right now.
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Add liveness and readiness probes to the Deployment from Day 4. Intentionally misconfigure the liveness probe to see what CrashLoopBackOff looks like — then fix it.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Create a Kubernetes <code>Secret</code> for the database password. Mount it as an environment variable in the Deployment. Verify it never appears in plaintext in your YAML files.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Create a Helm chart for EcoTrack: <code>helm create ecotrack</code>, then replace the boilerplate with your real app templates (Deployment, Service, ConfigMap, Secret reference).</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Create two <code>values</code> files: <code>values-staging.yaml</code> (1 replica, staging DB URL) and <code>values-production.yaml</code> (3 replicas, prod DB URL, resource limits). Deploy both to separate namespaces.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Simulate Sara's mistake: try to apply the staging chart to the production namespace. Verify it's impossible to mix them up now. Update the team wiki with: "how to deploy to staging" in 3 commands.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          <strong>Two environments, one chart.</strong> <code>helm upgrade --install ecotrack-staging ./ecotrack -f values-staging.yaml -n staging</code> and <code>helm upgrade --install ecotrack-prod ./ecotrack -f values-production.yaml -n production</code> both work cleanly. Sara can deploy to staging without ever touching production.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge</div>
+        <div class="ai-box">
+          <div class="ai-prompt">"Generate a production-ready Helm chart for a Node.js API with: configurable replicas and image tag in values.yaml, liveness/readiness probes, resource limits, a Secret for DB credentials, and an optional Ingress resource. After generating, explain what each template file does and what would break if I deleted it."</div>
+          <div class="ai-note">Compare the generated chart to yours. Add at least 2 things you were missing.</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="thread-box"><div class="thread-icon">🔗</div><div>Next chapter: EcoTrack lands a Series A. Investors require a security audit. The infrastructure doesn't pass. You need to rebuild it properly — in the cloud.</div></div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(5)">✓ Mark Chapter 5 Complete</button>
+    </div>
+  </div>
+
+  <!-- Chapter 6 -->
+  <div class="chapter" id="ch-6" data-chapter="6">
+    <div class="chapter-dot">☁️</div>
+    <div class="chapter-header" onclick="toggleChapter(6)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 6 · Cloud Foundations</div>
+        <div class="ch-title">"The Investors Want a Security Audit"</div>
+        <div class="ch-summary">Series A term sheet requires SOC2 readiness. Auditors find: no VPC isolation, hardcoded IAM credentials, database reachable from the internet.</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">AWS / GCP</span>
+          <span class="tag tag-tool">VPC</span>
+          <span class="tag tag-tool">IAM</span>
+          <span class="tag tag-alert">⚠️ Compliance</span>
+        </div>
+      </div>
+      <span class="ch-status status-locked" id="status-6">Locked</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          EcoTrack just signed a Series A term sheet. The investor's technical due diligence team spent two hours on your infrastructure. Their report:
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">M</div> Minh (CTO) · 9:15 AM</div>
+            Okay so the audit came back. The findings: (1) no VPC — everything is on default networking, (2) an IAM user with AdministratorAccess and hardcoded keys in the codebase, (3) RDS instance in a public subnet, (4) S3 bucket with public read. They want these fixed before close. We have 2 weeks.
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Create a VPC with 2 public subnets and 2 private subnets across 2 availability zones. Add a NAT Gateway so private instances can reach the internet but can't be reached from it.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Create IAM roles (not users) for each component: an EC2/EKS role with only S3 read access, an RDS access role, and a CI/CD deploy role. No hardcoded keys anywhere.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Move the database into the private subnet. Verify it's unreachable from your laptop but reachable from an EC2 in the private subnet.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Create an S3 bucket for customer emissions reports. Enable versioning, Block Public Access, and a lifecycle policy that moves objects older than 90 days to cheaper storage.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Use only the CLI (no console clicks) for everything. Document each command in a <code>setup.sh</code> so it could be reproduced.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          <strong>Security checklist passes:</strong> DB unreachable from internet ✓ · No credentials hardcoded anywhere in code ✓ · S3 bucket not public ✓ · Each service has its own least-privilege IAM role ✓ · Everything was built via CLI, not console ✓
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge</div>
+        <div class="ai-box">
+          <div class="ai-prompt">"I'm setting up AWS infrastructure for a startup that handles sensitive business data. We need to pass a basic security audit. Given this architecture: [describe yours], what are the top 5 remaining security risks? For each, explain the risk and give me the exact AWS CLI command or config change to fix it."</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="thread-box"><div class="thread-icon">🔗</div><div>Next chapter: James, a new hire, accidentally deletes the staging environment in the AWS console. It takes him all day to rebuild manually. You say: "Give me 20 minutes."</div></div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(6)">✓ Mark Chapter 6 Complete</button>
+    </div>
+  </div>
+
+  <!-- Chapter 7 -->
+  <div class="chapter" id="ch-7" data-chapter="7">
+    <div class="chapter-dot">🏗️</div>
+    <div class="chapter-header" onclick="toggleChapter(7)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 7 · Terraform</div>
+        <div class="ch-title">"I Accidentally Deleted Staging"</div>
+        <div class="ch-summary">A new engineer cleaned up the AWS console and deleted the entire staging environment. Manual rebuild would take a full day. Yours takes 20 minutes.</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">Terraform</span>
+          <span class="tag tag-tool">Remote state</span>
+          <span class="tag tag-tool">Modules</span>
+        </div>
+      </div>
+      <span class="ch-status status-locked" id="status-7">Locked</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          James, a new backend engineer, was cleaning up old resources in the AWS console. He saw "ecotrack-staging" and thought it was an old test environment. He deleted the VPC, the subnets, the security groups, and the RDS instance.
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">J</div> James · 3:48 PM</div>
+            I'm so sorry. I thought those were old test resources. I deleted staging. I've been trying to rebuild it for 4 hours and I can't get the networking right. How long will this take to fix?
+          </div>
+          You pull up the Terraform files you'd been writing since Day 6. You type <code>terraform apply</code>. Nineteen minutes later, staging is back.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Write Terraform code that provisions the full EcoTrack infra from Day 6: VPC + subnets + security groups + IAM roles + S3 bucket. It should match exactly what you built manually.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Set up a remote backend: S3 bucket for state storage + DynamoDB table for state locking. Never store state locally in a real project.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Extract the VPC + subnets into a reusable Terraform module. Call it twice — once for <code>staging</code>, once for <code>production</code> — with different CIDR ranges.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Simulate James's incident: manually delete a resource in the console, then run <code>terraform plan</code>. Observe what it detects. Run <code>terraform apply</code> to restore it.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Add an IAM policy that denies anyone except your Terraform role from deleting the VPC and subnets. James can never do this again.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          <strong>Run <code>terraform destroy</code> then <code>terraform apply</code>.</strong> The entire staging environment rebuilds in under 25 minutes with zero manual steps. State is remote. Two environments share one module. Infrastructure drift is detectable.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge</div>
+        <div class="ai-box">
+          <div class="ai-prompt">"Write a Terraform module for a secure AWS VPC with public and private subnets, NAT Gateway, and Internet Gateway. It should accept: vpc_cidr, environment name, and AWS region as inputs. Include outputs for VPC ID, subnet IDs, and NAT Gateway IP. After writing it, explain the state implications — what happens if I rename the module?"</div>
+          <div class="ai-note">Apply the module. Then rename it in your code and run <code>terraform plan</code>. Observe what Terraform wants to do — and understand why before you <code>apply</code>.</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="thread-box"><div class="thread-icon">🔗</div><div>Next chapter: Every deployment requires someone to SSH into the server and run commands manually. Last Friday this caused 45 minutes of downtime. You're building a pipeline.</div></div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(7)">✓ Mark Chapter 7 Complete</button>
+    </div>
+  </div>
+
+  <!-- Chapter 8 -->
+  <div class="chapter" id="ch-8" data-chapter="8">
+    <div class="chapter-dot">⚙️</div>
+    <div class="chapter-header" onclick="toggleChapter(8)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 8 · CI/CD</div>
+        <div class="ch-title">"Nobody Should SSH to Deploy"</div>
+        <div class="ch-summary">Manual deploys have broken production twice. Someone forgot npm install. Another forgot to set an env var. It's time to automate the human out of the process.</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">GitHub Actions</span>
+          <span class="tag tag-tool">Docker registry</span>
+          <span class="tag tag-tool">Helm deploy</span>
+        </div>
+      </div>
+      <span class="ch-status status-locked" id="status-8">Locked</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          The current deploy process: SSH into the server, <code>git pull</code>, <code>npm install</code>, <code>pm2 restart</code>. Last Friday at 5pm someone forgot <code>npm install</code> after pulling a commit that added a new dependency. The app crashed silently. It took 45 minutes before a customer reported it.
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">M</div> Minh (CTO) · Mon 9:00 AM</div>
+            After Friday's incident — can we please make it so nobody can break production by doing a deploy wrong? I want it to be impossible to deploy something broken.
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Create a GitHub Actions workflow that triggers on push to <code>main</code>: run tests, lint, and build the Docker image. If any step fails, the workflow stops.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">On success, push the image to a registry (Docker Hub or ECR) tagged with the git commit SHA. Use GitHub Secrets for credentials — never in the YAML.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Add a deploy step that runs <code>helm upgrade</code> to update the staging namespace automatically. Production requires a manual approval gate before deploying.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Test the failure path: intentionally break a test. Verify the pipeline stops and nothing is deployed. Fix it and verify the pipeline passes and deploys correctly.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Add a Slack notification (or email) that fires on pipeline failure. The on-call engineer must be notified within 2 minutes of a failed deploy.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          <strong>Nobody SSHes to deploy.</strong> A broken test blocks the pipeline ✓ · Image is tagged with commit SHA ✓ · Staging deploys automatically, prod requires approval ✓ · Failed deploy triggers a notification ✓ · The team's deploy process is now: <em>merge a PR</em>.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge</div>
+        <div class="ai-box">
+          <div class="ai-prompt">"Review this GitHub Actions workflow:
+
+[paste your workflow YAML]
+
+Check for: hardcoded secrets, missing permissions, no caching (slow builds), race conditions if two deploys run simultaneously, and anything that would make this unsuitable for production. Give me specific line-level feedback."</div>
+          <div class="ai-note">Then ask: "How would you add a canary deployment strategy to this pipeline?"</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="thread-box"><div class="thread-icon">🔗</div><div>Next chapter: Production goes down at 3:17am. Nobody notices for 2 hours. A customer tweets about it before the team even wakes up.</div></div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(8)">✓ Mark Chapter 8 Complete</button>
+    </div>
+  </div>
+
+  <!-- Chapter 9 -->
+  <div class="chapter" id="ch-9" data-chapter="9">
+    <div class="chapter-dot">📊</div>
+    <div class="chapter-header" onclick="toggleChapter(9)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 9 · Monitoring</div>
+        <div class="ch-title">"We Found Out from a Tweet"</div>
+        <div class="ch-summary">Production was down for 2 hours. The team slept through it. A customer tweeted at 5:30am and that's how Minh found out. This can never happen again.</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">Prometheus</span>
+          <span class="tag tag-tool">Grafana</span>
+          <span class="tag tag-tool">Alertmanager</span>
+          <span class="tag tag-alert">🔴 Silent outage</span>
+        </div>
+      </div>
+      <span class="ch-status status-locked" id="status-9">Locked</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          At 3:17am, the database connection pool exhausted. Every API request started returning 500. Nobody knew. At 5:30am, a customer tweeted: "hey @ecotrack is your dashboard broken? getting 500 errors for 2+ hours lol." Minh saw it at 6am and woke you up.
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">M</div> Minh (CTO) · 6:04 AM</div>
+            We were down for 2+ hours. Found out from Twitter. I'm losing my mind. Can you please set up something so we know BEFORE our customers do?
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Deploy the <code>kube-prometheus-stack</code> Helm chart to your cluster. Verify Prometheus is scraping all pods and Grafana is accessible.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Build a Grafana dashboard with 5 panels: HTTP request rate, error rate (5xx/total), p99 latency, pod CPU/memory, and pod restart count. These are the 5 things you check first in any incident.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Configure 4 alerts in Alertmanager: (1) error rate > 5% for 2 min, (2) p99 latency > 2s for 5 min, (3) any pod restarting > 3 times in 10 min, (4) DB connection pool > 80% saturation.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Simulate the incident: deliberately exhaust the DB connection pool (open many connections without closing them). Verify your alert fires within 2 minutes. You must receive the notification before manually checking anything.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Write a 1-page runbook: "What to do when the DB connection alert fires." Include: how to verify, how to find the leaking service, how to temporarily increase the pool, and how to fix properly.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          <strong>Recreate the 3am incident.</strong> This time your alert fires at T+90 seconds. You get a notification. You open the Grafana dashboard and can immediately see which panel shows the problem. The runbook tells you exactly what to do next. Minh never finds out from Twitter again.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge</div>
+        <div class="ai-box">
+          <div class="ai-prompt">"I'm setting up monitoring for a Node.js API on Kubernetes backed by PostgreSQL. Using Prometheus and Grafana:
+1. What are the 8 most important metrics I should track?
+2. What alert thresholds would you recommend for each, and why?
+3. Generate a Grafana dashboard JSON for the 5 most critical panels.
+4. What's an SLO I could set for this service and how do I track it in Grafana?"</div>
+          <div class="ai-note">Implement at least 2 things from the response that weren't in your original setup.</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="thread-box"><div class="thread-icon">🔗</div><div>Final chapter: EcoTrack's biggest customer ($200K ARR) says their dashboard takes 30 seconds to load. You have 2 hours to diagnose and fix it — or they cancel.</div></div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(9)">✓ Mark Chapter 9 Complete</button>
+    </div>
+  </div>
+
+  <!-- Chapter 10 -->
+  <div class="chapter" id="ch-10" data-chapter="10">
+    <div class="chapter-dot">🏁</div>
+    <div class="chapter-header" onclick="toggleChapter(10)">
+      <div class="ch-meta">
+        <div class="ch-day">Day 10 · Capstone</div>
+        <div class="ch-title">"Fix It or Lose the Customer"</div>
+        <div class="ch-summary">Your biggest customer ($200K ARR) says the dashboard takes 30 seconds to load. They're evaluating alternatives. You have 2 hours. Everything you've built leads here.</div>
+        <div class="ch-tags">
+          <span class="tag tag-tool">All tools</span>
+          <span class="tag tag-tool">Incident response</span>
+          <span class="tag tag-alert">🔴 Customer escalation</span>
+        </div>
+      </div>
+      <span class="ch-status status-locked" id="status-10">Locked</span>
+      <span class="ch-chevron">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="body-section">
+        <div class="bs-label"><span>📖</span> The Situation</div>
+        <div class="story-box">
+          Meridian Corp — 500 users, $200K ARR, 18% of EcoTrack's total revenue — emails at 9am. Their account manager calls Minh immediately.
+          <div class="slack-msg">
+            <div class="slack-author"><div class="avatar">M</div> Minh (CTO) · 9:11 AM</div>
+            Meridian's CTO just called me. Their emissions dashboard is taking 30+ seconds to load. They've been patient for 3 days but they're now formally evaluating Persefoni as an alternative. We need this fixed today, ideally in the next 2 hours before their 11am board meeting where they're presenting the data. This is all hands on deck.
+          </div>
+          <br/>
+          You open your Grafana dashboard. The graphs tell you <em>something</em> is wrong but not exactly what. Time to investigate.
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎯</span> Your Mission</div>
+        <div class="mission-list">
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text"><strong>Diagnose first, fix second.</strong> Open Grafana. What does p99 latency show? When did it start? Correlate with the deployment history, recent commits, and traffic patterns. Form a hypothesis before touching anything.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Check the application logs for slow queries, N+1 database calls, or missing indexes. The emissions dashboard query likely scans a large table without an index — find the slow query in the logs.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Investigate Kubernetes resource limits: are pods being CPU throttled? Is a pod restarting under load? Are there enough replicas? Check <code>kubectl top pods</code> and your Grafana panels.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Fix the root cause. Deploy the fix <strong>through the pipeline</strong> — not manually. The CI/CD system you built in Day 8 is how you ship, even under pressure.</div></div>
+          <div class="mission-item"><div class="mission-check" onclick="toggleCheck(this)"></div><div class="mission-text">Write a 1-page incident report for Minh and the customer: timeline, root cause, fix applied, and what you're doing to prevent it recurring. This is what separates a DevOps engineer from a firefighter.</div></div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>✅</span> This chapter is done when</div>
+        <div class="success-box">
+          <strong>Dashboard loads in under 1 second.</strong> Fix was deployed through the pipeline, not manually ✓ · Grafana shows latency back to normal ✓ · You can present your Grafana dashboard to your trainer and explain the timeline of what happened ✓ · Incident report written ✓ · Meridian stays a customer ✓
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🤖</span> AI Challenge — The Debrief</div>
+        <div class="ai-box">
+          <div class="ai-note">This is your final AI challenge. Use it for reflection, not to solve the incident:</div>
+          <div class="ai-prompt">"I just resolved a production performance incident. Here's what happened: [describe your diagnosis and fix].
+
+Now act as a senior SRE reviewing my work:
+1. Was my investigation structured, or did I jump to solutions?
+2. What signals might I have missed?
+3. What would a proper post-mortem look like for this incident?
+4. What would you add to the monitoring setup to catch this earlier next time?
+5. What's the one thing I should do differently next incident?"</div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="bs-label"><span>🎓</span> Trainer Review — Present These</div>
+        <div class="story-box" style="border-left-color: var(--accent);">
+          Before marking this complete, the trainee presents to their trainer:
+          <br/><br/>
+          <strong>1.</strong> Walk through the full deployment flow — from a git commit to live traffic in production.<br/>
+          <strong>2.</strong> Show the Grafana dashboard. Explain what each panel means and what alert threshold you set for it.<br/>
+          <strong>3.</strong> Simulate one failure live (kill a pod, exhaust connections, trigger a deploy failure). Recover from it.<br/>
+          <strong>4.</strong> Explain the incident: what went wrong, how you found it, how you fixed it, what changed in your infra as a result.<br/>
+          <strong>5.</strong> Answer: "What would you do differently if you were rebuilding EcoTrack's infra from scratch today?"
+        </div>
+      </div>
+      <button class="complete-btn" onclick="completeChapter(10)">🏁 Mark Journey Complete</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TOTAL = 10;
+const state = JSON.parse(localStorage.getItem('ecotrack-progress') || '{"done":[], "open":[]}');
+
+function save() {
+  localStorage.setItem('ecotrack-progress', JSON.stringify(state));
+}
+
+function getFirstOpen() {
+  for (let i = 1; i <= TOTAL; i++) {
+    if (!state.done.includes(i)) return i;
+  }
+  return TOTAL;
+}
+
+function applyState() {
+  let doneCount = state.done.length;
+  for (let i = 1; i <= TOTAL; i++) {
+    const el = document.getElementById('ch-' + i);
+    const statusEl = document.getElementById('status-' + i);
+    const dot = el.querySelector('.chapter-dot');
+    const btn = el.querySelector('.complete-btn');
+
+    if (state.done.includes(i)) {
+      el.classList.add('done');
+      el.classList.remove('active');
+      statusEl.textContent = '✓ Done';
+      statusEl.className = 'ch-status status-done';
+      if (btn) { btn.textContent = '✓ Completed'; btn.classList.add('done-btn'); }
+    } else if (i === 1 || state.done.includes(i - 1)) {
+      el.classList.add('active');
+      el.classList.remove('done');
+      statusEl.textContent = 'Up next';
+      statusEl.className = 'ch-status status-up';
+    } else {
+      el.classList.remove('done', 'active');
+      statusEl.textContent = 'Locked';
+      statusEl.className = 'ch-status status-locked';
+    }
+  }
+
+  // auto-open first incomplete
+  if (state.open.length === 0) {
+    const first = getFirstOpen();
+    document.getElementById('ch-' + first).classList.add('open');
+  }
+  state.open.forEach(n => {
+    const el = document.getElementById('ch-' + n);
+    if (el) el.classList.add('open');
+  });
+
+  document.getElementById('done-count').textContent = doneCount;
+  document.getElementById('topbar-fill').style.width = Math.round((doneCount / TOTAL) * 100) + '%';
+}
+
+function toggleChapter(n) {
+  const el = document.getElementById('ch-' + n);
+  const isOpen = el.classList.contains('open');
+  if (isOpen) {
+    el.classList.remove('open');
+    state.open = state.open.filter(x => x !== n);
+  } else {
+    el.classList.add('open');
+    if (!state.open.includes(n)) state.open.push(n);
+  }
+  save();
+}
+
+function completeChapter(n) {
+  const el = document.getElementById('ch-' + n);
+  const btn = el.querySelector('.complete-btn');
+  if (btn.classList.contains('done-btn')) return;
+  if (!state.done.includes(n)) state.done.push(n);
+  // auto-close this, open next
+  el.classList.remove('open');
+  state.open = state.open.filter(x => x !== n);
+  if (n < TOTAL) {
+    const next = document.getElementById('ch-' + (n + 1));
+    if (next) { next.classList.add('open'); state.open.push(n + 1); }
+  }
+  save();
+  applyState();
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+applyState();
+
+// ── Progress file save/load ──
+function buildStoryProgress() {
+  const dates = {};
+  state.done.forEach(n => { dates[String(n)] = dates[String(n)] || new Date().toISOString().split('T')[0]; });
+  return {
+    version: '1.0',
+    trainee: { name: localStorage.getItem('ecotrack-trainee-name') || '', email: '', start_date: localStorage.getItem('ecotrack-start-date') || new Date().toISOString().split('T')[0] },
+    pretest:    { completed: false, date: null, score_pct: null, section_scores: {}, recommendations: {} },
+    story: {
+      chapters_completed: [...state.done],
+      chapter_dates: dates,
+      current_chapter: Math.min(10, (state.done.length > 0 ? Math.max(...state.done) : 0) + 1)
+    },
+    assessment: { completed: false, date: null, trainer: null, total_score: null, total_max: 54, score_pct: null, recommendation: null, section_scores: {}, notes: '' },
+    last_updated: new Date().toISOString()
+  };
+}
+
+async function saveProgressFile() {
+  // Merge with any pretest data already stored
+  let existing = {};
+  try { existing = JSON.parse(localStorage.getItem('ecotrack-full-progress') || '{}'); } catch {}
+  const story = buildStoryProgress();
+  const merged = Object.assign({}, story, existing, {
+    story: story.story,
+    last_updated: story.last_updated,
+    trainee: story.trainee
+  });
+  if (existing.pretest?.completed) merged.pretest = existing.pretest;
+
+  if (!merged.trainee.name) {
+    merged.trainee.name = prompt('Enter your name for the progress file:') || 'trainee';
+    localStorage.setItem('ecotrack-trainee-name', merged.trainee.name);
+  }
+  const name = merged.trainee.name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+  const filename = name + '.json';
+  const json = JSON.stringify(merged, null, 2);
+  localStorage.setItem('ecotrack-full-progress', json);
+
+  if (window.showSaveFilePicker) {
+    try {
+      const fh = await window.showSaveFilePicker({ suggestedName: filename, types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }] });
+      const w = await fh.createWritable();
+      await w.write(json); await w.close(); return;
+    } catch(e) { if (e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a');
+  a.href = 'data:application/json,' + encodeURIComponent(json);
+  a.download = filename; a.click();
+}
+
+function triggerLoad() { document.getElementById('story-load-input').click(); }
+
+function loadProgressFile(evt) {
+  const file = evt.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      // Restore story state
+      if (d.story) {
+        state.done = d.story.chapters_completed || [];
+        state.open = [];
+      }
+      if (d.trainee?.name) {
+        localStorage.setItem('ecotrack-trainee-name', d.trainee.name);
+        localStorage.setItem('ecotrack-start-date', d.trainee.start_date || '');
+      }
+      localStorage.setItem('ecotrack-full-progress', JSON.stringify(d));
+      save(); applyState();
+      alert('Progress loaded for ' + (d.trainee?.name || 'trainee') + '! ' + state.done.length + '/10 chapters completed.');
+    } catch { alert('Could not read file — make sure it is a valid progress JSON.'); }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+</script>
+</body>
+</html>

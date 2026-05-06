@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Trainer Assessment Rubric — DevOps Capstone</title>
+<style>
+:root {
+  --bg: #0b0d14;
+  --surface: #13161f;
+  --surface2: #1c2030;
+  --surface3: #242840;
+  --border: #2a2f45;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --green: #22c55e;
+  --green-dim: #14532d;
+  --yellow: #f59e0b;
+  --yellow-dim: #78350f;
+  --red: #ef4444;
+  --red-dim: #450a0a;
+  --blue: #38bdf8;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --muted2: #94a3b8;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* Print overrides */
+@media print {
+  body { background: #fff; color: #111; }
+  .topbar, .no-print { display: none !important; }
+  .card { background: #fff; border: 1px solid #ccc; break-inside: avoid; }
+  .surface2-bg { background: #f5f5f5 !important; }
+  .score-ring { border-color: #333 !important; color: #333 !important; }
+  .rating-btn { border: 1px solid #999 !important; color: #333 !important; background: #eee !important; }
+  .rating-btn.selected-0 { background: #fee2e2 !important; color: #991b1b !important; }
+  .rating-btn.selected-1 { background: #fef9c3 !important; color: #854d0e !important; }
+  .rating-btn.selected-2 { background: #dbeafe !important; color: #1e40af !important; }
+  .rating-btn.selected-3 { background: #dcfce7 !important; color: #166534 !important; }
+  textarea { border: 1px solid #ccc !important; background: #fafafa !important; color: #111 !important; }
+  .probe-q { color: #333 !important; }
+  .section-header { background: #f0f0f0 !important; color: #111 !important; }
+}
+
+/* ── Topbar ── */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-icon {
+  width: 32px; height: 32px; border-radius: 7px;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.logo h2 { font-size: 15px; font-weight: 700; }
+.logo span { font-size: 12px; color: var(--muted); }
+.topbar-actions { display: flex; gap: 10px; }
+.btn-sm {
+  padding: 7px 16px; border-radius: 7px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none; transition: opacity 0.15s;
+}
+.btn-outline { background: var(--surface2); color: var(--muted2); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--accent); color: var(--text); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: 0.88; }
+
+/* ── Layout ── */
+.wrap { max-width: 900px; margin: 0 auto; padding: 36px 24px 80px; }
+
+/* ── Hero ── */
+.hero { margin-bottom: 36px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 999px; padding: 4px 12px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent2); margin-bottom: 14px;
+}
+.hero h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+.hero p { font-size: 14px; color: var(--muted2); line-height: 1.6; max-width: 620px; }
+
+/* ── Trainee info ── */
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+  margin-bottom: 32px;
+}
+.info-field label {
+  display: block; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); margin-bottom: 6px;
+}
+.info-field input {
+  width: 100%; padding: 9px 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 14px;
+  transition: border-color 0.15s;
+}
+.info-field input:focus { outline: none; border-color: var(--accent); }
+
+/* ── Score summary ── */
+.score-bar-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  display: flex; align-items: center; gap: 28px;
+}
+.score-ring {
+  width: 88px; height: 88px; border-radius: 50%;
+  border: 4px solid var(--border);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.score-ring .score-num { font-size: 24px; font-weight: 900; line-height: 1; }
+.score-ring .score-den { font-size: 12px; color: var(--muted); }
+.score-details { flex: 1; }
+.score-details h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.score-details p { font-size: 13px; color: var(--muted2); }
+.area-bars { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+.area-bar-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+.area-bar-label { width: 100px; color: var(--muted2); flex-shrink: 0; }
+.area-bar-track { flex: 1; height: 5px; background: var(--surface2); border-radius: 999px; overflow: hidden; }
+.area-bar-fill { height: 100%; border-radius: 999px; transition: width 0.3s; }
+.area-bar-score { width: 30px; text-align: right; color: var(--muted); font-size: 11px; flex-shrink: 0; }
+
+/* ── Section ── */
+.section-header {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 16px 22px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+.section-header:hover { border-color: var(--accent); }
+.sh-icon { font-size: 20px; }
+.sh-meta { flex: 1; }
+.sh-meta h3 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.sh-meta span { font-size: 12px; color: var(--muted); }
+.sh-score {
+  font-size: 13px; font-weight: 700;
+  padding: 4px 12px; border-radius: 999px;
+  background: var(--surface3); color: var(--muted2);
+  transition: all 0.2s; white-space: nowrap;
+}
+.sh-chevron { color: var(--muted); transition: transform 0.2s; }
+.section-block.open .sh-chevron { transform: rotate(180deg); }
+.section-block.open .section-header { border-radius: var(--radius) var(--radius) 0 0; }
+
+.section-body {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 0;
+  display: none;
+}
+.section-block.open .section-body { display: block; }
+.section-block { margin-bottom: 8px; }
+
+/* ── Criterion ── */
+.criterion {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.criterion:last-child { border-bottom: none; }
+.criterion-label {
+  font-size: 13px; font-weight: 700; margin-bottom: 6px;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.criterion-num {
+  background: var(--surface2); color: var(--accent2);
+  font-size: 10px; font-weight: 800;
+  padding: 2px 6px; border-radius: 4px; flex-shrink: 0; margin-top: 1px;
+}
+
+/* Probe questions */
+.probe-wrap { margin: 10px 0 14px; }
+.probe-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--muted); margin-bottom: 7px;
+}
+.probe-q {
+  font-size: 13px; color: var(--muted2); line-height: 1.6;
+  padding: 6px 0 6px 14px;
+  border-left: 2px solid var(--border);
+  margin-bottom: 5px;
+}
+.probe-q em { font-style: normal; color: var(--blue); }
+
+/* Rating buttons */
+.rating-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+.rating-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+  cursor: pointer; border: 1.5px solid var(--border);
+  background: var(--surface2); color: var(--muted2);
+  transition: all 0.15s;
+}
+.rating-btn:hover { border-color: var(--muted); color: var(--text); }
+.rating-btn.selected-0 { background: var(--red-dim); border-color: var(--red); color: #fca5a5; }
+.rating-btn.selected-1 { background: var(--yellow-dim); border-color: var(--yellow); color: #fde68a; }
+.rating-btn.selected-2 { background: #0c4a6e; border-color: var(--blue); color: #bae6fd; }
+.rating-btn.selected-3 { background: var(--green-dim); border-color: var(--green); color: #86efac; }
+
+/* Levels legend */
+.levels-legend {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  margin-bottom: 24px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 20px;
+}
+.level-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; }
+.level-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+}
+.level-item strong { display: block; margin-bottom: 2px; }
+.level-item span { color: var(--muted2); font-size: 12px; }
+
+/* Feedback textarea */
+.feedback-area {
+  padding: 20px 24px;
+}
+.feedback-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px;
+  display: block;
+}
+textarea {
+  width: 100%; padding: 12px 14px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 13px;
+  line-height: 1.6; resize: vertical; min-height: 80px;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+textarea:focus { outline: none; border-color: var(--accent); }
+
+/* Live demo checklist */
+.demo-list { display: flex; flex-direction: column; gap: 8px; padding: 20px 24px; }
+.demo-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 9px; padding: 12px 16px; font-size: 13px; line-height: 1.5;
+}
+.demo-check {
+  width: 20px; height: 20px; border-radius: 5px;
+  border: 2px solid var(--border); background: var(--surface);
+  flex-shrink: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; margin-top: 1px;
+  transition: all 0.15s;
+}
+.demo-check:hover { border-color: var(--green); }
+.demo-check.checked { background: var(--green-dim); border-color: var(--green); color: #86efac; }
+.demo-text strong { display: block; margin-bottom: 2px; font-size: 13px; }
+.demo-text span { color: var(--muted2); font-size: 12px; }
+
+/* Recommendation */
+.rec-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  padding: 20px 24px;
+}
+.rec-card {
+  border: 2px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; cursor: pointer; transition: all 0.15s;
+  background: var(--surface2);
+}
+.rec-card:hover { border-color: var(--muted); }
+.rec-card.selected-rec { border-color: var(--accent); background: #1e1b4b; }
+.rec-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.rec-card p { font-size: 12px; color: var(--muted2); line-height: 1.5; }
+.rec-icon { font-size: 18px; margin-bottom: 8px; display: block; }
+
+/* Divider */
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 28px 0 20px; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .levels-legend { grid-template-columns: 1fr; }
+  .rec-grid { grid-template-columns: 1fr; }
+  .score-bar-wrap { flex-direction: column; align-items: flex-start; }
+  .wrap { padding: 24px 16px 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar no-print">
+  <div class="logo">
+    <div class="logo-icon">📋</div>
+    <div>
+      <h2>Trainer Assessment Rubric</h2>
+      <span>DevOps & Cloud · Day 10 Capstone</span>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn-sm btn-outline" onclick="resetAll()">↺ Reset</button>
+    <button class="btn-sm btn-primary" onclick="window.print()">🖨 Print / Export PDF</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge">🎓 Trainer Use Only</div>
+    <h1>Day 10 Capstone Assessment</h1>
+    <p>Complete this rubric during or immediately after the trainee's capstone presentation. Score each criterion, note what you observed, and select a final recommendation. The rubric covers all 10 days of the EcoTrack story.</p>
+  </div>
+
+  <!-- Trainee info -->
+  <div class="info-grid">
+    <div class="info-field">
+      <label>Trainee name</label>
+      <input type="text" id="field-name" placeholder="e.g. Nguyen Van A" oninput="saveFields()"/>
+    </div>
+    <div class="info-field">
+      <label>Trainer name</label>
+      <input type="text" id="field-trainer" placeholder="e.g. Luther" oninput="saveFields()"/>
+    </div>
+    <div class="info-field">
+      <label>Assessment date</label>
+      <input type="date" id="field-date" oninput="saveFields()"/>
+    </div>
+  </div>
+
+  <!-- Score summary -->
+  <div class="score-bar-wrap" id="summary-block">
+    <div class="score-ring" id="total-ring">
+      <div class="score-num" id="total-num">0</div>
+      <div class="score-den" id="total-den">/ 0</div>
+    </div>
+    <div class="score-details">
+      <h3 id="summary-label">Fill in the rubric to see the score</h3>
+      <p id="summary-sub">Rate each criterion below. Scores update in real time.</p>
+      <div class="area-bars" id="area-bars"></div>
+    </div>
+  </div>
+
+  <!-- Rating legend -->
+  <div class="levels-legend">
+    <div class="level-item">
+      <div class="level-dot" style="background:#ef4444"></div>
+      <div><strong>0 — Not demonstrated</strong><span>Could not answer, skipped, or got it wrong despite prompting.</span></div>
+    </div>
+    <div class="level-item">
+      <div class="level-dot" style="background:#f59e0b"></div>
+      <div><strong>1 — Partial</strong><span>Knows the concept but needed significant prompting. Shaky on details.</span></div>
+    </div>
+    <div class="level-item">
+      <div class="level-dot" style="background:#38bdf8"></div>
+      <div><strong>2 — Solid</strong><span>Answered independently and correctly. Can apply it in context.</span></div>
+    </div>
+    <div class="level-item">
+      <div class="level-dot" style="background:#22c55e"></div>
+      <div><strong>3 — Strong</strong><span>Goes deeper without prompting. Can reason about edge cases and trade-offs.</span></div>
+    </div>
+  </div>
+
+  <!-- ── Part 1: Live Demo ── -->
+  <div class="divider">Part 1 — Live Demo Checklist</div>
+  <div class="section-block open" id="sec-demo">
+    <div class="section-header" onclick="toggleSection('demo')">
+      <div class="sh-icon">🎬</div>
+      <div class="sh-meta">
+        <h3>Observed During the Presentation</h3>
+        <span>Check each item the trainee successfully demonstrated live</span>
+      </div>
+      <span class="sh-score" id="score-demo">—</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="demo-list">
+        <div class="demo-item">
+          <div class="demo-check" onclick="toggleDemo(this)" data-key="demo-1"></div>
+          <div class="demo-text">
+            <strong>Full deployment flow</strong>
+            <span>Made a code change → committed → pipeline triggered automatically → deployed to staging, then production via manual approval. No manual SSH steps.</span>
+          </div>
+        </div>
+        <div class="demo-item">
+          <div class="demo-check" onclick="toggleDemo(this)" data-key="demo-2"></div>
+          <div class="demo-text">
+            <strong>Live failure simulation</strong>
+            <span>Killed a pod, exhausted a resource, or triggered a probe failure. Traffic stayed up (or recovered quickly). Did not panic.</span>
+          </div>
+        </div>
+        <div class="demo-item">
+          <div class="demo-check" onclick="toggleDemo(this)" data-key="demo-3"></div>
+          <div class="demo-text">
+            <strong>Grafana dashboard with real data</strong>
+            <span>Showed a dashboard with live metrics — not a blank screen or demo data. Could point to each panel and explain what it means.</span>
+          </div>
+        </div>
+        <div class="demo-item">
+          <div class="demo-check" onclick="toggleDemo(this)" data-key="demo-4"></div>
+          <div class="demo-text">
+            <strong>Alert fired as expected</strong>
+            <span>Demonstrated that at least one alert fires correctly when the threshold is breached and that the notification reaches the right place.</span>
+          </div>
+        </div>
+        <div class="demo-item">
+          <div class="demo-check" onclick="toggleDemo(this)" data-key="demo-5"></div>
+          <div class="demo-text">
+            <strong>Incident report presented</strong>
+            <span>Produced a written incident report covering: timeline, root cause, fix, and prevention. Clear enough for a non-technical stakeholder to understand.</span>
+          </div>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Trainer notes on the live demo</label>
+        <textarea id="note-demo" placeholder="What stood out? What was shaky? Any surprises?" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Part 2: Technical Depth ── -->
+  <div class="divider">Part 2 — Technical Depth (Probe Questions)</div>
+
+  <!-- Linux -->
+  <div class="section-block" id="sec-linux">
+    <div class="section-header" onclick="toggleSection('linux')">
+      <div class="sh-icon">🐧</div>
+      <div class="sh-meta"><h3>Linux & Shell</h3><span>Days 1–2 · Server diagnosis, permissions, networking</span></div>
+      <span class="sh-score" id="score-linux">—</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">L1</span>Process & log diagnosis</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"Walk me through exactly what you did when you first SSH'd into the crashing server. What commands did you run, in what order, and why?"</div>
+          <div class="probe-q">Follow up: <em>"What's the difference between <code>kill</code> and <code>kill -9</code>? When would you use each?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'linux','L1',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'linux','L1',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'linux','L1',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'linux','L1',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">L2</span>Networking on the server</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"How did you verify that PostgreSQL was no longer reachable from the internet after you made the change?"</div>
+          <div class="probe-q">Follow up: <em>"If a new service needs to listen on a port, what's your process for deciding whether to expose it publicly?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'linux','L2',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'linux','L2',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'linux','L2',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'linux','L2',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Notes</label>
+        <textarea id="note-linux" placeholder="What did they get right? Where did they hesitate?" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Docker -->
+  <div class="section-block" id="sec-docker">
+    <div class="section-header" onclick="toggleSection('docker')">
+      <div class="sh-icon">🐳</div>
+      <div class="sh-meta"><h3>Docker & Containers</h3><span>Day 3 · Dockerfile, multi-stage, Compose</span></div>
+      <span class="sh-score" id="score-docker">—</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">D1</span>Dockerfile quality</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee (show their actual Dockerfile on screen):</div>
+          <div class="probe-q">"Walk me through why you structured the Dockerfile this way. Why does the order of these instructions matter?"</div>
+          <div class="probe-q">Follow up: <em>"If I added a new environment variable, which layer cache would be invalidated? How does that affect build time?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'docker','D1',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'docker','D1',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'docker','D1',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'docker','D1',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">D2</span>Container debugging</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"If a container exits immediately after <code>docker run</code> with no output, what are your first three steps?"</div>
+          <div class="probe-q">Follow up: <em>"How do you get a shell inside a container that's currently running? What about one that already exited?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'docker','D2',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'docker','D2',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'docker','D2',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'docker','D2',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Notes</label>
+        <textarea id="note-docker" placeholder="Did they understand why multi-stage builds matter for security? Layer caching?" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kubernetes -->
+  <div class="section-block" id="sec-k8s">
+    <div class="section-header" onclick="toggleSection('k8s')">
+      <div class="sh-icon">☸️</div>
+      <div class="sh-meta"><h3>Kubernetes & Helm</h3><span>Days 4–5 · Deployments, probes, Helm charts, environments</span></div>
+      <span class="sh-score" id="score-k8s">—</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">K1</span>Kubernetes self-healing & rollouts</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee (they should show this live):</div>
+          <div class="probe-q">"Delete one of your running pods right now. Tell me what's happening as you watch it."</div>
+          <div class="probe-q">Follow up: <em>"What command would you run to roll back the last deployment? How long does it take? How do you verify it completed?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'k8s','K1',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'k8s','K1',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'k8s','K1',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'k8s','K1',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">K2</span>Probes & production readiness</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"What happens to your application's traffic if the readiness probe fails? What if the liveness probe fails?"</div>
+          <div class="probe-q">Follow up: <em>"You're deploying a new version. Half the pods are up with v2, half still on v1. Is the app taking traffic? From which version?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'k8s','K2',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'k8s','K2',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'k8s','K2',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'k8s','K2',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">K3</span>Helm & environment management</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"Show me how you deploy to staging vs production using your Helm chart. What's different between the two? What's shared?"</div>
+          <div class="probe-q">Follow up: <em>"If Sara accidentally runs <code>helm install ecotrack-prod</code> instead of <code>ecotrack-staging</code>, what happens? How have you protected against that?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'k8s','K3',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'k8s','K3',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'k8s','K3',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'k8s','K3',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Notes</label>
+        <textarea id="note-k8s" placeholder="Did they understand the Kubernetes control loop? Did they confuse readiness vs liveness?" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cloud -->
+  <div class="section-block" id="sec-cloud">
+    <div class="section-header" onclick="toggleSection('cloud')">
+      <div class="sh-icon">☁️</div>
+      <div class="sh-meta"><h3>Cloud & Security</h3><span>Day 6 · VPC, IAM, S3, least privilege</span></div>
+      <span class="sh-score" id="score-cloud">—</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">C1</span>IAM & least privilege</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"Your CI/CD pipeline needs to push a Docker image to ECR and deploy to EKS. What IAM permissions does it need? How would you set that up?"</div>
+          <div class="probe-q">Follow up: <em>"A developer asks you for IAM admin access 'just temporarily to debug something.' What do you say and do?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'cloud','C1',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'cloud','C1',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'cloud','C1',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'cloud','C1',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">C2</span>Network architecture</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"Walk me through your VPC design. Which resources are in public subnets, which are in private? Why?"</div>
+          <div class="probe-q">Follow up: <em>"How does a private EC2 instance access the internet to download updates, if it has no public IP?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'cloud','C2',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'cloud','C2',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'cloud','C2',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'cloud','C2',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Notes</label>
+        <textarea id="note-cloud" placeholder="Did they confuse security groups vs NACLs? Could they justify why the DB is in a private subnet?" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terraform -->
+  <div class="section-block" id="sec-terraform">
+    <div class="section-header" onclick="toggleSection('terraform')">
+      <div class="sh-icon">🏗️</div>
+      <div class="sh-meta"><h3>Terraform & IaC</h3><span>Day 7 · State, modules, drift, remote backend</span></div>
+      <span class="sh-score" id="score-terraform">—</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">T1</span>State & drift awareness</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"I went into the AWS console and manually changed the instance type of one of your EC2 instances. What happens when you run <code>terraform plan</code>?"</div>
+          <div class="probe-q">Follow up: <em>"Why is the state file important? What would break if you lost it? Where is yours stored and why?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'terraform','T1',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'terraform','T1',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'terraform','T1',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'terraform','T1',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">T2</span>Modules & reproducibility</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"James deleted staging again. Show me how you rebuild it from your Terraform code. How long does it take?"</div>
+          <div class="probe-q">Follow up: <em>"How are your staging and production environments different in the code? What's shared in the module, what's in the values?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'terraform','T2',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'terraform','T2',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'terraform','T2',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'terraform','T2',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Notes</label>
+        <textarea id="note-terraform" placeholder="Did they understand the plan before applying? Could they explain state locking?" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- CI/CD -->
+  <div class="section-block" id="sec-cicd">
+    <div class="section-header" onclick="toggleSection('cicd')">
+      <div class="sh-icon">⚙️</div>
+      <div class="sh-meta"><h3>CI/CD Pipeline</h3><span>Day 8 · GitHub Actions, deploy flow, safety gates</span></div>
+      <span class="sh-score" id="score-cicd">—</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">P1</span>Pipeline design & safety</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"Walk me through what happens from the moment I merge a PR to when it's live in production. Every step."</div>
+          <div class="probe-q">Follow up: <em>"How would you prevent two engineers from deploying at the same time and causing a conflict?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'cicd','P1',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'cicd','P1',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'cicd','P1',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'cicd','P1',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">P2</span>Failure handling</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee (demonstrate live):</div>
+          <div class="probe-q">"Break a test on purpose and push. Show me what happens in the pipeline and how you'd debug it."</div>
+          <div class="probe-q">Follow up: <em>"A deploy succeeded in CI but the app is behaving wrongly in production. What's your rollback plan?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'cicd','P2',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'cicd','P2',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'cicd','P2',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'cicd','P2',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Notes</label>
+        <textarea id="note-cicd" placeholder="Did they understand secrets management in pipelines? Did they have a rollback story?" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Monitoring -->
+  <div class="section-block" id="sec-monitor">
+    <div class="section-header" onclick="toggleSection('monitor')">
+      <div class="sh-icon">📊</div>
+      <div class="sh-meta"><h3>Monitoring & Observability</h3><span>Day 9 · Prometheus, Grafana, alerts, incident response</span></div>
+      <span class="sh-score" id="score-monitor">—</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">M1</span>Dashboard interpretation</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee (Grafana open on screen):</div>
+          <div class="probe-q">"Point to each panel and tell me: what is it measuring, what's the unit, and what would make you worried about this graph?"</div>
+          <div class="probe-q">Follow up: <em>"Your p99 latency is 3x the normal value but error rate is still zero. What could cause that? What do you check first?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'monitor','M1',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'monitor','M1',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'monitor','M1',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'monitor','M1',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">M2</span>Alert quality</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"Walk me through one of your alerts — what threshold did you set and why that number specifically?"</div>
+          <div class="probe-q">Follow up: <em>"Your alert fires at 3am. What's the first thing in your runbook? How long would it take you to find the root cause from the alert alone?"</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'monitor','M2',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'monitor','M2',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'monitor','M2',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'monitor','M2',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Notes</label>
+        <textarea id="note-monitor" placeholder="Did they understand the difference between metrics and logs? Could they read the Grafana panels without help?" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Problem-solving -->
+  <div class="section-block" id="sec-mindset">
+    <div class="section-header" onclick="toggleSection('mindset')">
+      <div class="sh-icon">🧠</div>
+      <div class="sh-meta"><h3>Problem-Solving Mindset</h3><span>How they think under pressure, not just what they know</span></div>
+      <span class="sh-score" id="score-mindset">—</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">PS1</span>Hypothesis-first debugging</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"When you found the performance issue in the capstone, what was your first hypothesis? How did you test it? Were you right?"</div>
+          <div class="probe-q">Watch for: <em>Do they describe forming a hypothesis before touching anything? Or do they describe randomly trying things?</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'mindset','PS1',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'mindset','PS1',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'mindset','PS1',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'mindset','PS1',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">PS2</span>Knowing the limits of their knowledge</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee:</div>
+          <div class="probe-q">"What's the one thing in this sprint you feel least confident about? What would you do if that became a production issue tomorrow?"</div>
+          <div class="probe-q">Watch for: <em>Honest self-assessment is a green flag. Claiming to know everything is a red flag.</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'mindset','PS2',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'mindset','PS2',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'mindset','PS2',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'mindset','PS2',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-label"><span class="criterion-num">PS3</span>Learning from the story</div>
+        <div class="probe-wrap">
+          <div class="probe-label">Ask the trainee (the final question):</div>
+          <div class="probe-q">"If you were rebuilding EcoTrack's infrastructure from scratch today — knowing everything you know now — what would you do differently from Day 1?"</div>
+          <div class="probe-q">Watch for: <em>Specific, opinionated answers show genuine understanding. Vague answers show surface-level learning.</em></div>
+        </div>
+        <div class="rating-wrap">
+          <button class="rating-btn" onclick="rate(this,'mindset','PS3',0)">0 · Not demonstrated</button>
+          <button class="rating-btn" onclick="rate(this,'mindset','PS3',1)">1 · Partial</button>
+          <button class="rating-btn" onclick="rate(this,'mindset','PS3',2)">2 · Solid</button>
+          <button class="rating-btn" onclick="rate(this,'mindset','PS3',3)">3 · Strong</button>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Notes</label>
+        <textarea id="note-mindset" placeholder="Did they show genuine reflection? Were their debugging stories structured or chaotic?" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Part 3: Recommendation ── -->
+  <div class="divider">Part 3 — Final Recommendation</div>
+
+  <div class="section-block open" id="sec-rec">
+    <div class="section-header" onclick="toggleSection('rec')">
+      <div class="sh-icon">🎯</div>
+      <div class="sh-meta"><h3>Trainer's Verdict</h3><span>Overall recommendation for next steps</span></div>
+      <span class="sh-score" id="score-rec" style="background:var(--surface3);color:var(--muted2);">Select one</span>
+      <span class="sh-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="rec-grid">
+        <div class="rec-card" onclick="selectRec(this,'ready')" id="rec-ready">
+          <span class="rec-icon">🚀</span>
+          <h4>Ready for independent work</h4>
+          <p>Can own tasks without pairing. Strong fundamentals, good problem-solving instincts. Assign real tickets.</p>
+        </div>
+        <div class="rec-card" onclick="selectRec(this,'pairing')" id="rec-pairing">
+          <span class="rec-icon">🤝</span>
+          <h4>Ready with pairing support</h4>
+          <p>Solid foundation but benefits from a more experienced pair on complex or production-critical work.</p>
+        </div>
+        <div class="rec-card" onclick="selectRec(this,'sprint')" id="rec-sprint">
+          <span class="rec-icon">🔁</span>
+          <h4>Needs a focused second sprint</h4>
+          <p>Strong in some areas, specific gaps need attention. Do a targeted 1-week sprint on the weak areas.</p>
+        </div>
+        <div class="rec-card" onclick="selectRec(this,'review')" id="rec-review">
+          <span class="rec-icon">📚</span>
+          <h4>Needs foundational review</h4>
+          <p>Key concepts unclear. Recommend revisiting core material before the next assessment attempt.</p>
+        </div>
+      </div>
+      <div class="feedback-area">
+        <label class="feedback-label">Specific focus areas for next sprint (if applicable)</label>
+        <textarea id="note-focus" placeholder="e.g. 'Strong on Linux and Docker, needs more hands-on time with Terraform state management and Grafana alerting. Suggest 3 days focused on Days 7 and 9.'" rows="3" oninput="saveNotes()"></textarea>
+      </div>
+      <div class="feedback-area" style="padding-top:0;">
+        <label class="feedback-label">Overall trainer comments</label>
+        <textarea id="note-overall" placeholder="General impressions, stand-out moments, things to watch, encouragement..." rows="5" oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── Data model ──
+let scores = {};      // { 'linux.L1': 2, 'docker.D1': 3, ... }
+let demoChecks = {};  // { 'demo-1': true, ... }
+let recommendation = null;
+
+const CRITERIA = {
+  linux:     ['L1','L2'],
+  docker:    ['D1','D2'],
+  k8s:       ['K1','K2','K3'],
+  cloud:     ['C1','C2'],
+  terraform: ['T1','T2'],
+  cicd:      ['P1','P2'],
+  monitor:   ['M1','M2'],
+  mindset:   ['PS1','PS2','PS3'],
+};
+const AREA_LABELS = {
+  linux:'Linux & Shell', docker:'Docker', k8s:'Kubernetes',
+  cloud:'Cloud', terraform:'Terraform', cicd:'CI/CD', monitor:'Monitoring', mindset:'Mindset'
+};
+const AREA_COLORS = {
+  linux:'#f59e0b', docker:'#38bdf8', k8s:'#818cf8', cloud:'#22c55e',
+  terraform:'#a78bfa', cicd:'#fb923c', monitor:'#34d399', mindset:'#f472b6'
+};
+
+function load() {
+  const saved = localStorage.getItem('ecotrack-rubric');
+  if (saved) {
+    const d = JSON.parse(saved);
+    scores = d.scores || {};
+    demoChecks = d.demoChecks || {};
+    recommendation = d.recommendation || null;
+
+    // restore field values
+    if (d.fields) {
+      ['name','trainer','date'].forEach(f => {
+        const el = document.getElementById('field-' + f);
+        if (el && d.fields[f]) el.value = d.fields[f];
+      });
+    }
+    if (d.notes) {
+      Object.keys(d.notes).forEach(k => {
+        const el = document.getElementById('note-' + k);
+        if (el) el.value = d.notes[k];
+      });
+    }
+
+    // restore rating button states
+    Object.entries(scores).forEach(([key, val]) => {
+      const [area, crit] = key.split('.');
+      const btns = document.querySelectorAll(`.rating-btn[data-area="${area}"][data-crit="${crit}"]`);
+      btns.forEach(b => {
+        if (parseInt(b.dataset.val) === val) b.classList.add('selected-' + val);
+      });
+    });
+
+    // restore demo checks
+    Object.entries(demoChecks).forEach(([key, checked]) => {
+      if (checked) {
+        const el = document.querySelector(`.demo-check[data-key="${key}"]`);
+        if (el) { el.classList.add('checked'); el.textContent = '✓'; }
+      }
+    });
+
+    // restore recommendation
+    if (recommendation) {
+      const el = document.getElementById('rec-' + recommendation);
+      if (el) el.classList.add('selected-rec');
+      const scoreEl = document.getElementById('score-rec');
+      const labels = {ready:'🚀 Ready',pairing:'🤝 With pairing',sprint:'🔁 Second sprint',review:'📚 Needs review'};
+      if (scoreEl) scoreEl.textContent = labels[recommendation] || '';
+    }
+  }
+  updateSummary();
+}
+
+function save() {
+  const fields = {};
+  ['name','trainer','date'].forEach(f => {
+    const el = document.getElementById('field-' + f);
+    if (el) fields[f] = el.value;
+  });
+  const notes = {};
+  document.querySelectorAll('textarea').forEach(t => {
+    if (t.id) notes[t.id.replace('note-','')] = t.value;
+  });
+  localStorage.setItem('ecotrack-rubric', JSON.stringify({ scores, demoChecks, recommendation, fields, notes }));
+}
+
+function saveFields() { save(); }
+function saveNotes() { save(); }
+
+function rate(btn, area, crit, val) {
+  const key = area + '.' + crit;
+  scores[key] = val;
+
+  // Update button classes — find siblings
+  const wrap = btn.closest('.rating-wrap');
+  wrap.querySelectorAll('.rating-btn').forEach(b => {
+    b.className = 'rating-btn'; // reset
+    b.dataset.area = area;
+    b.dataset.crit = crit;
+    b.dataset.val = b.textContent[0]; // approx
+  });
+  btn.dataset.area = area;
+  btn.dataset.crit = crit;
+  btn.dataset.val = val;
+
+  // Deselect all in wrap, select this one
+  wrap.querySelectorAll('.rating-btn').forEach(b => {
+    ['selected-0','selected-1','selected-2','selected-3'].forEach(c => b.classList.remove(c));
+  });
+  btn.classList.add('selected-' + val);
+
+  updateSummary();
+  save();
+}
+
+function toggleDemo(el) {
+  el.classList.toggle('checked');
+  const isChecked = el.classList.contains('checked');
+  el.textContent = isChecked ? '✓' : '';
+  demoChecks[el.dataset.key] = isChecked;
+  updateDemoScore();
+  save();
+}
+
+function updateDemoScore() {
+  const checked = Object.values(demoChecks).filter(Boolean).length;
+  const el = document.getElementById('score-demo');
+  if (el) el.textContent = checked + ' / 5 checked';
+}
+
+function selectRec(card, key) {
+  document.querySelectorAll('.rec-card').forEach(c => c.classList.remove('selected-rec'));
+  card.classList.add('selected-rec');
+  recommendation = key;
+  const labels = {ready:'🚀 Ready',pairing:'🤝 With pairing',sprint:'🔁 Second sprint',review:'📚 Needs review'};
+  const el = document.getElementById('score-rec');
+  if (el) el.textContent = labels[key] || key;
+  save();
+}
+
+function toggleSection(id) {
+  const el = document.getElementById('sec-' + id);
+  el.classList.toggle('open');
+}
+
+function updateSummary() {
+  let totalScore = 0, totalMax = 0;
+  const areaBars = document.getElementById('area-bars');
+  areaBars.innerHTML = '';
+
+  Object.entries(CRITERIA).forEach(([area, crits]) => {
+    let areaScore = 0, areaMax = crits.length * 3;
+    let areaRated = 0;
+    crits.forEach(c => {
+      const key = area + '.' + c;
+      if (scores[key] !== undefined) { areaScore += scores[key]; areaRated++; }
+    });
+
+    totalScore += areaScore;
+    totalMax += areaMax;
+
+    // Section header score
+    const scoreEl = document.getElementById('score-' + area);
+    if (scoreEl) {
+      if (areaRated === 0) { scoreEl.textContent = '—'; }
+      else {
+        scoreEl.textContent = areaScore + ' / ' + areaMax;
+        const pct = areaScore / areaMax;
+        scoreEl.style.background = pct >= 0.75 ? 'var(--green-dim)' : pct >= 0.5 ? 'var(--yellow-dim)' : 'var(--red-dim)';
+        scoreEl.style.color = pct >= 0.75 ? '#86efac' : pct >= 0.5 ? '#fde68a' : '#fca5a5';
+      }
+    }
+
+    // Area bar in summary
+    const barPct = areaMax > 0 ? Math.round((areaScore / areaMax) * 100) : 0;
+    const row = document.createElement('div');
+    row.className = 'area-bar-row';
+    row.innerHTML = `
+      <span class="area-bar-label">${AREA_LABELS[area]}</span>
+      <div class="area-bar-track"><div class="area-bar-fill" style="width:${barPct}%;background:${AREA_COLORS[area]};"></div></div>
+      <span class="area-bar-score">${areaRated > 0 ? areaScore + '/' + areaMax : '—'}</span>
+    `;
+    areaBars.appendChild(row);
+  });
+
+  // Total ring
+  const ring = document.getElementById('total-ring');
+  const numEl = document.getElementById('total-num');
+  const denEl = document.getElementById('total-den');
+  const labelEl = document.getElementById('summary-label');
+  const subEl = document.getElementById('summary-sub');
+
+  const ratedCount = Object.keys(scores).length;
+  const totalCriteria = Object.values(CRITERIA).flat().length;
+
+  if (ratedCount === 0) {
+    numEl.textContent = '—';
+    denEl.textContent = '';
+    ring.style.borderColor = 'var(--border)';
+    ring.style.color = 'var(--muted)';
+    labelEl.textContent = 'Fill in the rubric to see the score';
+    subEl.textContent = 'Rate each criterion below. Scores update in real time.';
+  } else {
+    numEl.textContent = totalScore;
+    denEl.textContent = '/ ' + totalMax;
+    const pct = totalScore / totalMax;
+    const color = pct >= 0.75 ? 'var(--green)' : pct >= 0.5 ? 'var(--yellow)' : pct >= 0.3 ? 'var(--blue)' : 'var(--red)';
+    ring.style.borderColor = color;
+    ring.style.color = color;
+    labelEl.textContent = pct >= 0.75 ? 'Strong — ready for real work' : pct >= 0.5 ? 'Solid foundation, some gaps' : pct >= 0.3 ? 'Building up — targeted practice needed' : 'Needs foundational review';
+    subEl.textContent = ratedCount + ' of ' + totalCriteria + ' criteria rated · ' + Math.round(pct * 100) + '% overall';
+  }
+
+  updateDemoScore();
+}
+
+function resetAll() {
+  if (!confirm('Reset all scores and notes? This cannot be undone.')) return;
+  scores = {}; demoChecks = {}; recommendation = null;
+  document.querySelectorAll('.rating-btn').forEach(b => {
+    ['selected-0','selected-1','selected-2','selected-3'].forEach(c => b.classList.remove(c));
+  });
+  document.querySelectorAll('.demo-check').forEach(el => { el.classList.remove('checked'); el.textContent = ''; });
+  document.querySelectorAll('.rec-card').forEach(c => c.classList.remove('selected-rec'));
+  document.getElementById('score-rec').textContent = 'Select one';
+  document.querySelectorAll('textarea').forEach(t => t.value = '');
+  document.querySelectorAll('input[type=text], input[type=date]').forEach(i => i.value = '');
+  localStorage.removeItem('ecotrack-rubric');
+  updateSummary();
+  Object.keys(CRITERIA).forEach(a => {
+    const el = document.getElementById('score-' + a);
+    if (el) { el.textContent = '—'; el.style.background = ''; el.style.color = ''; }
+  });
+}
+
+// Set data-area / data-crit / data-val on all buttons for restore to work
+document.querySelectorAll('.rating-btn').forEach(btn => {
+  const fn = btn.getAttribute('onclick');
+  const match = fn && fn.match(/rate\(this,'(\w+)','(\w+)',(\d)\)/);
+  if (match) {
+    btn.dataset.area = match[1];
+    btn.dataset.crit = match[2];
+    btn.dataset.val  = match[3];
+  }
+});
+
+// Set today's date as default
+const dateField = document.getElementById('field-date');
+if (dateField && !dateField.value) {
+  dateField.value = new Date().toISOString().split('T')[0];
+}
+
+load();
+</script>
+</body>
+</html>

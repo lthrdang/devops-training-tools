@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DevOps & Cloud — Skills Pre-Test</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3245;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 64px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    max-width: 640px;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .sub { color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 28px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress-track {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 20px;
+  }
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .q-number {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .q-text {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .hint {
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* ── Options ── */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .option:hover { border-color: var(--accent); }
+  .option.selected { border-color: var(--accent); background: #1e1f3a; }
+  .option.correct { border-color: var(--green); background: #0f2a1a; }
+  .option.wrong { border-color: var(--red); background: #2a0f0f; }
+  .option.reveal-correct { border-color: var(--green); background: #0f2a1a; }
+  .opt-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .option.selected .opt-dot { border-color: var(--accent); background: var(--accent); }
+  .option.correct .opt-dot { border-color: var(--green); background: var(--green); color: #fff; }
+  .option.wrong .opt-dot { border-color: var(--red); background: var(--red); color: #fff; }
+  .option.reveal-correct .opt-dot { border-color: var(--green); background: var(--green); color: #fff; }
+
+  /* ── Explanation ── */
+  .explanation {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-radius: 8px;
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.6;
+    display: none;
+  }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--text); }
+
+  /* ── Nav buttons ── */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:disabled { opacity: 0.35; cursor: default; }
+  .btn-ghost {
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:disabled { opacity: 0.3; cursor: default; }
+
+  /* ── Section break ── */
+  .section-break {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0 16px;
+    display: none;
+  }
+  .section-break.show { display: flex; }
+  .section-break-line { flex: 1; height: 1px; background: var(--border); }
+  .section-break-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── Results ── */
+  #results { display: none; width: 100%; max-width: 640px; }
+  .results-header { text-align: center; margin-bottom: 32px; }
+  .results-header h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .results-header p { color: var(--muted); font-size: 15px; }
+  .overall-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .score-ring {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .overall-text h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .overall-text p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  .section-scores { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+  .score-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .score-icon { font-size: 22px; width: 32px; text-align: center; }
+  .score-info { flex: 1; }
+  .score-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .score-bar-track {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.6s ease;
+  }
+  .score-badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-skip { background: #14532d; color: #86efac; }
+  .badge-skim { background: #78350f; color: #fde68a; }
+  .badge-do { background: #1e1b4b; color: #a5b4fc; }
+
+  .recommendation {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .recommendation h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .day-list { display: flex; flex-direction: column; gap: 10px; }
+  .day-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--surface2);
+  }
+  .day-item .day-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .day-item.full .day-dot { background: var(--accent); }
+  .day-item.skim .day-dot { background: var(--yellow); }
+  .day-item.skip .day-dot { background: var(--green); }
+  .day-item .day-label { font-weight: 600; min-width: 52px; }
+  .day-item .day-action { color: var(--muted); font-size: 13px; margin-left: auto; }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .ai-tip {
+    background: linear-gradient(135deg, #1e1b4b, #1a1d27);
+    border: 1px solid #3730a3;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .ai-tip h4 { font-size: 14px; font-weight: 700; color: var(--accent2); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .ai-tip p { font-size: 13px; color: #94a3b8; line-height: 1.6; }
+  .ai-tip code {
+    background: #0f0f2a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent2);
+    font-size: 12px;
+  }
+
+  .restart-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .restart-btn:hover { border-color: var(--accent); color: var(--text); }
+
+  /* ── Welcome ── */
+  #welcome { width: 100%; max-width: 640px; }
+  .welcome-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 16px;
+  }
+  .welcome-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+  .welcome-card p { color: #94a3b8; font-size: 14px; line-height: 1.7; margin-bottom: 16px; }
+  .topic-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 16px 0 24px;
+  }
+  .topic-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .start-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .start-btn:hover { opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<!-- ── Welcome Screen ── -->
+<div id="welcome">
+  <div class="header">
+    <div class="badge">DevOps & Cloud Team</div>
+    <h1>Skills Pre-Assessment</h1>
+    <p class="sub">~15 minutes · 24 questions · No pressure — this calibrates your learning path, not your worth.</p>
+  </div>
+
+  <div class="welcome-card">
+    <h2>How this works</h2>
+    <p>Answer honestly — there's no pass or fail. Your results map directly to the 2-week onboarding roadmap, telling you which days to do in full, which to skim, and which to skip because you already know it.</p>
+    <div class="topic-grid">
+      <div class="topic-chip">🐧 Linux & Shell</div>
+      <div class="topic-chip">🌐 Networking</div>
+      <div class="topic-chip">🐳 Docker</div>
+      <div class="topic-chip">☸️ Kubernetes</div>
+      <div class="topic-chip">☁️ Cloud (AWS/GCP)</div>
+      <div class="topic-chip">🏗️ Terraform</div>
+      <div class="topic-chip">📊 Monitoring</div>
+      <div class="topic-chip">🧠 Problem-Solving</div>
+    </div>
+    <p style="margin-bottom:0;">Pick the best answer you know. If you're not sure, that's fine — it means that area needs attention.</p>
+    <br/>
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:6px;">Your name (saved with results)</label>
+      <input id="trainee-name" type="text" placeholder="e.g. Nguyen Van A"
+        style="width:100%;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;"/>
+    </div>
+    <button class="start-btn" onclick="startTest()">Start Pre-Assessment →</button>
+    <button onclick="triggerLoadProgress()" style="width:100%;margin-top:10px;padding:11px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer;">
+      📂 Load existing progress file
+    </button>
+    <input type="file" id="load-file-input" accept=".json" style="display:none" onchange="loadProgressFile(event)"/>
+  </div>
+</div>
+
+<!-- ── Quiz Screen ── -->
+<div id="quiz" style="display:none; width:100%; max-width:640px;">
+  <div class="header">
+    <div class="badge">DevOps & Cloud Team</div>
+    <h1>Skills Pre-Assessment</h1>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="progress-label">Question 1 of 24</span>
+      <span id="progress-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+  <div id="question-container"></div>
+</div>
+
+<!-- ── Results Screen ── -->
+<div id="results"></div>
+
+<script>
+const SECTIONS = [
+  { id: 'linux',    label: 'Linux & Shell',     icon: '🐧', day: 'Day 1' },
+  { id: 'network',  label: 'Networking',         icon: '🌐', day: 'Day 2' },
+  { id: 'docker',   label: 'Docker',             icon: '🐳', day: 'Day 3' },
+  { id: 'k8s',      label: 'Kubernetes',         icon: '☸️', day: 'Days 4–5' },
+  { id: 'cloud',    label: 'Cloud (AWS/GCP)',    icon: '☁️', day: 'Day 6' },
+  { id: 'terraform',label: 'Terraform / IaC',   icon: '🏗️', day: 'Day 7' },
+  { id: 'monitor',  label: 'Monitoring',         icon: '📊', day: 'Day 9' },
+  { id: 'mindset',  label: 'Problem-Solving',    icon: '🧠', day: 'Day 10' },
+];
+
+const QUESTIONS = [
+  // ── Linux ──
+  {
+    section: 'linux',
+    q: 'You want to watch a log file update in real-time and only see the last 100 lines initially. Which command do you use?',
+    options: [
+      { text: 'cat /var/log/app.log | head -100', correct: false },
+      { text: 'tail -n 100 -f /var/log/app.log', correct: true },
+      { text: 'less +G /var/log/app.log', correct: false },
+      { text: 'watch -n 1 cat /var/log/app.log', correct: false },
+    ],
+    explanation: '<strong>tail -n 100 -f</strong> prints the last 100 lines then follows new output. <code>watch</code> refreshes but doesn\'t stream; <code>less +G</code> jumps to bottom but doesn\'t follow live; <code>cat | head</code> is static.',
+  },
+  {
+    section: 'linux',
+    q: 'What does the permission string <code style="color:#a5b4fc">-rwxr-x---</code> mean in practice?',
+    options: [
+      { text: 'Owner can read/write/execute; group can read/execute; others have no access', correct: true },
+      { text: 'Everyone can read and execute; only owner can write', correct: false },
+      { text: 'Owner can do everything; group and others can only read', correct: false },
+      { text: 'File is executable by all; owner can also write', correct: false },
+    ],
+    explanation: 'Parse left-to-right in triplets: <strong>rwx</strong> (owner), <strong>r-x</strong> (group), <strong>---</strong> (others). The leading <code>-</code> means it\'s a regular file (not a directory or symlink).',
+  },
+  {
+    section: 'linux',
+    q: 'A service started with systemd keeps crashing. What is your first command to understand why?',
+    options: [
+      { text: 'ps aux | grep servicename', correct: false },
+      { text: 'cat /etc/systemd/system/servicename.service', correct: false },
+      { text: 'journalctl -u servicename -n 50 --no-pager', correct: true },
+      { text: 'systemctl status servicename', correct: false },
+    ],
+    explanation: '<strong>journalctl -u</strong> gives you the full structured logs for a unit, including crash output and exit codes. <code>systemctl status</code> gives a brief summary but cuts off — always follow up with journalctl for details.',
+  },
+  {
+    section: 'linux',
+    q: 'How do you find which process is listening on port 3000?',
+    options: [
+      { text: 'ps aux | grep 3000', correct: false },
+      { text: 'netstat -rn | grep 3000', correct: false },
+      { text: 'ss -tlnp | grep 3000  (or lsof -i :3000)', correct: true },
+      { text: 'ifconfig | grep 3000', correct: false },
+    ],
+    explanation: '<strong>ss -tlnp</strong> (socket statistics) or <strong>lsof -i :PORT</strong> shows what process owns a port. <code>ps aux | grep</code> finds processes by name, not by port. <code>netstat -rn</code> shows routing table, not listeners.',
+  },
+
+  // ── Networking ──
+  {
+    section: 'network',
+    q: 'You run <code style="color:#a5b4fc">curl -I https://api.example.com/health</code> and get a <strong>502 Bad Gateway</strong>. What does this most likely tell you?',
+    options: [
+      { text: 'The DNS for api.example.com is not resolving', correct: false },
+      { text: 'Your TLS certificate is expired', correct: false },
+      { text: 'A proxy/load balancer received an invalid response from the upstream server', correct: true },
+      { text: 'The server explicitly rejected your request due to auth', correct: false },
+    ],
+    explanation: 'A <strong>502</strong> means the gateway (nginx, ALB, etc.) successfully connected to the upstream but got a garbage or no response back. The upstream is likely down or crashing. 401/403 = auth; 503 = upstream unavailable; DNS failure = connection refused or timeout.',
+  },
+  {
+    section: 'network',
+    q: 'What does the CIDR block <code style="color:#a5b4fc">10.0.1.0/24</code> define?',
+    options: [
+      { text: 'A single IP address at 10.0.1.0', correct: false },
+      { text: 'A range of 256 IP addresses from 10.0.1.0 to 10.0.1.255', correct: true },
+      { text: 'A range of 24 IP addresses', correct: false },
+      { text: 'A subnet with 24 hosts maximum', correct: false },
+    ],
+    explanation: 'The <strong>/24</strong> means the first 24 bits are the network part, leaving 8 bits for hosts: 2⁸ = 256 addresses (10.0.1.0 – 10.0.1.255). Two are reserved (network + broadcast), so 254 usable host addresses.',
+  },
+  {
+    section: 'network',
+    q: 'A pod in your Kubernetes cluster can\'t reach an external API. Internally all pods communicate fine. What is the most likely root cause?',
+    options: [
+      { text: 'kube-dns is misconfigured', correct: false },
+      { text: 'The pod\'s NetworkPolicy or the node\'s NAT/routing for egress traffic is blocked', correct: true },
+      { text: 'The container image is wrong', correct: false },
+      { text: 'The Service selector doesn\'t match the pod labels', correct: false },
+    ],
+    explanation: 'Internal pod-to-pod is fine, so the overlay network works. External access requires proper <strong>NAT/egress routing</strong> at the node level, or a NetworkPolicy may be blocking egress. Also check security groups if on cloud.',
+  },
+
+  // ── Docker ──
+  {
+    section: 'docker',
+    q: 'Your container exits immediately after <code style="color:#a5b4fc">docker run myapp</code> with no error shown. What is your next command?',
+    options: [
+      { text: 'docker inspect myapp', correct: false },
+      { text: 'docker logs $(docker ps -lq)', correct: true },
+      { text: 'docker stats myapp', correct: false },
+      { text: 'docker restart myapp', correct: false },
+    ],
+    explanation: '<strong>docker logs</strong> on the last stopped container (via <code>ps -lq</code>) shows stdout/stderr output. <code>docker inspect</code> gives metadata but not logs. <code>docker stats</code> only works on running containers. Always check logs first.',
+  },
+  {
+    section: 'docker',
+    q: 'What is the key benefit of a multi-stage Docker build?',
+    options: [
+      { text: 'It allows multiple CMD instructions to run simultaneously', correct: false },
+      { text: 'It lets you run multiple containers from one Dockerfile', correct: false },
+      { text: 'It produces a smaller final image by discarding build tools and dependencies not needed at runtime', correct: true },
+      { text: 'It speeds up the build by running stages in parallel', correct: false },
+    ],
+    explanation: 'In a multi-stage build you compile/build in a fat image with all dev tools, then <strong>COPY only the output artifacts</strong> into a minimal runtime image. The final image has no compilers, package managers, or source code — smaller, faster, and far less attack surface.',
+  },
+  {
+    section: 'docker',
+    q: 'In a docker-compose setup, Service A needs to connect to Service B\'s PostgreSQL on port 5432. What hostname should Service A use?',
+    options: [
+      { text: 'localhost:5432', correct: false },
+      { text: 'The container ID of Service B', correct: false },
+      { text: 'The service name defined in docker-compose.yml (e.g., "db")', correct: true },
+      { text: '127.0.0.1:5432', correct: false },
+    ],
+    explanation: 'Docker Compose creates a shared network and registers each service name as a <strong>DNS hostname</strong>. So if your Postgres service is named <code>db</code>, connect to <code>db:5432</code>. <code>localhost</code> resolves to the container itself, not its neighbors.',
+  },
+  {
+    section: 'docker',
+    q: 'What is the difference between <code style="color:#a5b4fc">CMD</code> and <code style="color:#a5b4fc">ENTRYPOINT</code> in a Dockerfile?',
+    options: [
+      { text: 'CMD runs at build time; ENTRYPOINT runs at container start', correct: false },
+      { text: 'ENTRYPOINT sets the executable; CMD provides default arguments that can be overridden at runtime', correct: true },
+      { text: 'They are interchangeable — use whichever you prefer', correct: false },
+      { text: 'ENTRYPOINT runs first; CMD runs after it completes', correct: false },
+    ],
+    explanation: '<strong>ENTRYPOINT</strong> defines the main process (e.g., your app binary). <strong>CMD</strong> provides default arguments to it. When you do <code>docker run myapp --flag</code>, <code>--flag</code> overrides CMD but not ENTRYPOINT. This makes ENTRYPOINT good for "the thing this container is", CMD for "default config".',
+  },
+
+  // ── Kubernetes ──
+  {
+    section: 'k8s',
+    q: 'A pod is stuck in <strong>CrashLoopBackOff</strong>. What is your investigation sequence?',
+    options: [
+      { text: 'Delete the pod and let it restart; it usually fixes itself', correct: false },
+      { text: 'Scale the deployment to 0 then back to 1', correct: false },
+      { text: 'kubectl logs <pod> --previous, then kubectl describe pod <pod> to read events', correct: true },
+      { text: 'Check the Deployment YAML for syntax errors and reapply', correct: false },
+    ],
+    explanation: '<strong>--previous</strong> gives you logs from the last crashed container (not the current one, which may already be gone). <code>describe pod</code> shows Events including image pull failures, OOM kills, liveness probe failures, etc. This combination usually tells you the root cause.',
+  },
+  {
+    section: 'k8s',
+    q: 'What is the difference between a <strong>liveness probe</strong> and a <strong>readiness probe</strong>?',
+    options: [
+      { text: 'Liveness checks if the pod is healthy; readiness checks if it\'s ready to receive traffic', correct: true },
+      { text: 'They are the same — both restart the pod if they fail', correct: false },
+      { text: 'Readiness probes only run at startup; liveness probes run continuously', correct: false },
+      { text: 'Liveness probes are for HTTP endpoints; readiness probes are for TCP', correct: false },
+    ],
+    explanation: 'If a <strong>liveness probe</strong> fails, Kubernetes <em>restarts the container</em>. If a <strong>readiness probe</strong> fails, the pod is <em>removed from Service endpoints</em> so it stops receiving traffic — but isn\'t restarted. Critical difference: a misconfigured liveness probe causes restart loops; a misconfigured readiness probe silently drops traffic.',
+  },
+  {
+    section: 'k8s',
+    q: 'You need to store a database connection string securely in Kubernetes and mount it as an environment variable. What is the correct approach?',
+    options: [
+      { text: 'Hardcode it in the Deployment YAML and commit to git', correct: false },
+      { text: 'Use a ConfigMap — it\'s encrypted by default', correct: false },
+      { text: 'Create a Secret, then reference it with envFrom or env.valueFrom.secretKeyRef in the Deployment', correct: true },
+      { text: 'Pass it as a command-line argument in the container spec', correct: false },
+    ],
+    explanation: '<strong>Secrets</strong> are base64-encoded (not encrypted by default unless you enable encryption at rest), but they\'re the correct K8s primitive for sensitive data. Reference with <code>secretKeyRef</code>. Never hardcode in YAML that goes to git.',
+  },
+  {
+    section: 'k8s',
+    q: 'You deploy v2 of your app and it\'s broken. What is the fastest way to recover?',
+    options: [
+      { text: 'Edit the Deployment YAML to change the image tag back and kubectl apply', correct: false },
+      { text: 'Delete the Deployment and redeploy from scratch', correct: false },
+      { text: 'kubectl rollout undo deployment/myapp', correct: true },
+      { text: 'kubectl scale deployment/myapp --replicas=0 then back to original', correct: false },
+    ],
+    explanation: '<strong>kubectl rollout undo</strong> instantly reverts to the previous ReplicaSet. Kubernetes keeps rollout history (configurable with <code>revisionHistoryLimit</code>). You can also undo to a specific revision with <code>--to-revision=N</code>.',
+  },
+
+  // ── Cloud ──
+  {
+    section: 'cloud',
+    q: 'An EC2 instance needs to read from an S3 bucket. What is the most secure way to grant this access?',
+    options: [
+      { text: 'Create an IAM user, generate access keys, and hardcode them in the application', correct: false },
+      { text: 'Attach an IAM Role with an S3 read policy to the EC2 instance', correct: true },
+      { text: 'Make the S3 bucket publicly readable', correct: false },
+      { text: 'Store the access keys in environment variables in the EC2 instance', correct: false },
+    ],
+    explanation: '<strong>IAM Roles</strong> for EC2 are the correct pattern — the instance gets temporary rotating credentials automatically via the metadata service (no hardcoding). Hardcoded keys are the #1 cloud security mistake and the source of most credential leaks.',
+  },
+  {
+    section: 'cloud',
+    q: 'What is the purpose of a private subnet in a VPC?',
+    options: [
+      { text: 'Resources in it cannot communicate with each other', correct: false },
+      { text: 'Resources in it have no route to/from the public internet, only internal traffic', correct: true },
+      { text: 'It is cheaper because it uses less bandwidth', correct: false },
+      { text: 'It encrypts all traffic between resources automatically', correct: false },
+    ],
+    explanation: 'A <strong>private subnet</strong> has no route to an Internet Gateway — resources can\'t be directly reached from outside and can\'t reach the internet without a NAT Gateway. Use for databases, internal services, workers. Use public subnets only for load balancers and bastion hosts.',
+  },
+  {
+    section: 'cloud',
+    q: 'You accidentally pushed an S3 bucket policy that makes all objects publicly readable. What do you do first?',
+    options: [
+      { text: 'Delete the bucket and recreate it', correct: false },
+      { text: 'Immediately remove the public policy or enable S3 Block Public Access, then audit what was accessed in CloudTrail', correct: true },
+      { text: 'Rotate all IAM credentials as a precaution', correct: false },
+      { text: 'Move all objects to a different bucket', correct: false },
+    ],
+    explanation: 'Priority: <strong>contain first</strong> (remove the policy / enable Block Public Access), then <strong>assess blast radius</strong> (CloudTrail + S3 access logs to see what was accessed and by whom). Rotating credentials is secondary unless the bucket contained secrets.',
+  },
+
+  // ── Terraform ──
+  {
+    section: 'terraform',
+    q: 'Why should the Terraform state file be stored in a remote backend (e.g., S3) instead of locally?',
+    options: [
+      { text: 'Local state files are not supported in Terraform v1.x', correct: false },
+      { text: 'Remote backends are faster to read and write', correct: false },
+      { text: 'It enables team collaboration, prevents concurrent state corruption, and keeps sensitive outputs off local machines', correct: true },
+      { text: 'Terraform requires a remote backend to run plan and apply', correct: false },
+    ],
+    explanation: 'Local state works for solo work but breaks in teams — two people running <code>apply</code> simultaneously can corrupt state. Remote backends (S3 + DynamoDB locking, Terraform Cloud) provide <strong>state locking, versioning, and shared access</strong>. State also contains sensitive values, so keeping it off dev laptops matters.',
+  },
+  {
+    section: 'terraform',
+    q: 'A junior engineer manually changed the instance type of an EC2 instance in the AWS console. What happens when you next run <code style="color:#a5b4fc">terraform plan</code>?',
+    options: [
+      { text: 'Nothing — Terraform doesn\'t detect manual changes', correct: false },
+      { text: 'Terraform will show a plan to revert the instance type back to the one defined in code', correct: true },
+      { text: 'Terraform will update its state file to match the console change', correct: false },
+      { text: 'Terraform will error and refuse to run', correct: false },
+    ],
+    explanation: '<strong>Terraform plan</strong> compares state file vs actual infra and code. It will detect the drift and show it plans to revert the instance type to match the code. This is the core principle of IaC: code is the source of truth, not the console.',
+  },
+  {
+    section: 'terraform',
+    q: 'What is the safest way to handle a database password in Terraform without committing it to git?',
+    options: [
+      { text: 'Store it in a .tfvars file and commit it with the rest of the code', correct: false },
+      { text: 'Pass it via TF_VAR_ environment variable or pull it from AWS Secrets Manager / Vault at apply time', correct: true },
+      { text: 'Hardcode it in the resource block and use .gitignore', correct: false },
+      { text: 'Encrypt it with base64 and store in variables.tf', correct: false },
+    ],
+    explanation: 'Use <strong>TF_VAR_password</strong> env var (never committed), or reference an existing secret from Secrets Manager/Vault using a data source. Note: even if you don\'t commit it, Terraform state will contain the value in plaintext — that\'s another reason for encrypted remote state.',
+  },
+
+  // ── Monitoring ──
+  {
+    section: 'monitor',
+    q: 'Which of the following best describes the four "Golden Signals" of site reliability?',
+    options: [
+      { text: 'CPU, Memory, Disk, Network', correct: false },
+      { text: 'Latency, Traffic, Errors, Saturation', correct: true },
+      { text: 'Uptime, Throughput, Error rate, Deployment frequency', correct: false },
+      { text: 'P50, P95, P99, P999 latency', correct: false },
+    ],
+    explanation: 'From the Google SRE Book: <strong>Latency</strong> (how long requests take), <strong>Traffic</strong> (how much demand), <strong>Errors</strong> (rate of failed requests), <strong>Saturation</strong> (how "full" the system is). These four tell you everything about service health.',
+  },
+  {
+    section: 'monitor',
+    q: 'Your Grafana dashboard shows p99 latency spiked from 50ms to 4 seconds, starting 20 minutes ago. What is your first investigation step?',
+    options: [
+      { text: 'Restart all pods to clear the problem', correct: false },
+      { text: 'Correlate the spike timestamp with recent deployments, scaling events, or upstream changes', correct: true },
+      { text: 'Increase the instance size to add more resources', correct: false },
+      { text: 'Check if the monitoring dashboard itself is misconfigured', correct: false },
+    ],
+    explanation: '<strong>Correlation before action.</strong> Find what changed at T-20min: a deploy, a config change, a traffic surge, an upstream dependency going slow. Adding resources or restarting without diagnosing the cause often hides the problem temporarily.',
+  },
+  {
+    section: 'monitor',
+    q: 'What is the difference between a metric and a log in observability?',
+    options: [
+      { text: 'Metrics are for applications; logs are for infrastructure', correct: false },
+      { text: 'Metrics are numeric time-series data (aggregated); logs are timestamped event records (individual)', correct: true },
+      { text: 'Logs are more accurate than metrics', correct: false },
+      { text: 'Metrics require an agent; logs are sent automatically', correct: false },
+    ],
+    explanation: '<strong>Metrics</strong> are aggregated numerics over time (e.g., "500 req/s, avg 30ms") — great for dashboards and alerts. <strong>Logs</strong> are individual event records ("user 123 hit endpoint /checkout at 14:22:01") — great for debugging specific incidents. They complement each other.',
+  },
+
+  // ── Problem-Solving Mindset ──
+  {
+    section: 'mindset',
+    q: 'A deployment works perfectly in staging but fails in production. What is your structured first step?',
+    options: [
+      { text: 'Roll back immediately and investigate later', correct: false },
+      { text: 'Try re-deploying — it might be a fluke', correct: false },
+      { text: 'Diff the two environments: env vars, secrets, resource limits, network policies, image tags', correct: true },
+      { text: 'Check if the production database is running', correct: false },
+    ],
+    explanation: '"Works in staging, fails in prod" = <strong>environment diff problem</strong>. Systematically compare what\'s different: secrets, config, resource limits, network rules, external dependencies. The failure lives in the difference.',
+  },
+  {
+    section: 'mindset',
+    q: 'A CI pipeline that usually takes 4 minutes has been running for 35 minutes. It\'s not failed — just hanging. What do you do?',
+    options: [
+      { text: 'Wait — CI pipelines sometimes take longer', correct: false },
+      { text: 'Cancel, check which step it\'s stuck on, look at its logs, and identify if it\'s a test timeout, hung process, or waiting for a resource lock', correct: true },
+      { text: 'Kill the runner and restart it', correct: false },
+      { text: 'Merge without CI passing — it\'s probably fine', correct: false },
+    ],
+    explanation: 'A <strong>hanging</strong> step (not failing) typically means: a test waiting on a port that never opened, a process that didn\'t exit, or a resource lock (e.g., database, mutex). Check which step is stuck, read its output, then find the hang root cause before restarting blindly.',
+  },
+];
+
+// ── State ──
+let current = 0;
+let answers = new Array(QUESTIONS.length).fill(null); // index of selected option
+let revealed = new Array(QUESTIONS.length).fill(false);
+
+function startTest() {
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  const container = document.getElementById('question-container');
+  const total = QUESTIONS.length;
+
+  // Progress
+  document.getElementById('progress-label').textContent = `Question ${current + 1} of ${total}`;
+  const pct = Math.round((current / total) * 100);
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  // Section name
+  const sec = SECTIONS.find(s => s.id === q.section);
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let cls = 'option';
+    let dot = '';
+    if (revealed[current]) {
+      if (opt.correct) { cls += ' reveal-correct'; dot = '✓'; }
+      else if (answers[current] === i && !opt.correct) { cls += ' wrong'; dot = '✗'; }
+    } else if (answers[current] === i) {
+      cls += ' selected';
+    }
+    return `<div class="${cls}" onclick="selectOption(${i})" data-idx="${i}">
+      <div class="opt-dot">${dot}</div>
+      <div>${opt.text}</div>
+    </div>`;
+  }).join('');
+
+  const explanationCls = revealed[current] ? 'explanation show' : 'explanation';
+
+  container.innerHTML = `
+    <div class="card">
+      <div class="section-tag">${sec.icon} ${sec.label}</div>
+      <div class="q-number">Q${current + 1} / ${total}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optionsHtml}</div>
+      <div class="${explanationCls}" id="explanation-box">💡 ${q.explanation}</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prevQ()" ${current === 0 ? 'disabled' : ''}>← Back</button>
+      <div style="display:flex;gap:10px;">
+        ${!revealed[current] && answers[current] !== null ? `<button class="btn btn-ghost" onclick="checkAnswer()">Check Answer</button>` : ''}
+        ${current < total - 1
+          ? `<button class="btn btn-primary" onclick="nextQ()" ${answers[current] === null ? 'disabled' : ''}>Next →</button>`
+          : `<button class="btn btn-primary" onclick="showResults()" ${answers[current] === null ? 'disabled' : ''}>See Results →</button>`
+        }
+      </div>
+    </div>
+  `;
+}
+
+function selectOption(idx) {
+  if (revealed[current]) return;
+  answers[current] = idx;
+  renderQuestion();
+}
+
+function checkAnswer() {
+  if (answers[current] === null) return;
+  revealed[current] = true;
+  renderQuestion();
+}
+
+function nextQ() {
+  if (current < QUESTIONS.length - 1) { current++; renderQuestion(); }
+}
+function prevQ() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+function showResults() {
+  document.getElementById('quiz').style.display = 'none';
+  const resultsEl = document.getElementById('results');
+  resultsEl.style.display = 'block';
+
+  // Score per section
+  const scores = {};
+  const totals = {};
+  SECTIONS.forEach(s => { scores[s.id] = 0; totals[s.id] = 0; });
+  QUESTIONS.forEach((q, i) => {
+    totals[q.section]++;
+    if (answers[i] !== null && q.options[answers[i]].correct) scores[q.section]++;
+  });
+
+  const overallCorrect = Object.values(scores).reduce((a, b) => a + b, 0);
+  const overallTotal = QUESTIONS.length;
+  const overallPct = Math.round((overallCorrect / overallTotal) * 100);
+
+  let overallColor = overallPct >= 70 ? '#22c55e' : overallPct >= 45 ? '#f59e0b' : '#818cf8';
+  let overallLabel = overallPct >= 70 ? 'Strong foundation' : overallPct >= 45 ? 'Solid base, gaps to fill' : 'Full roadmap — great timing to start!';
+  let overallDesc = overallPct >= 70
+    ? 'You\'ve got real experience. Use the roadmap to fill gaps and sharpen your practice.'
+    : overallPct >= 45
+    ? 'Good intuition in some areas. The roadmap will build on what you know and fill the blanks.'
+    : 'You\'re in the right place. The full 2-week sprint is designed exactly for where you are now.';
+
+  // Per-section recommendation
+  function recommend(id) {
+    const pct = totals[id] > 0 ? scores[id] / totals[id] : 0;
+    if (pct >= 0.75) return { label: 'Skip / Challenge only', cls: 'badge-skip', barColor: '#22c55e', day: 'skip' };
+    if (pct >= 0.4)  return { label: 'Skim + Lab', cls: 'badge-skim', barColor: '#f59e0b', day: 'skim' };
+    return { label: 'Do in full', cls: 'badge-do', barColor: '#818cf8', day: 'full' };
+  }
+
+  const sectionRowsHtml = SECTIONS.map(sec => {
+    const s = scores[sec.id];
+    const t = totals[sec.id];
+    const rec = recommend(sec.id);
+    const barPct = t > 0 ? Math.round((s / t) * 100) : 0;
+    return `
+      <div class="score-row">
+        <div class="score-icon">${sec.icon}</div>
+        <div class="score-info">
+          <h4>${sec.label} <span style="color:var(--muted);font-weight:400;font-size:13px;">${s}/${t} correct</span></h4>
+          <div class="score-bar-track">
+            <div class="score-bar-fill" style="width:${barPct}%;background:${rec.barColor};"></div>
+          </div>
+        </div>
+        <div class="score-badge ${rec.cls}">${rec.label}</div>
+      </div>`;
+  }).join('');
+
+  const dayMap = {
+    linux:    { label: 'Day 1 — Linux & Shell' },
+    network:  { label: 'Day 2 — Networking' },
+    docker:   { label: 'Day 3 — Docker' },
+    k8s:      { label: 'Days 4–5 — Kubernetes + Helm' },
+    cloud:    { label: 'Day 6 — Cloud Foundations' },
+    terraform:{ label: 'Day 7 — Terraform / IaC' },
+    monitor:  { label: 'Day 9 — Monitoring' },
+    mindset:  { label: 'Day 10 — Capstone & Problem-Solving' },
+  };
+
+  const dayListHtml = SECTIONS.map(sec => {
+    const rec = recommend(sec.id);
+    const action = rec.day === 'skip' ? 'Do the AI Challenge only'
+                 : rec.day === 'skim' ? 'Skim theory → jump to lab'
+                 : 'Full day — theory + lab + AI challenge';
+    return `<div class="day-item ${rec.day}">
+      <div class="day-dot"></div>
+      <div class="day-label">${dayMap[sec.id].label}</div>
+      <div class="day-action">${action}</div>
+    </div>`;
+  }).join('');
+
+  resultsEl.innerHTML = `
+    <div class="header">
+      <div class="badge">Pre-Assessment Complete</div>
+      <h1>Your Learning Path</h1>
+      <p class="sub">Based on your answers — here's exactly how to approach the 2-week sprint.</p>
+    </div>
+
+    <div class="overall-score">
+      <div class="score-ring" style="border-color:${overallColor};color:${overallColor}">${overallPct}%</div>
+      <div class="overall-text">
+        <h3>${overallLabel}</h3>
+        <p>${overallDesc}</p>
+      </div>
+    </div>
+
+    <div class="section-scores">${sectionRowsHtml}</div>
+
+    <div class="recommendation">
+      <h3>🗓️ Your Personalised Roadmap</h3>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Do in full</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div> Skim + lab</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Skip to AI challenge</div>
+      </div>
+      <div class="day-list">${dayListHtml}</div>
+    </div>
+
+    <div class="ai-tip">
+      <h4>🤖 Use AI to fill your gaps faster</h4>
+      <p>For every area where you scored below 50%, open Claude and try:<br/><br/>
+      <code>"I'm onboarding as a DevOps engineer. Quiz me on [topic] — ask 5 questions one at a time, tell me if I'm right or wrong, and explain why."</code><br/><br/>
+      Do this before Day 1 of that section. You'll arrive at the lab with context already loaded.</p>
+    </div>
+
+    <button class="restart-btn" onclick="restartTest()">↩ Retake the assessment</button>
+    <button class="restart-btn" onclick="saveProgressFile()" style="margin-top:10px;border-color:#6366f1;color:#a5b4fc;">💾 Save Progress File</button>
+  `;
+}
+
+// ── Progress file save/load ──
+function buildProgressData() {
+  const sectionScores = {};
+  const recs = {};
+  SECTIONS.forEach(s => {
+    const correct = QUESTIONS.filter((q,i) => q.section === s.id && answers[i] !== null && q.options[answers[i]].correct).length;
+    const total   = QUESTIONS.filter(q => q.section === s.id).length;
+    sectionScores[s.id] = { score: correct, max: total };
+    const pct = total > 0 ? correct / total : 0;
+    recs[s.id] = pct >= 0.75 ? 'skip' : pct >= 0.4 ? 'skim' : 'full';
+  });
+  const overallCorrect = Object.values(sectionScores).reduce((a,b) => a + b.score, 0);
+  const overallTotal   = QUESTIONS.length;
+  return {
+    version: '1.0',
+    trainee: { name: document.getElementById('trainee-name')?.value || '', email: '', start_date: new Date().toISOString().split('T')[0] },
+    pretest: {
+      completed: true,
+      date: new Date().toISOString().split('T')[0],
+      score_pct: Math.round((overallCorrect / overallTotal) * 100),
+      section_scores: sectionScores,
+      recommendations: recs
+    },
+    story:      { chapters_completed: [], chapter_dates: {}, current_chapter: 1 },
+    assessment: { completed: false, date: null, trainer: null, total_score: null, total_max: 54, score_pct: null, recommendation: null, section_scores: {}, notes: '' },
+    last_updated: new Date().toISOString()
+  };
+}
+
+async function saveProgressFile() {
+  const data = buildProgressData();
+  const name = (data.trainee.name || 'trainee').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+  const filename = name + '.json';
+  const json = JSON.stringify(data, null, 2);
+  if (window.showSaveFilePicker) {
+    try {
+      const fh = await window.showSaveFilePicker({ suggestedName: filename, types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }] });
+      const w = await fh.createWritable();
+      await w.write(json); await w.close();
+      alert('Progress saved! Put the file in the progress/ folder of the training repo.');
+      return;
+    } catch(e) { if (e.name === 'AbortError') return; }
+  }
+  // Fallback: download
+  const a = document.createElement('a');
+  a.href = 'data:application/json,' + encodeURIComponent(json);
+  a.download = filename; a.click();
+  setTimeout(() => alert('Downloaded ' + filename + ' — move it to the progress/ folder in the training repo.'), 300);
+}
+
+function triggerLoadProgress() { document.getElementById('load-file-input').click(); }
+
+function loadProgressFile(evt) {
+  const file = evt.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      if (d.trainee?.name) document.getElementById('trainee-name').value = d.trainee.name;
+      if (d.pretest?.completed) {
+        alert('Progress loaded for ' + d.trainee.name + '.\nPre-test already completed on ' + d.pretest.date + ' (' + d.pretest.score_pct + '%). Starting a new attempt will overwrite results when you save.');
+      } else {
+        alert('Progress loaded for ' + (d.trainee.name || 'trainee') + '. Pre-test not yet completed — click Start to begin.');
+      }
+    } catch { alert('Could not read file — make sure it is a valid progress JSON.'); }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
+function restartTest() {
+  current = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  revealed = new Array(QUESTIONS.length).fill(false);
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+}
+</script>
+</body>
+</html>

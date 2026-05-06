@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Trainer Dashboard — DevOps Cohort</title>
+<style>
+:root {
+  --bg: #0b0d14;
+  --surface: #13161f;
+  --surface2: #1c2030;
+  --surface3: #242840;
+  --border: #2a2f45;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --green: #22c55e;
+  --green-dim: #14532d;
+  --yellow: #f59e0b;
+  --yellow-dim: #78350f;
+  --red: #ef4444;
+  --red-dim: #450a0a;
+  --blue: #38bdf8;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --muted2: #94a3b8;
+  --radius: 12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ── Topbar ── */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:32px;height:32px;border-radius:7px;background:linear-gradient(135deg,#6366f1,#22c55e);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.logo h2{font-size:15px;font-weight:700;}
+.logo span{font-size:12px;color:var(--muted);}
+.btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity 0.15s;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{opacity:0.88;}
+.btn-outline{background:var(--surface2);color:var(--muted2);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--accent);color:var(--text);}
+
+/* ── Wrap ── */
+.wrap{max-width:1100px;margin:0 auto;padding:32px 24px 80px;}
+
+/* ── Empty state ── */
+.empty{
+  text-align:center;padding:80px 24px;
+  background:var(--surface);border:1px dashed var(--border);
+  border-radius:var(--radius);margin-top:32px;
+}
+.empty-icon{font-size:48px;margin-bottom:16px;}
+.empty h2{font-size:20px;font-weight:700;margin-bottom:8px;}
+.empty p{font-size:14px;color:var(--muted2);line-height:1.7;max-width:440px;margin:0 auto 28px;}
+.load-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:13px 24px;background:var(--accent);color:#fff;
+  border:none;border-radius:10px;font-size:15px;font-weight:700;
+  cursor:pointer;transition:opacity 0.15s;
+}
+.load-btn:hover{opacity:0.88;}
+
+/* ── Stats row ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;}
+.stat-card .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:6px;}
+.stat-card .value{font-size:28px;font-weight:800;line-height:1;}
+.stat-card .sub{font-size:12px;color:var(--muted2);margin-top:4px;}
+
+/* ── Table ── */
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.table-header{
+  display:grid;grid-template-columns:180px 90px 1fr 110px 100px 120px;
+  padding:11px 20px;background:var(--surface2);
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);
+  border-bottom:1px solid var(--border);gap:8px;
+}
+.table-row{
+  display:grid;grid-template-columns:180px 90px 1fr 110px 100px 120px;
+  padding:14px 20px;border-bottom:1px solid var(--border);
+  align-items:center;gap:8px;transition:background 0.1s;
+}
+.table-row:last-child{border-bottom:none;}
+.table-row:hover{background:var(--surface2);}
+
+.trainee-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.trainee-email{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.score-badge{
+  font-size:12px;font-weight:700;padding:3px 10px;
+  border-radius:999px;text-align:center;white-space:nowrap;
+}
+.score-na{background:var(--surface2);color:var(--muted);}
+.score-low{background:var(--red-dim);color:#fca5a5;}
+.score-mid{background:var(--yellow-dim);color:#fde68a;}
+.score-high{background:var(--green-dim);color:#86efac;}
+
+/* Chapter progress bar */
+.chapter-progress{display:flex;align-items:center;gap:8px;}
+.chapter-dots{display:flex;gap:3px;flex-wrap:wrap;}
+.cdot{width:14px;height:14px;border-radius:3px;background:var(--surface3);border:1px solid var(--border);}
+.cdot.done{background:var(--green);border-color:var(--green);}
+.cdot.current{background:var(--accent);border-color:var(--accent);}
+.chapter-num{font-size:12px;color:var(--muted);flex-shrink:0;}
+
+.last-active{font-size:12px;color:var(--muted2);}
+
+/* Recommendation pill */
+.rec-pill{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;text-align:center;white-space:nowrap;}
+.rec-ready{background:var(--green-dim);color:#86efac;}
+.rec-pairing{background:#0c4a6e;color:#bae6fd;}
+.rec-sprint{background:var(--yellow-dim);color:#fde68a;}
+.rec-review{background:var(--red-dim);color:#fca5a5;}
+.rec-pending{background:var(--surface2);color:var(--muted);}
+
+/* ── Detail panel ── */
+.detail-panel{
+  background:var(--surface);border:1px solid var(--accent);
+  border-radius:var(--radius);padding:28px;margin-top:16px;
+  display:none;
+}
+.detail-panel.show{display:block;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+.detail-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.detail-card h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:12px;}
+.section-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:13px;}
+.section-row .sicon{width:18px;text-align:center;font-size:14px;}
+.section-row .sname{flex:1;color:var(--muted2);}
+.section-row .sbar{width:80px;height:5px;background:var(--surface3);border-radius:999px;overflow:hidden;}
+.section-row .sbar-fill{height:100%;border-radius:999px;}
+.section-row .sscore{width:32px;text-align:right;font-size:12px;color:var(--muted);}
+
+.close-btn{float:right;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;}
+.close-btn:hover{color:var(--text);}
+
+/* ── Upload area ── */
+.upload-area{display:none;}
+
+/* Responsive */
+@media(max-width:900px){
+  .table-header,.table-row{grid-template-columns:1fr 80px 100px 90px;}
+  .col-pretest-detail,.col-last{display:none;}
+  .stats{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">📊</div>
+    <div>
+      <h2>Trainer Dashboard</h2>
+      <span>DevOps & Cloud · Cohort Overview</span>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <button class="btn btn-outline" onclick="refreshFolder()" id="refresh-btn" style="display:none">↺ Refresh</button>
+    <button class="btn btn-outline" onclick="loadFolder()" id="load-folder-btn">📂 Open progress/ folder</button>
+    <button class="btn btn-outline" onclick="loadSingleFiles()" id="load-files-btn">+ Add files</button>
+    <input type="file" id="file-input" accept=".json" multiple style="display:none" onchange="handleFiles(event)"/>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Empty state -->
+  <div class="empty" id="empty-state">
+    <div class="empty-icon">📁</div>
+    <h2>No progress files loaded</h2>
+    <p>Open the <code>progress/</code> folder from the training repository, or drag and drop individual trainee JSON files here. Each file represents one trainee's full progress.</p>
+    <button class="load-btn" onclick="loadFolder()">📂 Open progress/ folder</button>
+    <div style="margin-top:12px;">
+      <button onclick="loadSingleFiles()" style="background:none;border:none;color:var(--muted2);font-size:13px;cursor:pointer;text-decoration:underline;">
+        or select individual files
+      </button>
+    </div>
+  </div>
+
+  <!-- Dashboard (hidden until loaded) -->
+  <div id="dashboard" style="display:none;">
+
+    <!-- Stats row -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="label">Total trainees</div>
+        <div class="value" id="stat-total">0</div>
+        <div class="sub">in this cohort</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Avg pre-test score</div>
+        <div class="value" id="stat-pretest">—</div>
+        <div class="sub">across all who completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Chapters done</div>
+        <div class="value" id="stat-chapters">—</div>
+        <div class="sub">avg chapters per trainee</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Assessments passed</div>
+        <div class="value" id="stat-assessed">0</div>
+        <div class="sub">ready for independent work</div>
+      </div>
+    </div>
+
+    <!-- Detail panel (shown on row click) -->
+    <div class="detail-panel" id="detail-panel">
+      <button class="close-btn" onclick="closeDetail()">×</button>
+      <div id="detail-content"></div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <div>Trainee</div>
+        <div>Pre-test</div>
+        <div>Story Progress</div>
+        <div class="col-pretest-detail">Top gap</div>
+        <div class="col-last">Last active</div>
+        <div>Assessment</div>
+      </div>
+      <div id="table-body"></div>
+    </div>
+
+    <div style="margin-top:12px;font-size:12px;color:var(--muted);text-align:right;">
+      Click any row to see full detail · <span id="file-count">0</span> files loaded
+    </div>
+  </div>
+
+</div>
+
+<script>
+let trainees = [];  // array of parsed JSON objects
+let dirHandle = null;
+
+// ── Load methods ──
+async function loadFolder() {
+  if (!window.showDirectoryPicker) {
+    alert('Your browser doesn\'t support folder picking.\nUse "Add files" to select individual JSON files instead.');
+    loadSingleFiles(); return;
+  }
+  try {
+    dirHandle = await window.showDirectoryPicker();
+    await readDirectory(dirHandle);
+    document.getElementById('refresh-btn').style.display = 'inline-flex';
+  } catch(e) { if (e.name !== 'AbortError') alert('Error opening folder: ' + e.message); }
+}
+
+async function refreshFolder() {
+  if (!dirHandle) return;
+  await readDirectory(dirHandle);
+}
+
+async function readDirectory(dh) {
+  trainees = [];
+  for await (const entry of dh.values()) {
+    if (entry.kind === 'file' && entry.name.endsWith('.json') && !entry.name.startsWith('_')) {
+      try {
+        const file = await entry.getFile();
+        const text = await file.text();
+        const d = JSON.parse(text);
+        if (d.version && d.trainee) trainees.push(d);
+      } catch {}
+    }
+  }
+  renderDashboard();
+}
+
+function loadSingleFiles() { document.getElementById('file-input').click(); }
+
+function handleFiles(evt) {
+  const files = Array.from(evt.target.files);
+  let pending = files.length;
+  files.forEach(f => {
+    const r = new FileReader();
+    r.onload = e => {
+      try {
+        const d = JSON.parse(e.target.result);
+        if (d.version && d.trainee) {
+          // replace if same trainee name, otherwise append
+          const idx = trainees.findIndex(t => t.trainee.name === d.trainee.name);
+          if (idx >= 0) trainees[idx] = d; else trainees.push(d);
+        }
+      } catch {}
+      pending--;
+      if (pending === 0) renderDashboard();
+    };
+    r.readAsText(f);
+  });
+  evt.target.value = '';
+}
+
+// ── Render ──
+function renderDashboard() {
+  if (trainees.length === 0) {
+    document.getElementById('empty-state').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+    return;
+  }
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('file-count').textContent = trainees.length;
+
+  // Stats
+  document.getElementById('stat-total').textContent = trainees.length;
+  const withPretest = trainees.filter(t => t.pretest?.completed);
+  if (withPretest.length > 0) {
+    const avg = Math.round(withPretest.reduce((a,t) => a + (t.pretest.score_pct || 0), 0) / withPretest.length);
+    document.getElementById('stat-pretest').textContent = avg + '%';
+  } else {
+    document.getElementById('stat-pretest').textContent = '—';
+  }
+  const avgChapters = trainees.length > 0
+    ? (trainees.reduce((a,t) => a + (t.story?.chapters_completed?.length || 0), 0) / trainees.length).toFixed(1)
+    : '0';
+  document.getElementById('stat-chapters').textContent = avgChapters + '/10';
+  const assessed = trainees.filter(t => t.assessment?.recommendation === 'ready').length;
+  document.getElementById('stat-assessed').textContent = assessed;
+
+  // Table rows
+  const body = document.getElementById('table-body');
+  body.innerHTML = '';
+  trainees.slice().sort((a,b) => {
+    const ad = a.last_updated || ''; const bd = b.last_updated || '';
+    return bd.localeCompare(ad);
+  }).forEach((t, idx) => {
+    const row = document.createElement('div');
+    row.className = 'table-row';
+    row.style.cursor = 'pointer';
+    row.onclick = () => showDetail(t);
+
+    // Pretest score
+    const pct = t.pretest?.score_pct;
+    let scoreCls = 'score-na', scoreText = '—';
+    if (pct !== null && pct !== undefined) {
+      scoreText = pct + '%';
+      scoreCls = pct >= 70 ? 'score-high' : pct >= 45 ? 'score-mid' : 'score-low';
+    }
+
+    // Chapter dots
+    const done = t.story?.chapters_completed || [];
+    const current = t.story?.current_chapter || 1;
+    const dotsHtml = Array.from({length:10},(_,i)=>{
+      const n = i+1;
+      const cls = done.includes(n) ? 'done' : n === current && !done.includes(n) ? 'current' : '';
+      return `<div class="cdot ${cls}" title="Chapter ${n}: ${done.includes(n)?'Done':n===current?'In progress':'Locked'}"></div>`;
+    }).join('');
+
+    // Top gap (weakest pre-test section)
+    let topGap = '—';
+    if (t.pretest?.section_scores) {
+      const ss = t.pretest.section_scores;
+      const sections = { linux:'Linux', network:'Networking', docker:'Docker', k8s:'Kubernetes', cloud:'Cloud', terraform:'Terraform', monitor:'Monitoring', mindset:'Mindset' };
+      let worst = null, worstPct = 1;
+      Object.entries(ss).forEach(([k, v]) => {
+        if (v.score !== null && v.max > 0) {
+          const p = v.score / v.max;
+          if (p < worstPct) { worstPct = p; worst = k; }
+        }
+      });
+      if (worst) topGap = sections[worst] + ' (' + Math.round(worstPct*100) + '%)';
+    }
+
+    // Last active
+    const lu = t.last_updated;
+    let lastActive = '—';
+    if (lu) {
+      const d = new Date(lu);
+      lastActive = d.toLocaleDateString('en-GB', {day:'2-digit',month:'short'});
+    }
+
+    // Assessment
+    const rec = t.assessment?.recommendation;
+    const recLabels = { ready:'🚀 Ready', pairing:'🤝 Pairing', sprint:'🔁 2nd sprint', review:'📚 Review' };
+    const recCls = { ready:'rec-ready', pairing:'rec-pairing', sprint:'rec-sprint', review:'rec-review' };
+    const recHtml = rec
+      ? `<span class="rec-pill ${recCls[rec] || 'rec-pending'}">${recLabels[rec] || rec}</span>`
+      : `<span class="rec-pill rec-pending">Not assessed</span>`;
+
+    row.innerHTML = `
+      <div>
+        <div class="trainee-name">${t.trainee.name || 'Unknown'}</div>
+        <div class="trainee-email">${t.trainee.email || 'Started ' + (t.trainee.start_date || '—')}</div>
+      </div>
+      <div><span class="score-badge ${scoreCls}">${scoreText}</span></div>
+      <div class="chapter-progress">
+        <div class="chapter-dots">${dotsHtml}</div>
+        <span class="chapter-num">${done.length}/10</span>
+      </div>
+      <div class="last-active col-pretest-detail">${topGap}</div>
+      <div class="last-active col-last">${lastActive}</div>
+      <div>${recHtml}</div>
+    `;
+    body.appendChild(row);
+  });
+}
+
+// ── Detail panel ──
+const SECTION_META = [
+  {id:'linux',    label:'Linux & Shell',  icon:'🐧', max:4},
+  {id:'network',  label:'Networking',      icon:'🌐', max:3},
+  {id:'docker',   label:'Docker',          icon:'🐳', max:4},
+  {id:'k8s',      label:'Kubernetes',      icon:'☸️', max:4},
+  {id:'cloud',    label:'Cloud',           icon:'☁️', max:3},
+  {id:'terraform',label:'Terraform',       icon:'🏗️', max:3},
+  {id:'monitor',  label:'Monitoring',      icon:'📊', max:3},
+  {id:'mindset',  label:'Problem-Solving', icon:'🧠', max:2},
+];
+const COLORS = ['#ef4444','#f59e0b','#38bdf8','#22c55e'];
+
+function showDetail(t) {
+  const panel = document.getElementById('detail-panel');
+  const content = document.getElementById('detail-content');
+
+  const done = t.story?.chapters_completed || [];
+  const chapters = Array.from({length:10},(_,i)=>{
+    const n=i+1;
+    const titles = ['The Server is Sick','Our Database is on the Internet','It Works on My Laptop','We\'re on TechCrunch. We\'re Also Down.','Sara Deployed to Prod Again','The Investors Want a Security Audit','I Accidentally Deleted Staging','Nobody Should SSH to Deploy','We Found Out from a Tweet','Fix It or Lose the Customer'];
+    const d = t.story?.chapter_dates?.[String(n)];
+    const cls = done.includes(n) ? '#22c55e' : n === (t.story?.current_chapter||1) ? '#6366f1' : '#2a2f45';
+    return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border);">
+      <div style="width:22px;height:22px;border-radius:5px;background:${cls};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;">${n}</div>
+      <div style="flex:1;color:${done.includes(n)?'var(--text)':'var(--muted2)'};">${titles[i]}</div>
+      <div style="font-size:11px;color:var(--muted);">${d || (done.includes(n)?'done':'')}</div>
+    </div>`;
+  }).join('');
+
+  const pretestRows = SECTION_META.map(s => {
+    const sv = t.pretest?.section_scores?.[s.id];
+    const score = sv?.score ?? null;
+    const max   = sv?.max ?? s.max;
+    const pct   = score !== null ? score/max : null;
+    const barW  = pct !== null ? Math.round(pct*100) : 0;
+    const barC  = pct === null ? 'var(--surface3)' : pct >= 0.75 ? '#22c55e' : pct >= 0.4 ? '#f59e0b' : '#ef4444';
+    const rec   = t.pretest?.recommendations?.[s.id];
+    const recLbl = rec === 'skip' ? '✓ skip' : rec === 'skim' ? '~ skim' : rec ? '▶ full' : '—';
+    const recCol = rec === 'skip' ? '#86efac' : rec === 'skim' ? '#fde68a' : rec ? '#a5b4fc' : 'var(--muted)';
+    return `<div class="section-row">
+      <span class="sicon">${s.icon}</span>
+      <span class="sname">${s.label}</span>
+      <div class="sbar"><div class="sbar-fill" style="width:${barW}%;background:${barC};"></div></div>
+      <span class="sscore">${score !== null ? score+'/'+max : '—'}</span>
+      <span style="font-size:11px;font-weight:700;color:${recCol};width:42px;text-align:right;">${recLbl}</span>
+    </div>`;
+  }).join('');
+
+  const assessRows = SECTION_META.filter(s => ['linux','docker','k8s','cloud','terraform','cicd','monitor','mindset'].includes(s.id)).map(s => {
+    const score = t.assessment?.section_scores?.[s.id];
+    const max = s.id === 'k8s' ? 9 : s.id === 'mindset' ? 9 : 6;
+    const pct = score !== null && score !== undefined ? score/max : null;
+    const barW = pct !== null ? Math.round(pct*100) : 0;
+    const barC = pct === null ? 'var(--surface3)' : pct >= 0.75 ? '#22c55e' : pct >= 0.5 ? '#f59e0b' : '#ef4444';
+    return `<div class="section-row">
+      <span class="sicon">${s.icon}</span>
+      <span class="sname">${s.label}</span>
+      <div class="sbar"><div class="sbar-fill" style="width:${barW}%;background:${barC};"></div></div>
+      <span class="sscore">${score !== null && score !== undefined ? score : '—'}</span>
+    </div>`;
+  }).join('');
+
+  const rec = t.assessment?.recommendation;
+  const recLabels = { ready:'🚀 Ready for independent work', pairing:'🤝 Ready with pairing', sprint:'🔁 Needs second sprint', review:'📚 Needs foundational review' };
+
+  content.innerHTML = `
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:4px;">${t.trainee.name || 'Unknown'}</h2>
+    <div style="font-size:13px;color:var(--muted2);margin-bottom:20px;">
+      ${t.trainee.email || ''} · Started ${t.trainee.start_date || '—'} · Last active ${t.last_updated ? new Date(t.last_updated).toLocaleDateString() : '—'}
+    </div>
+    <div class="detail-grid">
+      <div class="detail-card">
+        <h4>Pre-test · ${t.pretest?.completed ? t.pretest.score_pct+'% overall' : 'Not completed'}</h4>
+        ${t.pretest?.completed ? pretestRows : '<div style="color:var(--muted);font-size:13px;">Pre-test not yet taken.</div>'}
+      </div>
+      <div class="detail-card">
+        <h4>Story Progress · ${done.length}/10 chapters</h4>
+        ${chapters}
+      </div>
+      <div class="detail-card">
+        <h4>Assessment · ${t.assessment?.completed ? (t.assessment.total_score+'/'+t.assessment.total_max+' — '+Math.round(t.assessment.score_pct||0)+'%') : 'Not completed'}</h4>
+        ${t.assessment?.completed ? assessRows : '<div style="color:var(--muted);font-size:13px;">Assessment not yet completed.</div>'}
+        ${rec ? '<div style="margin-top:12px;font-size:13px;font-weight:700;color:var(--accent2);">'+recLabels[rec]+'</div>' : ''}
+      </div>
+      ${t.assessment?.notes ? `<div class="detail-card"><h4>Trainer Notes</h4><div style="font-size:13px;color:var(--muted2);line-height:1.6;">${t.assessment.notes}</div></div>` : ''}
+    </div>
+  `;
+  panel.classList.add('show');
+  panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('show');
+}
+
+// Drag and drop support
+document.body.addEventListener('dragover', e => { e.preventDefault(); });
+document.body.addEventListener('drop', e => {
+  e.preventDefault();
+  const files = Array.from(e.dataTransfer.files).filter(f => f.name.endsWith('.json'));
+  if (files.length === 0) return;
+  let pending = files.length;
+  files.forEach(f => {
+    const r = new FileReader();
+    r.onload = ev => {
+      try {
+        const d = JSON.parse(ev.target.result);
+        if (d.version && d.trainee) {
+          const idx = trainees.findIndex(t => t.trainee.name === d.trainee.name);
+          if (idx >= 0) trainees[idx] = d; else trainees.push(d);
+        }
+      } catch {}
+      pending--;
+      if (pending === 0) renderDashboard();
+    };
+    r.readAsText(f);
+  });
+});
+</script>
+</body>
+</html>

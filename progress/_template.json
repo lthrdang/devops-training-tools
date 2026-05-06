@@ -1,0 +1,59 @@
+{
+  "version": "1.0",
+  "trainee": {
+    "name": "",
+    "email": "",
+    "start_date": ""
+  },
+  "pretest": {
+    "completed": false,
+    "date": null,
+    "score_pct": null,
+    "section_scores": {
+      "linux":     { "score": null, "max": 4 },
+      "network":   { "score": null, "max": 3 },
+      "docker":    { "score": null, "max": 4 },
+      "k8s":       { "score": null, "max": 4 },
+      "cloud":     { "score": null, "max": 3 },
+      "terraform": { "score": null, "max": 3 },
+      "monitor":   { "score": null, "max": 3 },
+      "mindset":   { "score": null, "max": 2 }
+    },
+    "recommendations": {
+      "linux":     null,
+      "network":   null,
+      "docker":    null,
+      "k8s":       null,
+      "cloud":     null,
+      "terraform": null,
+      "monitor":   null,
+      "mindset":   null
+    }
+  },
+  "story": {
+    "chapters_completed": [],
+    "chapter_dates": {},
+    "current_chapter": 1
+  },
+  "assessment": {
+    "completed": false,
+    "date": null,
+    "trainer": null,
+    "total_score": null,
+    "total_max": 54,
+    "score_pct": null,
+    "recommendation": null,
+    "section_scores": {
+      "linux":     null,
+      "docker":    null,
+      "k8s":       null,
+      "cloud":     null,
+      "terraform": null,
+      "cicd":      null,
+      "monitor":   null,
+      "mindset":   null
+    },
+    "notes": ""
+  },
+  "last_updated": null
+}
