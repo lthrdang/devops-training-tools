@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hands-on Labs — DevOps Training</title>
+<style>
+  :root {
+    --bg: #0b0d14;
+    --surface: #13161f;
+    --surface2: #1c2030;
+    --surface3: #242840;
+    --border: #2a2f45;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --green: #22c55e;
+    --green-dim: #14532d;
+    --yellow: #f59e0b;
+    --yellow-dim: #78350f;
+    --red: #ef4444;
+    --red-dim: #450a0a;
+    --blue: #38bdf8;
+    --blue-dim: #0c4a6e;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.65;
+  }
+
+  /* ── Topbar ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--orange), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .logo h2 { font-size: 15px; font-weight: 700; }
+  .logo span { font-size: 12px; color: var(--muted); }
+  .topbar-right a {
+    color: var(--muted2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+  .topbar-right a:hover { background: var(--surface2); color: var(--text); }
+
+  /* ── Layout ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 32px;
+    padding: 32px 24px 80px;
+  }
+
+  /* ── Sidebar ── */
+  aside {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  aside h3 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 18px 0 8px;
+    padding-left: 12px;
+  }
+  aside h3:first-child { margin-top: 0; }
+  aside a {
+    display: block;
+    padding: 7px 12px;
+    color: var(--muted2);
+    text-decoration: none;
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  aside a:hover { color: var(--text); background: var(--surface); }
+  aside a.active { color: var(--accent2); border-left-color: var(--accent); background: var(--surface); }
+  aside a .pending {
+    display: inline-block;
+    font-size: 9px;
+    color: var(--yellow);
+    background: var(--yellow-dim);
+    padding: 1px 6px;
+    border-radius: 999px;
+    margin-left: 6px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Main ── */
+  main { min-width: 0; }
+  .hero { margin-bottom: 36px; }
+  .badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+  .hero .sub { color: var(--muted2); font-size: 15px; max-width: 640px; }
+
+  /* ── Sections ── */
+  section { margin-bottom: 40px; scroll-margin-top: 80px; }
+  section > h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  section p { margin-bottom: 12px; color: var(--muted2); font-size: 14.5px; }
+  section ul, section ol { margin: 8px 0 16px 22px; }
+  section li { margin-bottom: 6px; color: var(--muted2); font-size: 14.5px; }
+  section strong { color: var(--text); }
+
+  /* ── Code ── */
+  code {
+    background: var(--surface2);
+    color: var(--accent2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+  pre {
+    background: #050810;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 10px 0 16px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  pre code {
+    background: transparent;
+    color: var(--text);
+    padding: 0;
+    font-size: 13px;
+  }
+  pre .cmt { color: var(--muted); }
+  pre .kw { color: var(--purple); }
+  pre .str { color: #86efac; }
+  pre .var { color: var(--blue); }
+
+  /* ── Callouts ── */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 18px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: var(--muted2);
+  }
+  .callout strong { color: var(--accent2); }
+  .callout.warn { border-left-color: var(--yellow); }
+  .callout.warn strong { color: var(--yellow); }
+  .callout.danger { border-left-color: var(--red); }
+  .callout.danger strong { color: var(--red); }
+  .callout.tip { border-left-color: var(--green); }
+  .callout.tip strong { color: var(--green); }
+
+  /* ── Beginner welcome card ── */
+  .welcome {
+    background: linear-gradient(135deg, var(--surface), var(--surface2));
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-bottom: 32px;
+  }
+  .welcome h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--green);
+  }
+  .welcome p { font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
+  .welcome p:last-child { margin-bottom: 0; }
+
+  /* ── Concept primer ── */
+  .primer {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 12px 0 18px;
+  }
+  .primer h5 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  .primer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .primer-term {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--muted2);
+    line-height: 1.55;
+  }
+  .primer-term strong {
+    display: block;
+    color: var(--accent2);
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  /* ── Collapsible hint / term ── */
+  details {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0;
+    margin: 8px 0 12px;
+    font-size: 13.5px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  details[open] { border-color: var(--accent); }
+  details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent2);
+    user-select: none;
+    list-style: none;
+    padding: 9px 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before {
+    content: '▸';
+    display: inline-block;
+    transition: transform 0.15s;
+    color: var(--muted);
+    font-size: 11px;
+  }
+  details[open] summary::before { transform: rotate(90deg); color: var(--accent); }
+  details summary:hover { background: var(--surface3); }
+  details .body {
+    padding: 0 14px 12px 28px;
+    color: var(--muted2);
+    line-height: 1.65;
+  }
+  details .body p { margin-bottom: 8px; font-size: 13.5px; }
+  details .body p:last-child { margin-bottom: 0; }
+  details .body code { font-size: 12.5px; }
+  details.hint summary { color: #a5f3fc; }
+  details.hint[open] { border-color: var(--blue); }
+  details.term summary { color: var(--accent2); }
+
+  /* ── OS tabs ── */
+  .os-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: -1px;
+  }
+  .os-tab {
+    background: none;
+    border: 1px solid transparent;
+    border-bottom: none;
+    padding: 8px 16px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+  }
+  .os-tab.active {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text);
+  }
+  .os-panel { display: none; padding-top: 14px; }
+  .os-panel.active { display: block; }
+
+  /* ── Lab card ── */
+  .lab {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 18px;
+    scroll-margin-top: 80px;
+  }
+  .lab.pending { opacity: 0.55; }
+  .lab-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lab-num {
+    flex-shrink: 0;
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: var(--surface2);
+    border: 1.5px solid var(--accent);
+    color: var(--accent2);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .lab-num strong { font-size: 18px; color: var(--text); margin-top: 3px; }
+  .lab-title { flex: 1; }
+  .lab-title h3 { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
+  .lab-title p { font-size: 13px; color: var(--muted); margin: 0; }
+  .lab-meta { display: flex; gap: 8px; flex-shrink: 0; }
+  .meta-pill {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--surface2);
+    color: var(--muted2);
+  }
+  .meta-pill.time { background: var(--accent); color: #fff; }
+  .meta-pill.level {
+    background: var(--green-dim);
+    color: var(--green);
+  }
+  .meta-pill.pending { background: var(--yellow-dim); color: var(--yellow); }
+
+  .lab h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 22px 0 8px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .lab h4:first-of-type { margin-top: 14px; }
+  .lab h4 .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--accent2);
+    border: 1px solid var(--accent);
+    font-size: 11px;
+    margin-right: 8px;
+    font-weight: 700;
+  }
+
+  .ex-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 10px 0;
+  }
+  .ex-step .ex-head {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .ex-step .ex-num {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--accent2);
+    border: 1px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .ex-step .ex-title {
+    flex: 1;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .ex-step p { font-size: 13.5px; margin-bottom: 8px; color: var(--muted2); }
+  .ex-step ul { margin: 6px 0 8px 20px; }
+  .ex-step ul li { font-size: 13.5px; color: var(--muted2); }
+
+  .verify {
+    background: var(--green-dim);
+    border-left: 3px solid var(--green);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-top: 12px;
+  }
+  .verify .check-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .verify ul { margin-bottom: 0; margin-left: 20px; }
+  .verify li { color: var(--text); font-size: 13.5px; }
+  .verify code { background: rgba(0,0,0,0.25); }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    margin-top: 40px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer a { color: var(--accent2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── Mobile ── */
+  @media (max-width: 880px) {
+    .layout { grid-template-columns: 1fr; padding: 24px 16px 60px; }
+    aside {
+      position: static;
+      max-height: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 24px;
+      background: var(--surface);
+    }
+    aside h3 { padding-left: 0; }
+    aside a { padding: 6px 8px; border-left: none; border-radius: 6px; }
+    aside a.active { border-left: none; }
+    .hero h1 { font-size: 24px; }
+    .lab { padding: 20px; }
+    .lab-head { flex-wrap: wrap; }
+    .topbar { padding: 12px 16px; }
+    .primer-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">🧪</div>
+    <div>
+      <h2>Hands-on Labs</h2>
+      <span>EcoTrack training · local VM</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a href="ecotrack-story-training.html">Story →</a>
+    <a href="index.html">← Home</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <aside>
+    <h3>Read first</h3>
+    <a href="#welcome">If you're new</a>
+
+    <h3>Setup</h3>
+    <a href="#install">Install Multipass</a>
+    <a href="#launch">Launch the VM</a>
+    <a href="#workflow">Daily workflow</a>
+
+    <h3>Labs</h3>
+    <a href="#lab-1">Day 1 · Linux</a>
+    <a href="#lab-2">Day 2 · Networking</a>
+    <a href="#lab-3">Day 3 · Docker <span class="pending">soon</span></a>
+    <a href="#lab-4">Day 4 · Kubernetes <span class="pending">soon</span></a>
+    <a href="#lab-5">Day 5 · Helm <span class="pending">soon</span></a>
+    <a href="#lab-6">Day 6 · Cloud <span class="pending">soon</span></a>
+    <a href="#lab-7">Day 7 · Terraform <span class="pending">soon</span></a>
+    <a href="#lab-8">Day 8 · CI/CD <span class="pending">soon</span></a>
+    <a href="#lab-9">Day 9 · Monitoring <span class="pending">soon</span></a>
+    <a href="#lab-10">Day 10 · Capstone <span class="pending">soon</span></a>
+
+    <h3>After</h3>
+    <a href="#cleanup">Cleanup</a>
+  </aside>
+
+  <main>
+
+    <div class="hero">
+      <div class="badge">Hands-on · Local VM · Multipass</div>
+      <h1>The Labs</h1>
+      <p class="sub">Each chapter of the EcoTrack story has a 30–60 minute lab you do on a local Ubuntu VM. The lab gives you a script that creates the broken state from the chapter — your job is to fix it.</p>
+    </div>
+
+    <div class="welcome" id="welcome">
+      <h3>👋 New to all this? Read this first.</h3>
+      <p>If you've never used Linux, an SSH session, or a virtual machine — that's fine. These labs assume zero. Every command is explained. Every technical term has a "What is this?" box you can click to read a plain-English definition. Every exercise step has a hint you can reveal if you're stuck for more than 10 minutes.</p>
+      <p><strong>How to use this page:</strong></p>
+      <ul style="margin: 6px 0 8px 22px;">
+        <li>Read the <em>Concept primer</em> box at the top of each lab — it defines the 4–6 terms used.</li>
+        <li>Hit the "Set the scene" script first; it creates the broken state for the chapter.</li>
+        <li>Work through the exercises one at a time. <strong>Don't skip ahead.</strong></li>
+        <li>If a step makes no sense, click <strong>"💭 Show a hint"</strong>. Hints don't give the solution, they nudge you toward one.</li>
+        <li>If a term confuses you, click <strong>"💡 What is X?"</strong> for a one-paragraph definition.</li>
+      </ul>
+      <p><strong>The 10-minute rule:</strong> struggle alone for 10 minutes before opening a hint or asking AI. The struggle is the lesson — productive frustration is how the muscle memory builds.</p>
+    </div>
+
+    <section id="install">
+      <h2>1. Install Multipass</h2>
+      <p>Multipass is a free virtual machine tool from Canonical (the company that makes Ubuntu). It runs a real Ubuntu Linux inside your normal computer, in a window/process you can start and stop. No company policy or license is required — it's open source.</p>
+
+      <details class="term">
+        <summary>💡 What is a virtual machine (VM)?</summary>
+        <div class="body">
+          <p>A VM is a real computer simulated inside your computer. It has its own operating system, its own disk, its own memory — but it all runs as a process on your real machine (called the <em>host</em>).</p>
+          <p>Why use one? Because it's safe. You can install anything, break anything, run weird commands — and your real laptop is untouched. Delete the VM and it all goes away.</p>
+        </div>
+      </details>
+
+      <div class="os-tabs">
+        <button class="os-tab active" data-os="mac">macOS</button>
+        <button class="os-tab" data-os="linux">Linux</button>
+        <button class="os-tab" data-os="windows">Windows</button>
+      </div>
+
+      <div class="os-panel active" data-os="mac">
+<pre><code><span class="cmt"># Homebrew (recommended — Homebrew is a package manager for macOS)</span>
+brew install --cask multipass
+
+<span class="cmt"># Or download the .pkg from https://multipass.run/download/macos</span>
+multipass version</code></pre>
+        <p>Works natively on Apple Silicon (M1/M2/M3) — uses QEMU under the hood, no Rosetta needed.</p>
+        <details class="term">
+          <summary>💡 What's Homebrew? What's a package manager?</summary>
+          <div class="body">
+            <p>A <em>package manager</em> is a tool that installs other tools for you. Instead of finding a download page, downloading a file, double-clicking, dragging to Applications, etc. — you type <code>brew install &lt;name&gt;</code> and it handles everything, including updates.</p>
+            <p>Homebrew is the most popular package manager for macOS. If you don't have it, install it first: <a href="https://brew.sh" target="_blank" rel="noopener" style="color:var(--accent2)">brew.sh</a> has a one-line command.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="os-panel" data-os="linux">
+<pre><code><span class="cmt"># Snap (Ubuntu, Debian, Fedora, Arch via snapd)</span>
+sudo snap install multipass
+
+multipass version</code></pre>
+        <details class="term">
+          <summary>💡 What is <code>sudo</code>?</summary>
+          <div class="body">
+            <p><code>sudo</code> means "do this command as the administrator". You'll be prompted for your password. It's how Linux protects the system — regular users can't install software or edit system files unless they explicitly ask permission.</p>
+            <p>Rule of thumb: only use <code>sudo</code> when a command refuses to run without it.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="os-panel" data-os="windows">
+<pre><code><span class="cmt"># Download from https://multipass.run/download/windows</span>
+<span class="cmt"># Run the installer. It sets up Hyper-V or VirtualBox automatically.</span>
+
+multipass version</code></pre>
+        <div class="callout warn"><strong>Note:</strong> on Windows Home, Multipass uses VirtualBox (it'll install VirtualBox for you). On Pro/Enterprise it uses Hyper-V (which needs to be enabled).</div>
+      </div>
+    </section>
+
+    <section id="launch">
+      <h2>2. Launch the EcoTrack VM</h2>
+      <p>You'll create a single Ubuntu 22.04 VM and reuse it for all 10 labs. 4GB of memory and 20GB of disk is enough for everything, including the Kubernetes labs (we use k3s — a lightweight version that fits in this footprint).</p>
+
+<pre><code><span class="cmt"># Launch a new VM named "ecotrack" running Ubuntu 22.04</span>
+<span class="cmt"># Takes ~30 seconds the first time (downloads the image), faster after.</span>
+multipass launch --name ecotrack --cpus 2 --memory 4G --disk 20G 22.04
+
+<span class="cmt"># Check it's running</span>
+multipass list
+
+<span class="cmt"># "Shell into" the VM — you're now inside the Linux machine</span>
+multipass shell ecotrack</code></pre>
+
+      <details class="term">
+        <summary>💡 What does "shell into" mean?</summary>
+        <div class="body">
+          <p>A <em>shell</em> is the program that reads commands you type and runs them. <code>bash</code> and <code>zsh</code> are shells. When you "shell into" a VM, you open a session where every command you type runs <em>inside</em> the VM, not on your laptop.</p>
+          <p>Your prompt will change — you might see something like <code>ubuntu@ecotrack:~$</code>. That tells you: user <em>ubuntu</em>, on the machine <em>ecotrack</em>, in the home directory (<code>~</code>). The <code>$</code> is where you type.</p>
+          <p>To leave the VM and go back to your laptop's shell, type <code>exit</code> or press <code>Ctrl+D</code>.</p>
+        </div>
+      </details>
+
+      <p>Now save a clean baseline you can roll back to anytime:</p>
+
+<pre><code><span class="cmt"># Snapshots require the VM to be stopped first</span>
+multipass stop ecotrack
+
+<span class="cmt"># Take a snapshot — this is "Save Game" for your VM</span>
+multipass snapshot ecotrack --name day-0-fresh --comment "Clean Ubuntu 22.04"
+
+<span class="cmt"># Start it back up and shell in</span>
+multipass start ecotrack
+multipass shell ecotrack</code></pre>
+
+      <details class="term">
+        <summary>💡 What's a snapshot? When should I take one?</summary>
+        <div class="body">
+          <p>A snapshot is a frozen copy of the VM's entire state — disk, configs, installed packages — at a point in time. You can roll back to it later with <code>multipass restore</code>.</p>
+          <p>Take a snapshot <strong>before</strong> a lab if you might want to retry from scratch, and <strong>after</strong> a lab once you've finished it (so you can resume that exact state on Day N+1).</p>
+        </div>
+      </details>
+
+      <div class="callout"><strong>Pretend the VM is <code>prod-1.ecotrack.io</code>.</strong> The story addresses you as if you're SSH'd into EcoTrack's production server. Your local Multipass VM <em>is</em> that server. The fiction makes the practice real.</div>
+    </section>
+
+    <section id="workflow">
+      <h2>3. Daily workflow</h2>
+      <ol>
+        <li>Open today's chapter in the <a href="ecotrack-story-training.html" style="color:var(--accent2);">story training</a> — read "The Situation".</li>
+        <li>Open this page, jump to today's lab, and run the <strong>Set the scene</strong> script in your VM. This installs the chapter's broken state.</li>
+        <li>Work the exercises (30–60 min). Use the story's mission checklist as your TODO.</li>
+        <li>Run the <strong>Verify</strong> commands. If they pass, you're done.</li>
+        <li>Snapshot before you stop: <code>multipass stop ecotrack && multipass snapshot ecotrack --name day-N-done</code>.</li>
+        <li>Tomorrow: <code>multipass start ecotrack && multipass shell ecotrack</code> and open the next lab.</li>
+      </ol>
+      <div class="callout tip"><strong>💡 Tip:</strong> keep two windows open — your VM shell on one side, this page on the other. Read a step here, run it there, watch what happens. That side-by-side rhythm is the fastest way to learn.</div>
+      <div class="callout warn"><strong>Stuck?</strong> 10-minute rule. Try alone for 10 minutes. <em>Then</em> open a hint or ask AI. Hints don't give answers; they nudge.</div>
+    </section>
+
+    <!-- ─────────────── DAY 1 ─────────────── -->
+    <div class="lab" id="lab-1">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>1</strong></div>
+        <div class="lab-title">
+          <h3>"The server keeps crashing"</h3>
+          <p>Linux & Shell · diagnose a leaky service, free a stuffed disk, and set up an early warning</p>
+        </div>
+        <div class="lab-meta">
+          <span class="meta-pill level">Beginner</span>
+          <span class="meta-pill time">45 min</span>
+        </div>
+      </div>
+
+      <div class="primer">
+        <h5>📚 Concept primer — read me first (~2 min)</h5>
+        <div class="primer-grid">
+          <div class="primer-term"><strong>process</strong>A running program. Each one has a number called a <em>PID</em> (process ID).</div>
+          <div class="primer-term"><strong>systemd</strong>Ubuntu's service manager. It starts programs at boot, restarts them if they crash, and keeps their logs.</div>
+          <div class="primer-term"><strong>service / unit</strong>A program managed by systemd. Defined by a <code>.service</code> file. You start/stop/check it with <code>systemctl</code>.</div>
+          <div class="primer-term"><strong>journalctl</strong>The command to read systemd's log database. Like <code>cat</code>, but for service logs across the whole system.</div>
+          <div class="primer-term"><strong>memory leak</strong>A bug where a program keeps asking for memory but never gives it back. Eventually it eats all RAM and the OS kills it.</div>
+          <div class="primer-term"><strong>/var/log</strong>The standard Linux folder where applications write log files. When it fills up, things break in weird ways.</div>
+          <div class="primer-term"><strong>cron</strong>A built-in scheduler. You give it a command and a schedule (every 5 min, every Monday 3am, etc.) and it runs the command for you.</div>
+        </div>
+      </div>
+
+      <h4><span class="step-num">1</span>Set the scene</h4>
+      <p>Inside the VM (run <code>multipass shell ecotrack</code> if you're not already in), copy the whole block below and paste it into the shell. Press Enter to run it. It installs a leaky service and stuffs the disk — simulating the broken EcoTrack production server.</p>
+<pre><code><span class="cmt"># --- Day 1 setup: simulate prod-1.ecotrack.io in distress ---</span>
+
+<span class="cmt"># 1. Create a tiny Python program that leaks memory on purpose</span>
+sudo tee /usr/local/bin/ecotrack-api.py &gt; /dev/null &lt;&lt;'PY'
+#!/usr/bin/env python3
+import time
+buf = []
+while True:
+    buf.append("x" * 10_000_000)  # grab another 10MB of RAM forever
+    time.sleep(1)
+PY
+sudo chmod +x /usr/local/bin/ecotrack-api.py
+
+<span class="cmt"># 2. Define it as a systemd service, so the OS auto-restarts it on crash</span>
+sudo tee /etc/systemd/system/ecotrack-api.service &gt; /dev/null &lt;&lt;'UNIT'
+[Unit]
+Description=EcoTrack API (simulated, leaky)
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /usr/local/bin/ecotrack-api.py
+Restart=always
+RestartSec=5
+MemoryMax=400M
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+<span class="cmt"># 3. Pile up large dummy log files until the disk is &gt;90% full</span>
+sudo mkdir -p /var/log/ecotrack
+while :; do
+  USED=$(df / | awk 'NR==2 {sub("%","",$5); print $5}')
+  [ "$USED" -ge 92 ] &amp;&amp; break
+  sudo dd if=/dev/zero of=/var/log/ecotrack/old-$RANDOM.log bs=1M count=300 status=none || break
+done
+
+<span class="cmt"># 4. Reload systemd's config and start the leaky service</span>
+sudo systemctl daemon-reload
+sudo systemctl enable --now ecotrack-api
+
+echo
+echo "✗ prod-1.ecotrack.io is unhealthy. Good luck."</code></pre>
+
+      <details class="term">
+        <summary>💡 What does the script actually do?</summary>
+        <div class="body">
+          <p><strong>Step 1</strong> writes a tiny Python file to <code>/usr/local/bin/ecotrack-api.py</code>. The program is dumb on purpose: it adds 10MB of junk to a list every second forever, never letting go. That's the leak.</p>
+          <p><strong>Step 2</strong> tells systemd: "treat this Python file as a service called <code>ecotrack-api</code>; if it dies, restart it after 5 seconds; cap its memory at 400MB". The cap means the kernel will kill it long before your VM runs out of RAM — which is exactly the cycle you'll see in the logs.</p>
+          <p><strong>Step 3</strong> creates large empty files in <code>/var/log/ecotrack/</code> until the disk is &gt;92% full. Real-world cause: app-rotated logs that nobody cleaned up.</p>
+          <p><strong>Step 4</strong> tells systemd to reload its config (<code>daemon-reload</code>) and start the service now plus on every boot (<code>enable --now</code>).</p>
+        </div>
+      </details>
+
+      <h4><span class="step-num">2</span>Exercises (~40 min)</h4>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">1</div><div class="ex-title">Get a snapshot of system health.</div></div>
+        <p>Run these one at a time. Don't worry if you don't understand every line — read the explanations below first.</p>
+        <pre><code>uptime    <span class="cmt"># how long the system has been up + 3 load-average numbers</span>
+df -h     <span class="cmt"># disk usage per filesystem, in human-readable form</span>
+free -h   <span class="cmt"># memory usage, human-readable</span>
+top       <span class="cmt"># live view of all processes (press q to quit)</span></code></pre>
+        <details class="term">
+          <summary>💡 What do those load-average numbers mean?</summary>
+          <div class="body">
+            <p>Three numbers — averaged over the last 1, 5, and 15 minutes. Each one is "how many processes were waiting for CPU on average". If your VM has 2 CPUs, then <strong>2.0 means CPU is fully used</strong>. Anything well above 2.0 means processes are queued up waiting.</p>
+            <p>So a quick sanity check: <em>load average / number of CPUs</em>. Above ~1.0 = busy. Above ~2.0 = saturated.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — what should I notice?</summary>
+          <div class="body">
+            <p>Look at the <code>%</code> in <code>df -h</code> for the <code>/</code> row. Look at the "available" column in <code>free -h</code>. In <code>top</code>, the top rows are sorted by CPU; press <code>Shift+M</code> (uppercase M) to sort by memory instead. What does the top entry look like?</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">2</div><div class="ex-title">Find the leaking process by name and PID.</div></div>
+        <p>Sort all processes by memory usage and look at the worst offender:</p>
+        <pre><code>ps aux --sort=-%mem | head</code></pre>
+        <details class="term">
+          <summary>💡 What's <code>ps aux</code>? What's a PID?</summary>
+          <div class="body">
+            <p><code>ps</code> shows running processes. <code>aux</code> is a common combo of flags meaning "show every process owned by every user, in BSD-style output". <code>--sort=-%mem</code> sorts by memory used, descending.</p>
+            <p>A PID is a process ID — a number Linux assigns to each running process. It's how you refer to a specific running instance, even if many copies of the same program exist.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — what am I looking for?</summary>
+          <div class="body">
+            <p>The first line is column headers: <code>USER PID %CPU %MEM ... COMMAND</code>. The second line is the worst-offending process. The PID is the second column; the program name is at the very end of the row.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">3</div><div class="ex-title">Read the crash log to confirm the leak.</div></div>
+        <p>The leaky service is named <code>ecotrack-api</code>. Read its recent log entries:</p>
+        <pre><code>journalctl -u ecotrack-api -n 100 --no-pager</code></pre>
+        <details class="term">
+          <summary>💡 What do those flags mean?</summary>
+          <div class="body">
+            <p><code>-u ecotrack-api</code> — only show logs for the <code>ecotrack-api</code> unit (service). <br><code>-n 100</code> — show the last 100 lines. <br><code>--no-pager</code> — print to the terminal directly instead of opening a pager (a pager is a "press space to scroll" view; <code>q</code> to quit).</p>
+            <p>Other useful variants: <code>journalctl -u ecotrack-api -f</code> tails the log live (Ctrl+C to stop). <code>journalctl -u ecotrack-api --since "10 minutes ago"</code> filters by time.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — what should I see?</summary>
+          <div class="body">
+            <p>Look for repeating lines like "Service died with signal 9" or "exited with status 137". Signal 9 / status 137 means the kernel's OOM killer (Out-Of-Memory) killed the process because it exceeded its memory limit. Then systemd restarts it, it leaks again, gets killed again. That cycle is what you're seeing.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">4</div><div class="ex-title">Find what's eating the disk and clean it up.</div></div>
+        <p>Find the biggest folders in <code>/var/log</code>:</p>
+        <pre><code>sudo du -sh /var/log/* 2&gt;/dev/null | sort -rh | head -15</code></pre>
+        <p>Then remove the EcoTrack-rotated logs (only those — don't touch system logs).</p>
+        <details class="term">
+          <summary>💡 What's <code>du</code> doing? Why all those flags?</summary>
+          <div class="body">
+            <p><code>du</code> = "disk usage". <br><code>-s</code> = summarize (show only the total, not every subdirectory). <br><code>-h</code> = human-readable (M, G instead of bytes). <br><code>2&gt;/dev/null</code> = silence error messages (some folders need root; we ignore those errors). <br><code>sort -rh</code> = sort reversed (biggest first), human-aware (knows that 2G &gt; 500M). <br><code>head -15</code> = show only the top 15 lines.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — how do I delete the right files?</summary>
+          <div class="body">
+            <p>You created the mess in <code>/var/log/ecotrack/</code>. Only that folder. Use <code>sudo rm /var/log/ecotrack/*.log</code> — that removes the .log files inside that folder and nothing else.</p>
+            <p><strong>Never</strong> run <code>rm -rf</code> against <code>/var/log</code> or any path you're not 100% sure of. That's how people break production. List with <code>ls</code> first; delete second.</p>
+          </div>
+        </details>
+        <div class="callout warn"><strong>⚠️ Tip:</strong> get in the habit of running <code>ls &lt;path&gt;</code> <em>before</em> any <code>rm</code>. The 2 seconds it costs you have saved careers.</div>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">5</div><div class="ex-title">Stop the bleeding for now.</div></div>
+        <p>The leak itself is a code bug — beyond Day 1's scope. Stop the service so the loop ends:</p>
+        <pre><code>sudo systemctl stop ecotrack-api</code></pre>
+        <details class="term">
+          <summary>💡 stop vs disable vs mask — what's the difference?</summary>
+          <div class="body">
+            <p><code>stop</code> = stop it right now. It can still start at boot or manually. <br><code>disable</code> = don't start it on next boot (but leaves it stoppable/startable). <br><code>mask</code> = forbid it entirely. Even root can't start it without unmasking. Use this last one for "this should never run again, ever".</p>
+            <p>For today, <code>stop</code> is enough. We want it stopped right now.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">6</div><div class="ex-title">Write a memory watcher script.</div></div>
+        <p>Create <code>~/watch-memory.sh</code> that appends a warning line to <code>/var/log/ecotrack-memory.log</code> if memory usage is over 85%. Make it executable.</p>
+        <details class="term">
+          <summary>💡 How do I create and edit a file in the shell?</summary>
+          <div class="body">
+            <p>Easiest editors on Ubuntu:</p>
+            <ul>
+              <li><code>nano ~/watch-memory.sh</code> — beginner-friendly. Save with <code>Ctrl+O</code> then Enter, exit with <code>Ctrl+X</code>.</li>
+              <li><code>vim ~/watch-memory.sh</code> — powerful but has a learning curve. Press <code>i</code> to start typing, <code>Esc</code> then <code>:wq</code> to save and quit.</li>
+            </ul>
+            <p>To make a script executable: <code>chmod +x ~/watch-memory.sh</code>. To run it: <code>~/watch-memory.sh</code> or <code>bash ~/watch-memory.sh</code>.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — how do I get memory usage as a number?</summary>
+          <div class="body">
+            <p><code>free</code> shows memory; you can pipe its output into <code>awk</code> to extract a percentage:</p>
+            <pre><code>free | awk '/Mem:/ {printf "%.0f", $3/$2*100}'</code></pre>
+            <p>That gives a single number like <code>23</code>. Compare it with <code>-gt 85</code> in an <code>if</code>:</p>
+            <pre><code>USE=$(free | awk '/Mem:/ {printf "%.0f", $3/$2*100}')
+if [ "$USE" -gt 85 ]; then
+    echo "$(date) WARN memory at ${USE}%" | sudo tee -a /var/log/ecotrack-memory.log
+fi</code></pre>
+            <p>Save that as <code>~/watch-memory.sh</code> with <code>#!/bin/bash</code> as the first line.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">7</div><div class="ex-title">Schedule it to run every 5 minutes via cron.</div></div>
+        <pre><code>crontab -e   <span class="cmt"># opens your personal cron schedule in an editor</span></code></pre>
+        <p>Add this line at the bottom, save, and quit:</p>
+        <pre><code>*/5 * * * * /home/ubuntu/watch-memory.sh</code></pre>
+        <details class="term">
+          <summary>💡 How do I read cron schedule syntax?</summary>
+          <div class="body">
+            <p>Five fields, space-separated: <code>minute hour day-of-month month day-of-week command</code>.</p>
+            <ul>
+              <li><code>*</code> = "any"</li>
+              <li><code>*/5</code> = "every 5"</li>
+              <li><code>0 3 * * 1</code> = "at 03:00 every Monday"</li>
+              <li><code>*/5 * * * *</code> = "every 5 minutes, every hour, every day"</li>
+            </ul>
+            <p>Try <a href="https://crontab.guru" target="_blank" rel="noopener" style="color:var(--accent2)">crontab.guru</a> — paste any cron expression and it tells you in English what it means.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — how do I check it actually ran?</summary>
+          <div class="body">
+            <p>Wait 5 minutes, then check: <code>sudo cat /var/log/syslog | grep CRON | tail</code>. You should see lines for <code>watch-memory.sh</code>. If memory is below 85%, the log file may be empty — that's correct (no warning needed). To force-trigger a write, run the script directly: <code>bash ~/watch-memory.sh</code>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="verify">
+        <div class="check-label">✅ Verify — you're done when</div>
+        <ul>
+          <li><code>df -h /</code> shows below 70% used</li>
+          <li><code>systemctl is-active ecotrack-api</code> returns <code>inactive</code></li>
+          <li><code>crontab -l</code> shows your <code>watch-memory</code> entry</li>
+          <li><code>bash ~/watch-memory.sh</code> runs without error (the log file is created if needed)</li>
+        </ul>
+      </div>
+
+      <h4><span class="step-num">3</span>Snapshot &amp; close</h4>
+<pre><code>exit  <span class="cmt"># leave the VM</span>
+multipass stop ecotrack
+multipass snapshot ecotrack --name day-1-done</code></pre>
+    </div>
+
+    <!-- ─────────────── DAY 2 ─────────────── -->
+    <div class="lab" id="lab-2">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>2</strong></div>
+        <div class="lab-title">
+          <h3>"A researcher found our open database"</h3>
+          <p>Networking · close the door, audit ports, rotate the password</p>
+        </div>
+        <div class="lab-meta">
+          <span class="meta-pill level">Beginner</span>
+          <span class="meta-pill time">45 min</span>
+        </div>
+      </div>
+
+      <div class="primer">
+        <h5>📚 Concept primer — read me first (~2 min)</h5>
+        <div class="primer-grid">
+          <div class="primer-term"><strong>port</strong>A numbered "door" on a network address. SSH uses 22, HTTPS uses 443, Postgres uses 5432. Programs <em>listen</em> on ports.</div>
+          <div class="primer-term"><strong>listen address</strong>Which network interface a program accepts traffic on. <code>127.0.0.1</code> = only this machine. <code>0.0.0.0</code> = anyone, anywhere.</div>
+          <div class="primer-term"><strong>localhost / 127.0.0.1</strong>The machine itself. A program listening on 127.0.0.1 can only be reached by other programs on the same machine.</div>
+          <div class="primer-term"><strong>firewall</strong>A traffic gate. Decides which incoming packets to allow or drop, regardless of what programs are listening. <code>ufw</code> is Ubuntu's friendly front-end.</div>
+          <div class="primer-term"><strong>PostgreSQL / postgres</strong>A popular open-source database. Listens on port 5432 by default. Should never be exposed to the internet.</div>
+          <div class="primer-term"><strong>pg_hba.conf</strong>Postgres' "who can connect from where" rules. Separate from <code>postgresql.conf</code> (which controls bind, ports, etc.).</div>
+          <div class="primer-term"><strong>nc (netcat)</strong>A Swiss Army knife for networking. <code>nc -zv host port</code> = "is something listening on this port?"</div>
+          <div class="primer-term"><strong>ss</strong>"Socket statistics" — lists open network connections and listeners. Modern replacement for <code>netstat</code>.</div>
+        </div>
+      </div>
+
+      <h4><span class="step-num">1</span>Set the scene</h4>
+      <p>Make sure the VM is running and you're shelled in: <code>multipass start ecotrack</code> then <code>multipass shell ecotrack</code>. Then paste:</p>
+<pre><code><span class="cmt"># --- Day 2 setup: PostgreSQL exposed to the world, firewall off ---</span>
+sudo apt-get update -qq
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq postgresql ufw netcat-openbsd
+
+<span class="cmt"># Find the active config dir (varies by Postgres version, e.g. /etc/postgresql/14/main)</span>
+PG_DIR=$(sudo find /etc/postgresql -maxdepth 3 -name postgresql.conf | head -1 | xargs dirname)
+
+<span class="cmt"># Bind to all interfaces (the WRONG thing — open to the world)</span>
+sudo sed -i "s/^#\?listen_addresses.*/listen_addresses = '*'/" "$PG_DIR/postgresql.conf"
+
+<span class="cmt"># Allow password auth from anywhere (the VERY wrong thing)</span>
+echo "host all all 0.0.0.0/0 md5" | sudo tee -a "$PG_DIR/pg_hba.conf" &gt; /dev/null
+
+<span class="cmt"># Set a weak password the "researcher" already guessed</span>
+sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'ecotrack123';" &gt;/dev/null
+
+sudo systemctl restart postgresql
+sudo ufw --force disable
+
+echo
+echo "✗ postgres is listening on $(ss -tlnp | awk '/5432/{print $4}'). UFW is OFF."</code></pre>
+
+      <details class="term">
+        <summary>💡 What did the script just configure?</summary>
+        <div class="body">
+          <p><strong>Postgres</strong> was installed and then deliberately misconfigured:</p>
+          <ul>
+            <li><code>listen_addresses = '*'</code> in <code>postgresql.conf</code> means "accept connections on every network interface" — including the public-facing one.</li>
+            <li>The line in <code>pg_hba.conf</code> says "any host (<code>0.0.0.0/0</code>) can authenticate as any user with a password". That's the "front door wide open" part.</li>
+            <li>The password is <code>ecotrack123</code>. Trivially crackable.</li>
+            <li><code>ufw --force disable</code> turns off the firewall — there's no second line of defense.</li>
+          </ul>
+          <p>Real-world: this exact configuration drift has leaked millions of records. Your job today: make the door unfindable, then add a deadbolt.</p>
+        </div>
+      </details>
+
+      <h4><span class="step-num">2</span>Exercises (~40 min)</h4>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">1</div><div class="ex-title">Verify the problem yourself, from outside the VM.</div></div>
+        <p>From your laptop's shell (<em>not</em> inside the VM), find the VM's IP and probe its Postgres port:</p>
+        <pre><code>multipass info ecotrack | grep IPv4
+nc -zv &lt;that-ip&gt; 5432</code></pre>
+        <details class="term">
+          <summary>💡 What does <code>nc -zv</code> do exactly?</summary>
+          <div class="body">
+            <p><code>nc</code> (netcat) tries to make a network connection. <code>-z</code> means "don't send any data, just check if the port is open". <code>-v</code> means "verbose — tell me what happened".</p>
+            <p>If something is listening: <code>Connection to 192.168.x.x 5432 port [tcp/postgresql] succeeded!</code> If not: <code>Connection refused</code> or a timeout.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — what's the security risk?</summary>
+          <div class="body">
+            <p>The connection succeeds, meaning <em>any</em> machine that can reach yours could try to log in. Combined with the weak <code>ecotrack123</code> password, an attacker could brute-force in within seconds. Once in, they have full access to every database table.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">2</div><div class="ex-title">Audit every listening port on the VM.</div></div>
+        <p>Inside the VM, run:</p>
+        <pre><code>sudo ss -tlnp</code></pre>
+        <details class="term">
+          <summary>💡 What do those flags mean? How do I read the output?</summary>
+          <div class="body">
+            <p><code>-t</code> = TCP only (skip UDP). <code>-l</code> = listening sockets only. <code>-n</code> = numeric (don't try to translate ports to names). <code>-p</code> = show the program owning the socket.</p>
+            <p>The <strong>Local Address:Port</strong> column tells you what's reachable. If it says <code>0.0.0.0:5432</code> or <code>*:5432</code>, the port is open to the world. If it says <code>127.0.0.1:5432</code>, only the VM itself can reach it.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — for each listener, ask yourself</summary>
+          <div class="body">
+            <p>"Should the public internet be able to talk to this?" SSH on port 22 — yes (you need to log in). HTTPS on 443 — yes if you serve traffic. Postgres on 5432 — <strong>no</strong>. Anything else binding to <code>0.0.0.0</code> or <code>:::</code> — investigate.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">3</div><div class="ex-title">Lock Postgres to localhost only.</div></div>
+        <p>Two files to fix:</p>
+        <ul>
+          <li><code>/etc/postgresql/&lt;version&gt;/main/postgresql.conf</code> — change <code>listen_addresses = '*'</code> to <code>listen_addresses = 'localhost'</code></li>
+          <li><code>/etc/postgresql/&lt;version&gt;/main/pg_hba.conf</code> — remove the <code>0.0.0.0/0</code> line; allow only <code>127.0.0.1/32</code> (and <code>::1/128</code> for IPv6)</li>
+        </ul>
+        <p>Then restart Postgres and re-test:</p>
+        <pre><code>sudo systemctl restart postgresql
+sudo ss -tlnp | grep 5432         <span class="cmt"># should show only 127.0.0.1:5432 now</span>
+sudo -u postgres psql -c '\l'     <span class="cmt"># local connection still works</span></code></pre>
+        <p>From your laptop again: <code>nc -zv &lt;vm-ip&gt; 5432</code> — should now <strong>fail</strong>.</p>
+        <details class="term">
+          <summary>💡 How do I edit those config files?</summary>
+          <div class="body">
+            <p>They're in <code>/etc/postgresql/...</code> — root-owned. Use <code>sudo nano</code> (or <code>sudo vim</code>):</p>
+            <pre><code>sudo nano /etc/postgresql/14/main/postgresql.conf
+sudo nano /etc/postgresql/14/main/pg_hba.conf</code></pre>
+            <p>The version number (e.g. <code>14</code>) might differ — use Tab to autocomplete or <code>ls /etc/postgresql/</code> to check.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — exact text to search for</summary>
+          <div class="body">
+            <p>In <code>postgresql.conf</code>, find the line starting with <code>listen_addresses</code>. There may be a <code>#</code> comment in front — remove it. Set the value to <code>'localhost'</code>.</p>
+            <p>In <code>pg_hba.conf</code>, scroll to the bottom. Delete (or comment out with <code>#</code>) the line we appended: <code>host all all 0.0.0.0/0 md5</code>. The default <code>127.0.0.1/32</code> entries that came with the package install are fine.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">4</div><div class="ex-title">Configure the firewall: deny by default, allow only SSH.</div></div>
+        <pre><code>sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
+sudo ufw --force enable
+sudo ufw status verbose</code></pre>
+        <details class="term">
+          <summary>💡 Why both "Postgres bound to localhost" AND "firewall blocks 5432"?</summary>
+          <div class="body">
+            <p><strong>Defense in depth.</strong> Two layers, each independent:</p>
+            <ul>
+              <li>If a future config change accidentally re-binds Postgres to <code>0.0.0.0</code>, the firewall still blocks it.</li>
+              <li>If the firewall is misconfigured, the bind setting still keeps it private.</li>
+            </ul>
+            <p>One layer alone is fragile. Both layers together is robust.</p>
+          </div>
+        </details>
+        <details class="hint">
+          <summary>💭 Hint — what about "I'm SSH'd in, will this kick me out?"</summary>
+          <div class="body">
+            <p>You added the SSH allow rule (<code>ufw allow 22/tcp</code>) before enabling the firewall, so existing SSH sessions stay alive. Multipass also uses its own networking, so even without that rule the <code>multipass shell</code> command would still work. But on a real cloud server: <strong>always allow port 22 BEFORE enabling ufw</strong>, or you'll lock yourself out.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">5</div><div class="ex-title">Rotate the postgres password.</div></div>
+        <p>Generate something strong, set it in Postgres, store it for your app to read — never put it in shell history.</p>
+        <details class="hint">
+          <summary>💭 Hint — full sequence</summary>
+          <div class="body">
+            <p>Generate a strong random password and use a here-string so it doesn't end up in your <code>~/.bash_history</code>:</p>
+            <pre><code>NEW_PW=$(openssl rand -base64 24)
+sudo -u postgres psql -c "ALTER USER postgres PASSWORD '$NEW_PW';"
+
+<span class="cmt"># Save it to ~/.pgpass (Postgres' standard credentials file)</span>
+echo "localhost:5432:*:postgres:$NEW_PW" &gt; ~/.pgpass
+chmod 600 ~/.pgpass
+unset NEW_PW   <span class="cmt"># clear it from this shell's environment</span></code></pre>
+            <p><code>chmod 600</code> = "owner can read/write, nobody else can even read". Postgres refuses to use a <code>.pgpass</code> file with looser permissions — that's the protection.</p>
+          </div>
+        </details>
+        <div class="callout warn"><strong>⚠️ Tip:</strong> never type a password literally on a command line in production. It ends up in your shell history file, in process listings, and in audit logs. Use environment variables, password managers, or files with strict permissions.</div>
+      </div>
+
+      <div class="ex-step">
+        <div class="ex-head"><div class="ex-num">6</div><div class="ex-title">Conceptual checkpoint — write or draw.</div></div>
+        <p>In your own words (notes app, paper, anywhere — but write it), describe what happens network-wise when a packet from the public internet hits port 5432 on this VM:</p>
+        <ul>
+          <li>Before your fixes</li>
+          <li>After your fixes</li>
+        </ul>
+        <p>If you can explain both clearly, you've internalized the lesson. If you can't, that's fine — re-read the primer and try again. The act of writing it out is what builds the understanding.</p>
+      </div>
+
+      <div class="verify">
+        <div class="check-label">✅ Verify — you're done when</div>
+        <ul>
+          <li><code>sudo ss -tln | grep 5432</code> shows only <code>127.0.0.1:5432</code> (no <code>0.0.0.0</code> or <code>:::</code>)</li>
+          <li><code>sudo ufw status</code> shows active, with port 22 allowed and a default deny policy</li>
+          <li>From the host: <code>nc -zv &lt;vm-ip&gt; 5432</code> fails (timeout or refused)</li>
+          <li>From the host: <code>nc -zv &lt;vm-ip&gt; 22</code> succeeds</li>
+          <li><code>ls -l ~/.pgpass</code> shows mode <code>-rw-------</code></li>
+        </ul>
+      </div>
+
+      <h4><span class="step-num">3</span>Snapshot &amp; close</h4>
+<pre><code>exit
+multipass stop ecotrack
+multipass snapshot ecotrack --name day-2-done</code></pre>
+    </div>
+
+    <!-- ─────────────── DAYS 3–10 placeholders ─────────────── -->
+    <div class="lab pending" id="lab-3">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>3</strong></div>
+        <div class="lab-title"><h3>"It works on my laptop"</h3><p>Docker · containerize the EcoTrack API and fix a broken Dockerfile</p></div>
+        <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
+      </div>
+    </div>
+    <div class="lab pending" id="lab-4">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>4</strong></div>
+        <div class="lab-title"><h3>"We're on TechCrunch. We're also down."</h3><p>Kubernetes · k3s on the same VM, scale the API to handle the spike</p></div>
+        <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
+      </div>
+    </div>
+    <div class="lab pending" id="lab-5">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>5</strong></div>
+        <div class="lab-title"><h3>"Sara deployed to prod again"</h3><p>Helm · package the API as a chart with safe upgrade/rollback</p></div>
+        <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
+      </div>
+    </div>
+    <div class="lab pending" id="lab-6">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>6</strong></div>
+        <div class="lab-title"><h3>"Investors want a security audit"</h3><p>Cloud foundations · IAM, VPC, S3 — using LocalStack inside the VM</p></div>
+        <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
+      </div>
+    </div>
+    <div class="lab pending" id="lab-7">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>7</strong></div>
+        <div class="lab-title"><h3>"I accidentally deleted staging"</h3><p>Terraform · provision against LocalStack, observe drift, modularize</p></div>
+        <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
+      </div>
+    </div>
+    <div class="lab pending" id="lab-8">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>8</strong></div>
+        <div class="lab-title"><h3>"Nobody should SSH to deploy"</h3><p>CI/CD · GitHub Actions runner inside the VM, build &amp; deploy pipeline</p></div>
+        <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
+      </div>
+    </div>
+    <div class="lab pending" id="lab-9">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>9</strong></div>
+        <div class="lab-title"><h3>"We found out from a tweet"</h3><p>Monitoring · Prometheus + Grafana on k3s, alert before users notice</p></div>
+        <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
+      </div>
+    </div>
+    <div class="lab pending" id="lab-10">
+      <div class="lab-head">
+        <div class="lab-num">Lab<strong>10</strong></div>
+        <div class="lab-title"><h3>"Fix it or lose the customer"</h3><p>Capstone · ship a real fix end-to-end with everything you've built</p></div>
+        <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
+      </div>
+    </div>
+
+    <section id="cleanup">
+      <h2>Cleanup</h2>
+      <p>When you're done with the program (or want to start over):</p>
+<pre><code><span class="cmt"># Roll back to the clean snapshot</span>
+multipass stop ecotrack
+multipass restore ecotrack.day-0-fresh
+
+<span class="cmt"># Or delete the VM entirely</span>
+multipass delete ecotrack
+multipass purge
+
+<span class="cmt"># List snapshots to clean up specific ones</span>
+multipass list --snapshots
+multipass delete ecotrack.day-1-done
+multipass purge</code></pre>
+    </section>
+
+    <footer>
+      <p><a href="index.html">← Home</a> · <a href="ecotrack-story-training.html">Story training</a> · <a href="roadmap.html">Roadmap</a></p>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // OS tabs
+  document.querySelectorAll('.os-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const os = btn.dataset.os;
+      btn.parentElement.querySelectorAll('.os-tab').forEach(b => b.classList.toggle('active', b === btn));
+      const section = btn.closest('section');
+      section.querySelectorAll('.os-panel').forEach(p => p.classList.toggle('active', p.dataset.os === os));
+    });
+  });
+
+  // Sidebar active highlight
+  const links = document.querySelectorAll('aside a');
+  const targets = Array.from(links).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-80px 0px -60% 0px' });
+  targets.forEach(t => observer.observe(t));
+</script>
+
+</body>
+</html>
