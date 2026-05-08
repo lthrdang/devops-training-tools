@@ -193,6 +193,27 @@
   footer a { color: var(--accent2); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
 
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+    padding: 0 24px;
+  }
+  .tnav-link {
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted2, #94a3b8);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .tnav-link:hover { background: var(--surface2); color: var(--text); }
+  .tnav-link.active { background: var(--surface2); color: var(--text); font-weight: 600; }
+  @media (max-width: 768px) { .topbar-nav { display: none; } }
+
   /* ── Responsive ── */
   @media (max-width: 720px) {
     .hero h1 { font-size: 26px; }
@@ -213,8 +234,12 @@
       <span>DevOps onboarding</span>
     </div>
   </div>
+  <nav class="topbar-nav">
+    <a class="tnav-link active" href="index.html">Trainer Home</a>
+    <a class="tnav-link" href="dashboard.html">Dashboard</a>
+    <a class="tnav-link" href="assessment-rubric.html">Assessment Rubric</a>
+  </nav>
   <div class="topbar-right">
-    <a href="../index.html">← Trainee site</a>
     <span class="role-pill">Trainer</span>
   </div>
 </div>

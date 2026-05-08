@@ -38,6 +38,32 @@
     line-height: 1.65;
   }
 
+  /* ── Language toggle ── */
+  .vi { display: none; }
+  body.lang-vi .vi { display: inline; }
+  body.lang-vi .en { display: none; }
+  .lang-switch {
+    display: flex;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .lang-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.15s, color 0.15s;
+  }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .lang-btn:hover:not(.active) { background: var(--surface3); color: var(--text); }
+
   /* ── Topbar ── */
   .topbar {
     background: var(--surface);
@@ -60,6 +86,7 @@
   }
   .logo h2 { font-size: 15px; font-weight: 700; }
   .logo span { font-size: 12px; color: var(--muted); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
   .topbar-right a {
     color: var(--muted2);
     text-decoration: none;
@@ -145,13 +172,7 @@
 
   /* ── Sections ── */
   section { margin-bottom: 40px; scroll-margin-top: 80px; }
-  section > h2 {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
+  section > h2 { font-size: 22px; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
   section p { margin-bottom: 12px; color: var(--muted2); font-size: 14.5px; }
   section ul, section ol { margin: 8px 0 16px 22px; }
   section li { margin-bottom: 6px; color: var(--muted2); font-size: 14.5px; }
@@ -176,16 +197,8 @@
     font-size: 13px;
     line-height: 1.55;
   }
-  pre code {
-    background: transparent;
-    color: var(--text);
-    padding: 0;
-    font-size: 13px;
-  }
+  pre code { background: transparent; color: var(--text); padding: 0; font-size: 13px; }
   pre .cmt { color: var(--muted); }
-  pre .kw { color: var(--purple); }
-  pre .str { color: #86efac; }
-  pre .var { color: var(--blue); }
 
   /* ── Callouts ── */
   .callout {
@@ -201,12 +214,10 @@
   .callout strong { color: var(--accent2); }
   .callout.warn { border-left-color: var(--yellow); }
   .callout.warn strong { color: var(--yellow); }
-  .callout.danger { border-left-color: var(--red); }
-  .callout.danger strong { color: var(--red); }
   .callout.tip { border-left-color: var(--green); }
   .callout.tip strong { color: var(--green); }
 
-  /* ── Beginner welcome card ── */
+  /* ── Welcome card ── */
   .welcome {
     background: linear-gradient(135deg, var(--surface), var(--surface2));
     border: 1px solid var(--border);
@@ -215,12 +226,7 @@
     padding: 22px 26px;
     margin-bottom: 32px;
   }
-  .welcome h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: var(--green);
-  }
+  .welcome h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: var(--green); }
   .welcome p { font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
   .welcome p:last-child { margin-bottom: 0; }
 
@@ -232,19 +238,8 @@
     padding: 18px 20px;
     margin: 12px 0 18px;
   }
-  .primer h5 {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--blue);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 12px;
-  }
-  .primer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
-  }
+  .primer h5 { font-size: 11px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .primer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
   .primer-term {
     background: var(--bg);
     border: 1px solid var(--border);
@@ -254,13 +249,7 @@
     color: var(--muted2);
     line-height: 1.55;
   }
-  .primer-term strong {
-    display: block;
-    color: var(--accent2);
-    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-    font-size: 13px;
-    margin-bottom: 4px;
-  }
+  .primer-term strong { display: block; color: var(--accent2); font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; margin-bottom: 4px; }
 
   /* ── Collapsible hint / term ── */
   details {
@@ -287,50 +276,24 @@
     gap: 8px;
   }
   details summary::-webkit-details-marker { display: none; }
-  details summary::before {
-    content: '▸';
-    display: inline-block;
-    transition: transform 0.15s;
-    color: var(--muted);
-    font-size: 11px;
-  }
+  details summary::before { content: '▸'; display: inline-block; transition: transform 0.15s; color: var(--muted); font-size: 11px; }
   details[open] summary::before { transform: rotate(90deg); color: var(--accent); }
   details summary:hover { background: var(--surface3); }
-  details .body {
-    padding: 0 14px 12px 28px;
-    color: var(--muted2);
-    line-height: 1.65;
-  }
+  details .body { padding: 0 14px 12px 28px; color: var(--muted2); line-height: 1.65; }
   details .body p { margin-bottom: 8px; font-size: 13.5px; }
   details .body p:last-child { margin-bottom: 0; }
   details .body code { font-size: 12.5px; }
   details.hint summary { color: #a5f3fc; }
   details.hint[open] { border-color: var(--blue); }
-  details.term summary { color: var(--accent2); }
 
   /* ── OS tabs ── */
-  .os-tabs {
-    display: flex;
-    gap: 4px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: -1px;
-  }
+  .os-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: -1px; }
   .os-tab {
-    background: none;
-    border: 1px solid transparent;
-    border-bottom: none;
-    padding: 8px 16px;
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border-radius: 8px 8px 0 0;
+    background: none; border: 1px solid transparent; border-bottom: none;
+    padding: 8px 16px; color: var(--muted); font-size: 13px; font-weight: 600;
+    cursor: pointer; border-radius: 8px 8px 0 0;
   }
-  .os-tab.active {
-    background: var(--surface);
-    border-color: var(--border);
-    color: var(--text);
-  }
+  .os-tab.active { background: var(--surface); border-color: var(--border); color: var(--text); }
   .os-panel { display: none; padding-top: 14px; }
   .os-panel.active { display: block; }
 
@@ -344,152 +307,80 @@
     scroll-margin-top: 80px;
   }
   .lab.pending { opacity: 0.55; }
-  .lab-head {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 8px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
+  .lab-head { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
   .lab-num {
-    flex-shrink: 0;
-    width: 48px; height: 48px;
-    border-radius: 10px;
-    background: var(--surface2);
-    border: 1.5px solid var(--accent);
-    color: var(--accent2);
-    display: flex; flex-direction: column;
+    flex-shrink: 0; width: 48px; height: 48px; border-radius: 10px;
+    background: var(--surface2); border: 1.5px solid var(--accent);
+    color: var(--accent2); display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    font-size: 10px; font-weight: 600; line-height: 1; letter-spacing: 0.05em; text-transform: uppercase;
   }
   .lab-num strong { font-size: 18px; color: var(--text); margin-top: 3px; }
   .lab-title { flex: 1; }
   .lab-title h3 { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
   .lab-title p { font-size: 13px; color: var(--muted); margin: 0; }
   .lab-meta { display: flex; gap: 8px; flex-shrink: 0; }
-  .meta-pill {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: var(--surface2);
-    color: var(--muted2);
-  }
+  .meta-pill { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 10px; border-radius: 999px; background: var(--surface2); color: var(--muted2); }
   .meta-pill.time { background: var(--accent); color: #fff; }
-  .meta-pill.level {
-    background: var(--green-dim);
-    color: var(--green);
-  }
+  .meta-pill.level { background: var(--green-dim); color: var(--green); }
   .meta-pill.pending { background: var(--yellow-dim); color: var(--yellow); }
-
-  .lab h4 {
-    font-size: 13px;
-    font-weight: 700;
-    margin: 22px 0 8px;
-    color: var(--accent2);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
+  .lab h4 { font-size: 13px; font-weight: 700; margin: 22px 0 8px; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.06em; }
   .lab h4:first-of-type { margin-top: 14px; }
   .lab h4 .step-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--surface2);
-    color: var(--accent2);
-    border: 1px solid var(--accent);
-    font-size: 11px;
-    margin-right: 8px;
-    font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--surface2); color: var(--accent2); border: 1px solid var(--accent);
+    font-size: 11px; margin-right: 8px; font-weight: 700;
   }
 
-  .ex-step {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 20px;
-    margin: 10px 0;
-  }
-  .ex-step .ex-head {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    margin-bottom: 8px;
-  }
+  .ex-step { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin: 10px 0; }
+  .ex-step .ex-head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; }
   .ex-step .ex-num {
-    flex-shrink: 0;
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    background: var(--bg);
-    color: var(--accent2);
-    border: 1px solid var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--bg); color: var(--accent2); border: 1px solid var(--accent);
+    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
   }
-  .ex-step .ex-title {
-    flex: 1;
-    font-size: 14.5px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.5;
-  }
+  .ex-step .ex-title { flex: 1; font-size: 14.5px; font-weight: 600; color: var(--text); line-height: 1.5; }
   .ex-step p { font-size: 13.5px; margin-bottom: 8px; color: var(--muted2); }
   .ex-step ul { margin: 6px 0 8px 20px; }
   .ex-step ul li { font-size: 13.5px; color: var(--muted2); }
 
-  .verify {
-    background: var(--green-dim);
-    border-left: 3px solid var(--green);
-    border-radius: 0 8px 8px 0;
-    padding: 14px 18px;
-    margin-top: 12px;
-  }
-  .verify .check-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--green);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
+  .verify { background: var(--green-dim); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-top: 12px; }
+  .verify .check-label { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
   .verify ul { margin-bottom: 0; margin-left: 20px; }
   .verify li { color: var(--text); font-size: 13.5px; }
   .verify code { background: rgba(0,0,0,0.25); }
 
   /* ── Footer ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 28px 0;
-    margin-top: 40px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-  }
+  footer { border-top: 1px solid var(--border); padding: 28px 0; margin-top: 40px; text-align: center; color: var(--muted); font-size: 13px; }
   footer a { color: var(--accent2); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
+
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+    padding: 0 24px;
+  }
+  .tnav-link {
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted2, #94a3b8);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .tnav-link:hover { background: var(--surface2); color: var(--text); }
+  .tnav-link.active { background: var(--surface2); color: var(--text); font-weight: 600; }
+  @media (max-width: 768px) { .topbar-nav { display: none; } }
 
   /* ── Mobile ── */
   @media (max-width: 880px) {
     .layout { grid-template-columns: 1fr; padding: 24px 16px 60px; }
-    aside {
-      position: static;
-      max-height: none;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 24px;
-      background: var(--surface);
-    }
+    aside { position: static; max-height: none; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 24px; background: var(--surface); }
     aside h3 { padding-left: 0; }
     aside a { padding: 6px 8px; border-left: none; border-radius: 6px; }
     aside a.active { border-left: none; }
@@ -507,28 +398,38 @@
   <div class="logo">
     <div class="logo-icon">🧪</div>
     <div>
-      <h2>Hands-on Labs</h2>
-      <span>EcoTrack training · local VM</span>
+      <h2><span class="en">Hands-on Labs</span><span class="vi">Bài thực hành</span></h2>
+      <span class="en">EcoTrack training · local VM</span>
+      <span class="vi">Đào tạo EcoTrack · máy ảo cục bộ</span>
     </div>
   </div>
+  <nav class="topbar-nav">
+    <a class="tnav-link" href="index.html">Home</a>
+    <a class="tnav-link" href="devops-pretest.html">Pre-Assessment</a>
+    <a class="tnav-link" href="roadmap.html">Roadmap</a>
+    <a class="tnav-link" href="ecotrack-story-training.html">Story Training</a>
+    <a class="tnav-link active" href="labs.html">Labs</a>
+  </nav>
   <div class="topbar-right">
-    <a href="ecotrack-story-training.html">Story →</a>
-    <a href="index.html">← Home</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">VI</button>
+    </div>
   </div>
 </div>
 
 <div class="layout">
 
   <aside>
-    <h3>Read first</h3>
-    <a href="#welcome">If you're new</a>
+    <h3><span class="en">Read first</span><span class="vi">Đọc trước</span></h3>
+    <a href="#welcome"><span class="en">If you're new</span><span class="vi">Nếu bạn mới bắt đầu</span></a>
 
-    <h3>Setup</h3>
-    <a href="#install">Install Multipass</a>
-    <a href="#launch">Launch the VM</a>
-    <a href="#workflow">Daily workflow</a>
+    <h3><span class="en">Setup</span><span class="vi">Cài đặt</span></h3>
+    <a href="#install"><span class="en">Install Multipass</span><span class="vi">Cài Multipass</span></a>
+    <a href="#launch"><span class="en">Launch the VM</span><span class="vi">Khởi động máy ảo</span></a>
+    <a href="#workflow"><span class="en">Daily workflow</span><span class="vi">Quy trình mỗi ngày</span></a>
 
-    <h3>Labs</h3>
+    <h3><span class="en">Labs</span><span class="vi">Bài thực hành</span></h3>
     <a href="#lab-1">Day 1 · Linux</a>
     <a href="#lab-2">Day 2 · Networking</a>
     <a href="#lab-3">Day 3 · Docker <span class="pending">soon</span></a>
@@ -540,41 +441,54 @@
     <a href="#lab-9">Day 9 · Monitoring <span class="pending">soon</span></a>
     <a href="#lab-10">Day 10 · Capstone <span class="pending">soon</span></a>
 
-    <h3>After</h3>
-    <a href="#cleanup">Cleanup</a>
+    <h3><span class="en">After</span><span class="vi">Sau khi xong</span></h3>
+    <a href="#cleanup"><span class="en">Cleanup</span><span class="vi">Dọn dẹp</span></a>
   </aside>
 
   <main>
 
     <div class="hero">
-      <div class="badge">Hands-on · Local VM · Multipass</div>
-      <h1>The Labs</h1>
-      <p class="sub">Each chapter of the EcoTrack story has a 30–60 minute lab you do on a local Ubuntu VM. The lab gives you a script that creates the broken state from the chapter — your job is to fix it.</p>
+      <div class="badge"><span class="en">Hands-on · Local VM · Multipass</span><span class="vi">Thực hành · Máy ảo cục bộ · Multipass</span></div>
+      <h1><span class="en">The Labs</span><span class="vi">Bài thực hành</span></h1>
+      <p class="sub">
+        <span class="en">Each chapter of the EcoTrack story has a 30–60 minute lab you do on a local Ubuntu VM. The lab gives you a script that creates the broken state from the chapter — your job is to fix it.</span>
+        <span class="vi">Mỗi chương của câu chuyện EcoTrack có một bài thực hành 30–60 phút trên máy ảo Ubuntu cục bộ. Mỗi bài cung cấp script tạo ra tình trạng lỗi từ chương đó — nhiệm vụ của bạn là sửa nó.</span>
+      </p>
     </div>
 
     <div class="welcome" id="welcome">
-      <h3>👋 New to all this? Read this first.</h3>
-      <p>If you've never used Linux, an SSH session, or a virtual machine — that's fine. These labs assume zero. Every command is explained. Every technical term has a "What is this?" box you can click to read a plain-English definition. Every exercise step has a hint you can reveal if you're stuck for more than 10 minutes.</p>
-      <p><strong>How to use this page:</strong></p>
+      <h3>👋 <span class="en">New to all this? Read this first.</span><span class="vi">Mới bắt đầu? Đọc phần này trước.</span></h3>
+      <p>
+        <span class="en">If you've never used Linux, an SSH session, or a virtual machine — that's fine. These labs assume zero. Every command is explained. Every technical term has a "What is this?" box you can click to read a plain-English definition. Every exercise step has a hint you can reveal if you're stuck for more than 10 minutes.</span>
+        <span class="vi">Nếu bạn chưa từng dùng Linux, SSH hay máy ảo — không sao cả. Các bài này giả định bạn chưa biết gì. Mọi lệnh đều được giải thích. Mọi thuật ngữ kỹ thuật đều có ô "Cái này là gì?" để bạn nhấn vào đọc giải thích bằng ngôn ngữ đơn giản. Mỗi bước bài tập đều có gợi ý nếu bạn bị tắc hơn 10 phút.</span>
+      </p>
+      <p><strong><span class="en">How to use this page:</span><span class="vi">Cách dùng trang này:</span></strong></p>
       <ul style="margin: 6px 0 8px 22px;">
-        <li>Read the <em>Concept primer</em> box at the top of each lab — it defines the 4–6 terms used.</li>
-        <li>Hit the "Set the scene" script first; it creates the broken state for the chapter.</li>
-        <li>Work through the exercises one at a time. <strong>Don't skip ahead.</strong></li>
-        <li>If a step makes no sense, click <strong>"💭 Show a hint"</strong>. Hints don't give the solution, they nudge you toward one.</li>
-        <li>If a term confuses you, click <strong>"💡 What is X?"</strong> for a one-paragraph definition.</li>
+        <li><span class="en">Read the <em>Concept primer</em> box at the top of each lab — it defines the 4–6 terms used.</span><span class="vi">Đọc ô <em>Khái niệm cơ bản</em> ở đầu mỗi bài — nó định nghĩa 4–6 thuật ngữ được dùng trong bài.</span></li>
+        <li><span class="en">Hit the "Set the scene" script first; it creates the broken state for the chapter.</span><span class="vi">Chạy script "Dựng cảnh" trước tiên; nó tạo ra tình trạng lỗi cho chương đó.</span></li>
+        <li><span class="en">Work through the exercises one at a time. <strong>Don't skip ahead.</strong></span><span class="vi">Làm từng bước một. <strong>Đừng bỏ qua bước nào.</strong></span></li>
+        <li><span class="en">If a step makes no sense, click <strong>"💭 Show a hint"</strong>. Hints don't give the solution, they nudge you toward one.</span><span class="vi">Nếu một bước không có nghĩa gì, nhấn <strong>"💭 Xem gợi ý"</strong>. Gợi ý không đưa ra đáp án, chỉ hướng bạn đến đáp án.</span></li>
+        <li><span class="en">If a term confuses you, click <strong>"💡 What is X?"</strong> for a one-paragraph definition.</span><span class="vi">Nếu một thuật ngữ làm bạn bối rối, nhấn <strong>"💡 X là gì?"</strong> để đọc định nghĩa.</span></li>
       </ul>
-      <p><strong>The 10-minute rule:</strong> struggle alone for 10 minutes before opening a hint or asking AI. The struggle is the lesson — productive frustration is how the muscle memory builds.</p>
+      <p>
+        <strong><span class="en">The 10-minute rule:</span><span class="vi">Quy tắc 10 phút:</span></strong>
+        <span class="en"> struggle alone for 10 minutes before opening a hint or asking AI. The struggle is the lesson — productive frustration is how the muscle memory builds.</span>
+        <span class="vi"> tự vật lộn 10 phút trước khi mở gợi ý hoặc hỏi AI. Sự vật lộn chính là bài học — sự bứt rứt có mục đích là cách hình thành bản năng.</span>
+      </p>
     </div>
 
+    <!-- ── Setup 1: Install ── -->
     <section id="install">
-      <h2>1. Install Multipass</h2>
-      <p>Multipass is a free virtual machine tool from Canonical (the company that makes Ubuntu). It runs a real Ubuntu Linux inside your normal computer, in a window/process you can start and stop. No company policy or license is required — it's open source.</p>
+      <h2>1. <span class="en">Install Multipass</span><span class="vi">Cài đặt Multipass</span></h2>
+      <p>
+        <span class="en">Multipass is a free virtual machine tool from Canonical (the company that makes Ubuntu). It runs a real Ubuntu Linux inside your normal computer. No company policy or license required — it's open source.</span>
+        <span class="vi">Multipass là công cụ máy ảo miễn phí từ Canonical (công ty tạo ra Ubuntu). Nó chạy Ubuntu Linux thực sự bên trong máy tính bình thường của bạn. Không cần chính sách công ty hay giấy phép — nó là mã nguồn mở.</span>
+      </p>
 
       <details class="term">
-        <summary>💡 What is a virtual machine (VM)?</summary>
+        <summary>💡 <span class="en">What is a virtual machine (VM)?</span><span class="vi">Máy ảo (VM) là gì?</span></summary>
         <div class="body">
-          <p>A VM is a real computer simulated inside your computer. It has its own operating system, its own disk, its own memory — but it all runs as a process on your real machine (called the <em>host</em>).</p>
-          <p>Why use one? Because it's safe. You can install anything, break anything, run weird commands — and your real laptop is untouched. Delete the VM and it all goes away.</p>
+          <p><span class="en">A VM is a real computer simulated inside your computer. It has its own operating system, disk, and memory — but it all runs as a process on your real machine (called the <em>host</em>). Why use one? You can install anything, break anything, and your real laptop is untouched. Delete the VM and it all goes away.</span><span class="vi">Máy ảo là một máy tính thực sự được mô phỏng bên trong máy tính của bạn. Nó có hệ điều hành, ổ đĩa và bộ nhớ riêng — nhưng tất cả chạy như một tiến trình trên máy thực của bạn (gọi là <em>host</em>). Tại sao dùng máy ảo? Bạn có thể cài bất cứ thứ gì, phá bất cứ thứ gì, còn laptop thực của bạn không bị ảnh hưởng.</span></p>
         </div>
       </details>
 
@@ -585,147 +499,139 @@
       </div>
 
       <div class="os-panel active" data-os="mac">
-<pre><code><span class="cmt"># Homebrew (recommended — Homebrew is a package manager for macOS)</span>
+<pre><code><span class="cmt"># Homebrew (recommended)</span>
 brew install --cask multipass
 
-<span class="cmt"># Or download the .pkg from https://multipass.run/download/macos</span>
 multipass version</code></pre>
-        <p>Works natively on Apple Silicon (M1/M2/M3) — uses QEMU under the hood, no Rosetta needed.</p>
+        <p><span class="en">Works natively on Apple Silicon (M1/M2/M3).</span><span class="vi">Chạy tốt trên Apple Silicon (M1/M2/M3).</span></p>
         <details class="term">
-          <summary>💡 What's Homebrew? What's a package manager?</summary>
+          <summary>💡 <span class="en">What's Homebrew?</span><span class="vi">Homebrew là gì?</span></summary>
           <div class="body">
-            <p>A <em>package manager</em> is a tool that installs other tools for you. Instead of finding a download page, downloading a file, double-clicking, dragging to Applications, etc. — you type <code>brew install &lt;name&gt;</code> and it handles everything, including updates.</p>
-            <p>Homebrew is the most popular package manager for macOS. If you don't have it, install it first: <a href="https://brew.sh" target="_blank" rel="noopener" style="color:var(--accent2)">brew.sh</a> has a one-line command.</p>
+            <p><span class="en">A package manager for macOS. Instead of downloading and installing manually, you type <code>brew install &lt;name&gt;</code>. If you don't have it, install it from <a href="https://brew.sh" target="_blank" rel="noopener" style="color:var(--accent2)">brew.sh</a>.</span><span class="vi">Trình quản lý gói cho macOS. Thay vì tải và cài thủ công, bạn gõ <code>brew install &lt;tên&gt;</code>. Nếu chưa có, cài từ <a href="https://brew.sh" target="_blank" rel="noopener" style="color:var(--accent2)">brew.sh</a>.</span></p>
           </div>
         </details>
       </div>
 
       <div class="os-panel" data-os="linux">
-<pre><code><span class="cmt"># Snap (Ubuntu, Debian, Fedora, Arch via snapd)</span>
+<pre><code><span class="cmt"># Snap</span>
 sudo snap install multipass
-
 multipass version</code></pre>
         <details class="term">
-          <summary>💡 What is <code>sudo</code>?</summary>
+          <summary>💡 <span class="en">What is <code>sudo</code>?</span><span class="vi"><code>sudo</code> là gì?</span></summary>
           <div class="body">
-            <p><code>sudo</code> means "do this command as the administrator". You'll be prompted for your password. It's how Linux protects the system — regular users can't install software or edit system files unless they explicitly ask permission.</p>
-            <p>Rule of thumb: only use <code>sudo</code> when a command refuses to run without it.</p>
+            <p><span class="en"><code>sudo</code> means "run this as administrator". Linux protects system files from regular users — <code>sudo</code> is how you explicitly ask for elevated permission. Rule: only use it when a command refuses to run without it.</span><span class="vi"><code>sudo</code> nghĩa là "chạy lệnh này với quyền quản trị viên". Linux bảo vệ file hệ thống khỏi người dùng thông thường — <code>sudo</code> là cách bạn xin quyền nâng cao. Quy tắc: chỉ dùng khi lệnh từ chối chạy mà không có nó.</span></p>
           </div>
         </details>
       </div>
 
       <div class="os-panel" data-os="windows">
-<pre><code><span class="cmt"># Download from https://multipass.run/download/windows</span>
-<span class="cmt"># Run the installer. It sets up Hyper-V or VirtualBox automatically.</span>
-
+<pre><code><span class="cmt"># Download from https://multipass.run/download/windows and run the installer</span>
 multipass version</code></pre>
-        <div class="callout warn"><strong>Note:</strong> on Windows Home, Multipass uses VirtualBox (it'll install VirtualBox for you). On Pro/Enterprise it uses Hyper-V (which needs to be enabled).</div>
+        <div class="callout warn"><strong><span class="en">Note:</span><span class="vi">Lưu ý:</span></strong> <span class="en">On Windows Home, Multipass uses VirtualBox (installs it for you). On Pro/Enterprise it uses Hyper-V.</span><span class="vi">Trên Windows Home, Multipass dùng VirtualBox (tự cài cho bạn). Trên Pro/Enterprise thì dùng Hyper-V.</span></div>
       </div>
     </section>
 
+    <!-- ── Setup 2: Launch ── -->
     <section id="launch">
-      <h2>2. Launch the EcoTrack VM</h2>
-      <p>You'll create a single Ubuntu 22.04 VM and reuse it for all 10 labs. 4GB of memory and 20GB of disk is enough for everything, including the Kubernetes labs (we use k3s — a lightweight version that fits in this footprint).</p>
-
-<pre><code><span class="cmt"># Launch a new VM named "ecotrack" running Ubuntu 22.04</span>
-<span class="cmt"># Takes ~30 seconds the first time (downloads the image), faster after.</span>
+      <h2>2. <span class="en">Launch the EcoTrack VM</span><span class="vi">Khởi động máy ảo EcoTrack</span></h2>
+      <p>
+        <span class="en">Create a single Ubuntu 22.04 VM and reuse it for all 10 labs. 4GB memory and 20GB disk is enough for everything, including the Kubernetes labs (we use k3s — lightweight).</span>
+        <span class="vi">Tạo một máy ảo Ubuntu 22.04 và dùng lại cho cả 10 bài thực hành. 4GB RAM và 20GB ổ đĩa là đủ cho mọi thứ, kể cả bài Kubernetes (chúng ta dùng k3s — nhẹ hơn nhiều).</span>
+      </p>
+<pre><code><span class="cmt"># Tạo máy ảo tên "ecotrack" — lần đầu mất ~30 giây để tải image</span>
 multipass launch --name ecotrack --cpus 2 --memory 4G --disk 20G 22.04
 
-<span class="cmt"># Check it's running</span>
+<span class="cmt"># Kiểm tra đang chạy</span>
 multipass list
 
-<span class="cmt"># "Shell into" the VM — you're now inside the Linux machine</span>
+<span class="cmt"># Vào trong máy ảo (shell vào VM)</span>
 multipass shell ecotrack</code></pre>
 
       <details class="term">
-        <summary>💡 What does "shell into" mean?</summary>
+        <summary>💡 <span class="en">What does "shell into" mean?</span><span class="vi">"Shell vào" nghĩa là gì?</span></summary>
         <div class="body">
-          <p>A <em>shell</em> is the program that reads commands you type and runs them. <code>bash</code> and <code>zsh</code> are shells. When you "shell into" a VM, you open a session where every command you type runs <em>inside</em> the VM, not on your laptop.</p>
-          <p>Your prompt will change — you might see something like <code>ubuntu@ecotrack:~$</code>. That tells you: user <em>ubuntu</em>, on the machine <em>ecotrack</em>, in the home directory (<code>~</code>). The <code>$</code> is where you type.</p>
-          <p>To leave the VM and go back to your laptop's shell, type <code>exit</code> or press <code>Ctrl+D</code>.</p>
+          <p><span class="en">A <em>shell</em> is the program that reads and runs your commands (bash, zsh). When you "shell into" a VM, every command you type runs <em>inside</em> the VM, not on your laptop. Your prompt changes to something like <code>ubuntu@ecotrack:~$</code>. To leave and go back to your laptop, type <code>exit</code> or press Ctrl+D.</span><span class="vi">Một <em>shell</em> là chương trình đọc và chạy lệnh của bạn (bash, zsh). Khi bạn "shell vào" máy ảo, mọi lệnh bạn gõ đều chạy <em>bên trong</em> máy ảo, không phải trên laptop. Dấu nhắc lệnh thay đổi thành <code>ubuntu@ecotrack:~$</code>. Để thoát về laptop, gõ <code>exit</code> hoặc nhấn Ctrl+D.</span></p>
         </div>
       </details>
 
-      <p>Now save a clean baseline you can roll back to anytime:</p>
-
-<pre><code><span class="cmt"># Snapshots require the VM to be stopped first</span>
+      <p><span class="en">Save a clean baseline snapshot — you can always roll back to this:</span><span class="vi">Lưu một snapshot cơ sở sạch — bạn có thể khôi phục lại bất cứ lúc nào:</span></p>
+<pre><code><span class="cmt"># Snapshot cần VM tắt trước</span>
 multipass stop ecotrack
-
-<span class="cmt"># Take a snapshot — this is "Save Game" for your VM</span>
 multipass snapshot ecotrack --name day-0-fresh --comment "Clean Ubuntu 22.04"
-
-<span class="cmt"># Start it back up and shell in</span>
 multipass start ecotrack
 multipass shell ecotrack</code></pre>
 
       <details class="term">
-        <summary>💡 What's a snapshot? When should I take one?</summary>
+        <summary>💡 <span class="en">What's a snapshot?</span><span class="vi">Snapshot là gì?</span></summary>
         <div class="body">
-          <p>A snapshot is a frozen copy of the VM's entire state — disk, configs, installed packages — at a point in time. You can roll back to it later with <code>multipass restore</code>.</p>
-          <p>Take a snapshot <strong>before</strong> a lab if you might want to retry from scratch, and <strong>after</strong> a lab once you've finished it (so you can resume that exact state on Day N+1).</p>
+          <p><span class="en">A snapshot is a frozen copy of the VM's entire state — disk, configs, installed packages — at a point in time. Roll back with <code>multipass restore</code>. Think of it as "Save Game" for your VM. Take one before each lab and after completing it.</span><span class="vi">Snapshot là bản sao đông lạnh toàn bộ trạng thái máy ảo — ổ đĩa, cấu hình, phần mềm đã cài — tại một thời điểm. Khôi phục bằng <code>multipass restore</code>. Hãy nghĩ đó là "Lưu game" cho máy ảo. Chụp snapshot trước và sau mỗi bài thực hành.</span></p>
         </div>
       </details>
 
-      <div class="callout"><strong>Pretend the VM is <code>prod-1.ecotrack.io</code>.</strong> The story addresses you as if you're SSH'd into EcoTrack's production server. Your local Multipass VM <em>is</em> that server. The fiction makes the practice real.</div>
+      <div class="callout">
+        <strong><span class="en">Pretend the VM is <code>prod-1.ecotrack.io</code>.</span><span class="vi">Hãy giả vờ máy ảo là <code>prod-1.ecotrack.io</code>.</span></strong>
+        <span class="en"> The story addresses you as if you're SSH'd into EcoTrack's production server. Your local VM <em>is</em> that server.</span>
+        <span class="vi"> Câu chuyện xưng hô với bạn như thể bạn đang SSH vào máy chủ production của EcoTrack. Máy ảo cục bộ của bạn <em>chính là</em> máy chủ đó.</span>
+      </div>
     </section>
 
+    <!-- ── Setup 3: Workflow ── -->
     <section id="workflow">
-      <h2>3. Daily workflow</h2>
+      <h2>3. <span class="en">Daily workflow</span><span class="vi">Quy trình mỗi ngày</span></h2>
       <ol>
-        <li>Open today's chapter in the <a href="ecotrack-story-training.html" style="color:var(--accent2);">story training</a> — read "The Situation".</li>
-        <li>Open this page, jump to today's lab, and run the <strong>Set the scene</strong> script in your VM. This installs the chapter's broken state.</li>
-        <li>Work the exercises (30–60 min). Use the story's mission checklist as your TODO.</li>
-        <li>Run the <strong>Verify</strong> commands. If they pass, you're done.</li>
-        <li>Snapshot before you stop: <code>multipass stop ecotrack && multipass snapshot ecotrack --name day-N-done</code>.</li>
-        <li>Tomorrow: <code>multipass start ecotrack && multipass shell ecotrack</code> and open the next lab.</li>
+        <li><span class="en">Open today's chapter in the <a href="ecotrack-story-training.html" style="color:var(--accent2);">story training</a> — read "The Situation".</span><span class="vi">Mở chương hôm nay trong <a href="ecotrack-story-training.html" style="color:var(--accent2);">câu chuyện đào tạo</a> — đọc "Tình huống".</span></li>
+        <li><span class="en">Open this page, jump to today's lab, and run the <strong>Set the scene</strong> script in your VM.</span><span class="vi">Mở trang này, đến bài thực hành hôm nay, chạy script <strong>Dựng cảnh</strong> trong máy ảo.</span></li>
+        <li><span class="en">Work the exercises (30–60 min). Use the story's mission checklist as your TODO.</span><span class="vi">Làm bài tập (30–60 phút). Dùng danh sách nhiệm vụ của câu chuyện làm TODO.</span></li>
+        <li><span class="en">Run the <strong>Verify</strong> commands. If they pass, you're done.</span><span class="vi">Chạy lệnh <strong>Kiểm tra</strong>. Nếu qua, bạn đã xong.</span></li>
+        <li><span class="en">Snapshot before stopping: <code>multipass stop ecotrack && multipass snapshot ecotrack --name day-N-done</code>.</span><span class="vi">Chụp snapshot trước khi tắt: <code>multipass stop ecotrack && multipass snapshot ecotrack --name day-N-done</code>.</span></li>
       </ol>
-      <div class="callout tip"><strong>💡 Tip:</strong> keep two windows open — your VM shell on one side, this page on the other. Read a step here, run it there, watch what happens. That side-by-side rhythm is the fastest way to learn.</div>
-      <div class="callout warn"><strong>Stuck?</strong> 10-minute rule. Try alone for 10 minutes. <em>Then</em> open a hint or ask AI. Hints don't give answers; they nudge.</div>
+      <div class="callout tip"><strong>💡 <span class="en">Tip:</span><span class="vi">Mẹo:</span></strong> <span class="en">Keep two windows open — VM shell on one side, this page on the other. Read a step, run it, watch what happens. That side-by-side rhythm is the fastest way to learn.</span><span class="vi">Mở hai cửa sổ — shell máy ảo ở một bên, trang này ở bên kia. Đọc một bước, chạy nó, quan sát kết quả. Nhịp song song đó là cách học nhanh nhất.</span></div>
+      <div class="callout warn"><strong><span class="en">Stuck?</span><span class="vi">Bị tắc?</span></strong> <span class="en">10-minute rule. Try alone for 10 minutes. <em>Then</em> open a hint or ask AI. Hints don't give answers; they nudge.</span><span class="vi">Quy tắc 10 phút. Tự thử 10 phút. <em>Sau đó</em> mở gợi ý hoặc hỏi AI. Gợi ý không cho đáp án; chỉ hướng dẫn.</span></div>
     </section>
 
-    <!-- ─────────────── DAY 1 ─────────────── -->
+    <!-- ─────────────── LAB 1 ─────────────── -->
     <div class="lab" id="lab-1">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>1</strong></div>
         <div class="lab-title">
-          <h3>"The server keeps crashing"</h3>
-          <p>Linux & Shell · diagnose a leaky service, free a stuffed disk, and set up an early warning</p>
+          <h3><span class="en">"The server keeps crashing"</span><span class="vi">"Máy chủ cứ bị sập"</span></h3>
+          <p><span class="en">Linux & Shell · diagnose a leaky service, free a stuffed disk, set up an early warning</span><span class="vi">Linux & Shell · chẩn đoán dịch vụ rò rỉ, giải phóng ổ đĩa đầy, thiết lập cảnh báo sớm</span></p>
         </div>
         <div class="lab-meta">
-          <span class="meta-pill level">Beginner</span>
+          <span class="meta-pill level"><span class="en">Beginner</span><span class="vi">Cơ bản</span></span>
           <span class="meta-pill time">45 min</span>
         </div>
       </div>
 
       <div class="primer">
-        <h5>📚 Concept primer — read me first (~2 min)</h5>
+        <h5>📚 <span class="en">Concept primer — read me first (~2 min)</span><span class="vi">Khái niệm cơ bản — đọc trước (~2 phút)</span></h5>
         <div class="primer-grid">
-          <div class="primer-term"><strong>process</strong>A running program. Each one has a number called a <em>PID</em> (process ID).</div>
-          <div class="primer-term"><strong>systemd</strong>Ubuntu's service manager. It starts programs at boot, restarts them if they crash, and keeps their logs.</div>
-          <div class="primer-term"><strong>service / unit</strong>A program managed by systemd. Defined by a <code>.service</code> file. You start/stop/check it with <code>systemctl</code>.</div>
-          <div class="primer-term"><strong>journalctl</strong>The command to read systemd's log database. Like <code>cat</code>, but for service logs across the whole system.</div>
-          <div class="primer-term"><strong>memory leak</strong>A bug where a program keeps asking for memory but never gives it back. Eventually it eats all RAM and the OS kills it.</div>
-          <div class="primer-term"><strong>/var/log</strong>The standard Linux folder where applications write log files. When it fills up, things break in weird ways.</div>
-          <div class="primer-term"><strong>cron</strong>A built-in scheduler. You give it a command and a schedule (every 5 min, every Monday 3am, etc.) and it runs the command for you.</div>
+          <div class="primer-term"><strong>process / tiến trình</strong><span class="en">A running program. Each has a number called a PID (process ID).</span><span class="vi">Một chương trình đang chạy. Mỗi tiến trình có một số gọi là PID (mã tiến trình).</span></div>
+          <div class="primer-term"><strong>systemd</strong><span class="en">Ubuntu's service manager. Starts programs at boot, restarts them if they crash, keeps their logs.</span><span class="vi">Trình quản lý dịch vụ của Ubuntu. Khởi động chương trình khi boot, khởi động lại nếu crash, lưu log.</span></div>
+          <div class="primer-term"><strong>service / dịch vụ</strong><span class="en">A program managed by systemd, defined by a <code>.service</code> file. Control it with <code>systemctl</code>.</span><span class="vi">Chương trình được quản lý bởi systemd, định nghĩa bằng file <code>.service</code>. Điều khiển bằng <code>systemctl</code>.</span></div>
+          <div class="primer-term"><strong>journalctl</strong><span class="en">Reads systemd's log database. Like <code>cat</code>, but for service logs across the whole system.</span><span class="vi">Đọc cơ sở dữ liệu log của systemd. Giống <code>cat</code> nhưng dành cho log dịch vụ trên toàn hệ thống.</span></div>
+          <div class="primer-term"><strong>memory leak / rò rỉ bộ nhớ</strong><span class="en">A bug where a program keeps requesting memory but never releases it. Eventually the OS kills it.</span><span class="vi">Lỗi khi chương trình liên tục yêu cầu bộ nhớ nhưng không bao giờ giải phóng. Cuối cùng hệ điều hành sẽ kill nó.</span></div>
+          <div class="primer-term"><strong>/var/log</strong><span class="en">Standard Linux folder where apps write log files. When it fills up, things break in weird ways.</span><span class="vi">Thư mục Linux chuẩn nơi ứng dụng ghi file log. Khi đầy, mọi thứ hỏng theo cách kỳ lạ.</span></div>
+          <div class="primer-term"><strong>cron</strong><span class="en">A built-in scheduler. Give it a command and a schedule; it runs automatically.</span><span class="vi">Trình lên lịch tích hợp sẵn. Cho nó một lệnh và lịch; nó tự chạy.</span></div>
         </div>
       </div>
 
-      <h4><span class="step-num">1</span>Set the scene</h4>
-      <p>Inside the VM (run <code>multipass shell ecotrack</code> if you're not already in), copy the whole block below and paste it into the shell. Press Enter to run it. It installs a leaky service and stuffs the disk — simulating the broken EcoTrack production server.</p>
+      <h4><span class="step-num">1</span><span class="en">Set the scene</span><span class="vi">Dựng cảnh</span></h4>
+      <p><span class="en">Inside the VM (<code>multipass shell ecotrack</code>), paste the whole block below and press Enter. It installs a leaky service and stuffs the disk — simulating the broken EcoTrack production server.</span><span class="vi">Trong máy ảo (<code>multipass shell ecotrack</code>), dán toàn bộ đoạn dưới đây và nhấn Enter. Nó cài một dịch vụ bị rò rỉ và lấp đầy ổ đĩa — mô phỏng máy chủ production EcoTrack bị hỏng.</span></p>
 <pre><code><span class="cmt"># --- Day 1 setup: simulate prod-1.ecotrack.io in distress ---</span>
 
-<span class="cmt"># 1. Create a tiny Python program that leaks memory on purpose</span>
+<span class="cmt"># 1. Tạo chương trình Python cố ý rò rỉ bộ nhớ</span>
 sudo tee /usr/local/bin/ecotrack-api.py &gt; /dev/null &lt;&lt;'PY'
 #!/usr/bin/env python3
 import time
 buf = []
 while True:
-    buf.append("x" * 10_000_000)  # grab another 10MB of RAM forever
+    buf.append("x" * 10_000_000)  # chiếm thêm 10MB RAM mỗi giây mãi mãi
     time.sleep(1)
 PY
 sudo chmod +x /usr/local/bin/ecotrack-api.py
 
-<span class="cmt"># 2. Define it as a systemd service, so the OS auto-restarts it on crash</span>
+<span class="cmt"># 2. Định nghĩa nó là một systemd service</span>
 sudo tee /etc/systemd/system/ecotrack-api.service &gt; /dev/null &lt;&lt;'UNIT'
 [Unit]
 Description=EcoTrack API (simulated, leaky)
@@ -741,7 +647,7 @@ MemoryMax=400M
 WantedBy=multi-user.target
 UNIT
 
-<span class="cmt"># 3. Pile up large dummy log files until the disk is &gt;90% full</span>
+<span class="cmt"># 3. Tạo file log giả cho đến khi ổ đĩa &gt;90% đầy</span>
 sudo mkdir -p /var/log/ecotrack
 while :; do
   USED=$(df / | awk 'NR==2 {sub("%","",$5); print $5}')
@@ -749,490 +655,420 @@ while :; do
   sudo dd if=/dev/zero of=/var/log/ecotrack/old-$RANDOM.log bs=1M count=300 status=none || break
 done
 
-<span class="cmt"># 4. Reload systemd's config and start the leaky service</span>
+<span class="cmt"># 4. Tải lại cấu hình systemd và khởi động dịch vụ</span>
 sudo systemctl daemon-reload
 sudo systemctl enable --now ecotrack-api
 
 echo
-echo "✗ prod-1.ecotrack.io is unhealthy. Good luck."</code></pre>
+echo "✗ prod-1.ecotrack.io đang có vấn đề. Chúc may mắn."</code></pre>
 
       <details class="term">
-        <summary>💡 What does the script actually do?</summary>
+        <summary>💡 <span class="en">What does the script actually do?</span><span class="vi">Script thực sự làm gì?</span></summary>
         <div class="body">
-          <p><strong>Step 1</strong> writes a tiny Python file to <code>/usr/local/bin/ecotrack-api.py</code>. The program is dumb on purpose: it adds 10MB of junk to a list every second forever, never letting go. That's the leak.</p>
-          <p><strong>Step 2</strong> tells systemd: "treat this Python file as a service called <code>ecotrack-api</code>; if it dies, restart it after 5 seconds; cap its memory at 400MB". The cap means the kernel will kill it long before your VM runs out of RAM — which is exactly the cycle you'll see in the logs.</p>
-          <p><strong>Step 3</strong> creates large empty files in <code>/var/log/ecotrack/</code> until the disk is &gt;92% full. Real-world cause: app-rotated logs that nobody cleaned up.</p>
-          <p><strong>Step 4</strong> tells systemd to reload its config (<code>daemon-reload</code>) and start the service now plus on every boot (<code>enable --now</code>).</p>
+          <p><span class="en"><strong>Step 1</strong> writes a tiny Python file. The program grabs 10MB of RAM every second and never lets go — that's the leak. <strong>Step 2</strong> tells systemd: restart it after 5 seconds if it dies; cap memory at 400MB. The kernel kills it when it hits 400MB, systemd restarts it, it leaks again — that's the crash loop. <strong>Step 3</strong> fills <code>/var/log/ecotrack/</code> with dummy files until disk is >92% full. <strong>Step 4</strong> starts it all.</span><span class="vi"><strong>Bước 1</strong> viết một file Python nhỏ. Chương trình chiếm 10MB RAM mỗi giây và không bao giờ thả ra — đó là rò rỉ. <strong>Bước 2</strong> nói với systemd: khởi động lại sau 5 giây nếu chết; giới hạn bộ nhớ 400MB. Kernel kill nó khi chạm 400MB, systemd khởi động lại, nó rò rỉ lại — đó là vòng lặp crash. <strong>Bước 3</strong> lấp đầy <code>/var/log/ecotrack/</code> bằng file giả cho đến khi ổ đĩa >92% đầy. <strong>Bước 4</strong> khởi động tất cả.</span></p>
         </div>
       </details>
 
-      <h4><span class="step-num">2</span>Exercises (~40 min)</h4>
+      <h4><span class="step-num">2</span><span class="en">Exercises (~40 min)</span><span class="vi">Bài tập (~40 phút)</span></h4>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">1</div><div class="ex-title">Get a snapshot of system health.</div></div>
-        <p>Run these one at a time. Don't worry if you don't understand every line — read the explanations below first.</p>
-        <pre><code>uptime    <span class="cmt"># how long the system has been up + 3 load-average numbers</span>
-df -h     <span class="cmt"># disk usage per filesystem, in human-readable form</span>
-free -h   <span class="cmt"># memory usage, human-readable</span>
-top       <span class="cmt"># live view of all processes (press q to quit)</span></code></pre>
+        <div class="ex-head"><div class="ex-num">1</div><div class="ex-title"><span class="en">Get a snapshot of system health.</span><span class="vi">Kiểm tra tình trạng sức khỏe hệ thống.</span></div></div>
+        <p><span class="en">Run these one at a time and read the output:</span><span class="vi">Chạy từng lệnh một và đọc kết quả:</span></p>
+        <pre><code>uptime    <span class="cmt"># thời gian hoạt động + 3 chỉ số load average</span>
+df -h     <span class="cmt"># dung lượng ổ đĩa, dạng dễ đọc</span>
+free -h   <span class="cmt"># dung lượng bộ nhớ, dạng dễ đọc</span>
+top       <span class="cmt"># xem trực tiếp tiến trình (nhấn q để thoát)</span></code></pre>
         <details class="term">
-          <summary>💡 What do those load-average numbers mean?</summary>
+          <summary>💡 <span class="en">What does load average mean?</span><span class="vi">Load average nghĩa là gì?</span></summary>
           <div class="body">
-            <p>Three numbers — averaged over the last 1, 5, and 15 minutes. Each one is "how many processes were waiting for CPU on average". If your VM has 2 CPUs, then <strong>2.0 means CPU is fully used</strong>. Anything well above 2.0 means processes are queued up waiting.</p>
-            <p>So a quick sanity check: <em>load average / number of CPUs</em>. Above ~1.0 = busy. Above ~2.0 = saturated.</p>
+            <p><span class="en">Three numbers — averaged over the last 1, 5, and 15 minutes. Each is "how many processes were waiting for CPU". On a 2-CPU VM, anything above 2.0 means CPU is saturated.</span><span class="vi">Ba con số — trung bình trong 1, 5 và 15 phút vừa qua. Mỗi số là "số tiến trình đang chờ CPU". Trên máy ảo 2 CPU, bất kỳ con số nào trên 2.0 có nghĩa là CPU đang quá tải.</span></p>
           </div>
         </details>
         <details class="hint">
-          <summary>💭 Hint — what should I notice?</summary>
+          <summary>💭 <span class="en">Hint — what should I notice?</span><span class="vi">Gợi ý — tôi cần chú ý gì?</span></summary>
           <div class="body">
-            <p>Look at the <code>%</code> in <code>df -h</code> for the <code>/</code> row. Look at the "available" column in <code>free -h</code>. In <code>top</code>, the top rows are sorted by CPU; press <code>Shift+M</code> (uppercase M) to sort by memory instead. What does the top entry look like?</p>
+            <p><span class="en">Look at the % in <code>df -h</code> for the <code>/</code> row. Check "available" in <code>free -h</code>. In <code>top</code>, press <code>Shift+M</code> to sort by memory. What's at the top?</span><span class="vi">Nhìn vào % trong <code>df -h</code> ở hàng <code>/</code>. Kiểm tra "available" trong <code>free -h</code>. Trong <code>top</code>, nhấn <code>Shift+M</code> để sắp xếp theo bộ nhớ. Cái gì đứng đầu?</span></p>
           </div>
         </details>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">2</div><div class="ex-title">Find the leaking process by name and PID.</div></div>
-        <p>Sort all processes by memory usage and look at the worst offender:</p>
+        <div class="ex-head"><div class="ex-num">2</div><div class="ex-title"><span class="en">Find the leaking process by name and PID.</span><span class="vi">Tìm tiến trình rò rỉ theo tên và PID.</span></div></div>
         <pre><code>ps aux --sort=-%mem | head</code></pre>
         <details class="term">
-          <summary>💡 What's <code>ps aux</code>? What's a PID?</summary>
+          <summary>💡 <span class="en">What's <code>ps aux</code>? What's a PID?</span><span class="vi"><code>ps aux</code> là gì? PID là gì?</span></summary>
           <div class="body">
-            <p><code>ps</code> shows running processes. <code>aux</code> is a common combo of flags meaning "show every process owned by every user, in BSD-style output". <code>--sort=-%mem</code> sorts by memory used, descending.</p>
-            <p>A PID is a process ID — a number Linux assigns to each running process. It's how you refer to a specific running instance, even if many copies of the same program exist.</p>
+            <p><span class="en"><code>ps</code> shows running processes. <code>aux</code> = show all processes for all users. <code>--sort=-%mem</code> = sort by memory, biggest first. A PID is a process ID — a unique number Linux assigns to each running process.</span><span class="vi"><code>ps</code> hiển thị các tiến trình đang chạy. <code>aux</code> = hiển thị tất cả tiến trình của mọi user. <code>--sort=-%mem</code> = sắp xếp theo bộ nhớ, lớn nhất trước. PID là mã tiến trình — số duy nhất Linux gán cho mỗi tiến trình đang chạy.</span></p>
           </div>
         </details>
         <details class="hint">
-          <summary>💭 Hint — what am I looking for?</summary>
+          <summary>💭 <span class="en">Hint — what am I looking for?</span><span class="vi">Gợi ý — tôi đang tìm gì?</span></summary>
           <div class="body">
-            <p>The first line is column headers: <code>USER PID %CPU %MEM ... COMMAND</code>. The second line is the worst-offending process. The PID is the second column; the program name is at the very end of the row.</p>
+            <p><span class="en">The second line (first data row) is the worst offender. The PID is column 2; the program name is at the end.</span><span class="vi">Dòng thứ hai (hàng dữ liệu đầu tiên) là tiến trình tệ nhất. PID là cột 2; tên chương trình ở cuối dòng.</span></p>
           </div>
         </details>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">3</div><div class="ex-title">Read the crash log to confirm the leak.</div></div>
-        <p>The leaky service is named <code>ecotrack-api</code>. Read its recent log entries:</p>
+        <div class="ex-head"><div class="ex-num">3</div><div class="ex-title"><span class="en">Read the crash log to confirm the leak.</span><span class="vi">Đọc log crash để xác nhận rò rỉ.</span></div></div>
         <pre><code>journalctl -u ecotrack-api -n 100 --no-pager</code></pre>
         <details class="term">
-          <summary>💡 What do those flags mean?</summary>
+          <summary>💡 <span class="en">What do those flags mean?</span><span class="vi">Các flag đó nghĩa là gì?</span></summary>
           <div class="body">
-            <p><code>-u ecotrack-api</code> — only show logs for the <code>ecotrack-api</code> unit (service). <br><code>-n 100</code> — show the last 100 lines. <br><code>--no-pager</code> — print to the terminal directly instead of opening a pager (a pager is a "press space to scroll" view; <code>q</code> to quit).</p>
-            <p>Other useful variants: <code>journalctl -u ecotrack-api -f</code> tails the log live (Ctrl+C to stop). <code>journalctl -u ecotrack-api --since "10 minutes ago"</code> filters by time.</p>
+            <p><span class="en"><code>-u ecotrack-api</code> = only show logs for this service. <code>-n 100</code> = last 100 lines. <code>--no-pager</code> = print directly to terminal instead of opening a scroll view. Useful variant: <code>-f</code> to follow logs live.</span><span class="vi"><code>-u ecotrack-api</code> = chỉ hiện log cho dịch vụ này. <code>-n 100</code> = 100 dòng cuối. <code>--no-pager</code> = in thẳng ra terminal thay vì mở chế độ cuộn. Biến thể hữu ích: <code>-f</code> để theo dõi log trực tiếp.</span></p>
           </div>
         </details>
         <details class="hint">
-          <summary>💭 Hint — what should I see?</summary>
+          <summary>💭 <span class="en">Hint — what should I see?</span><span class="vi">Gợi ý — tôi sẽ thấy gì?</span></summary>
           <div class="body">
-            <p>Look for repeating lines like "Service died with signal 9" or "exited with status 137". Signal 9 / status 137 means the kernel's OOM killer (Out-Of-Memory) killed the process because it exceeded its memory limit. Then systemd restarts it, it leaks again, gets killed again. That cycle is what you're seeing.</p>
+            <p><span class="en">Look for "signal 9" or "status 137" — that means the OOM killer (Out-Of-Memory) terminated the process for exceeding its memory limit. Then systemd restarts it, it leaks again, gets killed again. That cycle is the crash loop.</span><span class="vi">Tìm "signal 9" hoặc "status 137" — nghĩa là OOM killer (tiến trình kill khi hết bộ nhớ) đã kết thúc tiến trình vì vượt giới hạn bộ nhớ. Rồi systemd khởi động lại, nó rò rỉ lại, bị kill lại. Vòng lặp đó là crash loop.</span></p>
           </div>
         </details>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">4</div><div class="ex-title">Find what's eating the disk and clean it up.</div></div>
-        <p>Find the biggest folders in <code>/var/log</code>:</p>
+        <div class="ex-head"><div class="ex-num">4</div><div class="ex-title"><span class="en">Find what's eating the disk and clean it up.</span><span class="vi">Tìm thứ đang ngốn ổ đĩa và dọn sạch.</span></div></div>
         <pre><code>sudo du -sh /var/log/* 2&gt;/dev/null | sort -rh | head -15</code></pre>
-        <p>Then remove the EcoTrack-rotated logs (only those — don't touch system logs).</p>
         <details class="term">
-          <summary>💡 What's <code>du</code> doing? Why all those flags?</summary>
+          <summary>💡 <span class="en">What's <code>du</code> doing?</span><span class="vi"><code>du</code> đang làm gì?</span></summary>
           <div class="body">
-            <p><code>du</code> = "disk usage". <br><code>-s</code> = summarize (show only the total, not every subdirectory). <br><code>-h</code> = human-readable (M, G instead of bytes). <br><code>2&gt;/dev/null</code> = silence error messages (some folders need root; we ignore those errors). <br><code>sort -rh</code> = sort reversed (biggest first), human-aware (knows that 2G &gt; 500M). <br><code>head -15</code> = show only the top 15 lines.</p>
+            <p><span class="en"><code>du</code> = "disk usage". <code>-s</code> = summarize (total only). <code>-h</code> = human-readable (M, G). <code>2&gt;/dev/null</code> = silence permission errors. <code>sort -rh</code> = sort reversed, human-aware. <code>head -15</code> = show top 15.</span><span class="vi"><code>du</code> = "disk usage" (dung lượng ổ đĩa). <code>-s</code> = tóm tắt (chỉ tổng). <code>-h</code> = dạng dễ đọc (M, G). <code>2&gt;/dev/null</code> = ẩn lỗi quyền. <code>sort -rh</code> = sắp xếp đảo ngược, nhận biết đơn vị. <code>head -15</code> = hiện top 15.</span></p>
           </div>
         </details>
         <details class="hint">
-          <summary>💭 Hint — how do I delete the right files?</summary>
+          <summary>💭 <span class="en">Hint — how do I delete the right files?</span><span class="vi">Gợi ý — làm thế nào xóa đúng file?</span></summary>
           <div class="body">
-            <p>You created the mess in <code>/var/log/ecotrack/</code>. Only that folder. Use <code>sudo rm /var/log/ecotrack/*.log</code> — that removes the .log files inside that folder and nothing else.</p>
-            <p><strong>Never</strong> run <code>rm -rf</code> against <code>/var/log</code> or any path you're not 100% sure of. That's how people break production. List with <code>ls</code> first; delete second.</p>
+            <p><span class="en">The mess is in <code>/var/log/ecotrack/</code> — only that folder. Use <code>sudo rm /var/log/ecotrack/*.log</code>. <strong>Never</strong> run <code>rm -rf</code> against a path you're not 100% sure of. Always <code>ls &lt;path&gt;</code> first.</span><span class="vi">Rác nằm ở <code>/var/log/ecotrack/</code> — chỉ thư mục đó. Dùng <code>sudo rm /var/log/ecotrack/*.log</code>. <strong>Đừng bao giờ</strong> chạy <code>rm -rf</code> với đường dẫn bạn không chắc 100%. Luôn <code>ls &lt;đường dẫn&gt;</code> trước.</span></p>
           </div>
         </details>
-        <div class="callout warn"><strong>⚠️ Tip:</strong> get in the habit of running <code>ls &lt;path&gt;</code> <em>before</em> any <code>rm</code>. The 2 seconds it costs you have saved careers.</div>
+        <div class="callout warn"><strong>⚠️ <span class="en">Tip:</span><span class="vi">Mẹo:</span></strong> <span class="en">Run <code>ls</code> <em>before</em> any <code>rm</code>. The 2 seconds it costs you have saved careers.</span><span class="vi">Chạy <code>ls</code> <em>trước</em> mọi lệnh <code>rm</code>. 2 giây đó đã cứu nhiều sự nghiệp.</span></div>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">5</div><div class="ex-title">Stop the bleeding for now.</div></div>
-        <p>The leak itself is a code bug — beyond Day 1's scope. Stop the service so the loop ends:</p>
+        <div class="ex-head"><div class="ex-num">5</div><div class="ex-title"><span class="en">Stop the service for now.</span><span class="vi">Dừng dịch vụ lại.</span></div></div>
+        <p><span class="en">The leak is a code bug — beyond Day 1's scope. Stop the service so the loop ends:</span><span class="vi">Rò rỉ là lỗi code — ngoài phạm vi Ngày 1. Dừng dịch vụ để kết thúc vòng lặp:</span></p>
         <pre><code>sudo systemctl stop ecotrack-api</code></pre>
         <details class="term">
-          <summary>💡 stop vs disable vs mask — what's the difference?</summary>
+          <summary>💡 <span class="en">stop vs disable vs mask — what's the difference?</span><span class="vi">stop vs disable vs mask — khác gì nhau?</span></summary>
           <div class="body">
-            <p><code>stop</code> = stop it right now. It can still start at boot or manually. <br><code>disable</code> = don't start it on next boot (but leaves it stoppable/startable). <br><code>mask</code> = forbid it entirely. Even root can't start it without unmasking. Use this last one for "this should never run again, ever".</p>
-            <p>For today, <code>stop</code> is enough. We want it stopped right now.</p>
+            <p><span class="en"><code>stop</code> = stop right now, can still start at boot. <code>disable</code> = don't auto-start on next boot. <code>mask</code> = forbid completely — even root can't start it. For today, <code>stop</code> is enough.</span><span class="vi"><code>stop</code> = dừng ngay, vẫn có thể khởi động khi boot. <code>disable</code> = không tự khởi động khi boot tiếp theo. <code>mask</code> = cấm hoàn toàn — kể cả root cũng không khởi động được. Hôm nay, <code>stop</code> là đủ.</span></p>
           </div>
         </details>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">6</div><div class="ex-title">Write a memory watcher script.</div></div>
-        <p>Create <code>~/watch-memory.sh</code> that appends a warning line to <code>/var/log/ecotrack-memory.log</code> if memory usage is over 85%. Make it executable.</p>
+        <div class="ex-head"><div class="ex-num">6</div><div class="ex-title"><span class="en">Write a memory watcher script.</span><span class="vi">Viết script theo dõi bộ nhớ.</span></div></div>
+        <p><span class="en">Create <code>~/watch-memory.sh</code> that appends a warning line to <code>/var/log/ecotrack-memory.log</code> when memory &gt; 85%. Make it executable.</span><span class="vi">Tạo <code>~/watch-memory.sh</code> thêm dòng cảnh báo vào <code>/var/log/ecotrack-memory.log</code> khi bộ nhớ &gt; 85%. Đặt quyền thực thi cho nó.</span></p>
         <details class="term">
-          <summary>💡 How do I create and edit a file in the shell?</summary>
+          <summary>💡 <span class="en">How do I create and edit a file in the shell?</span><span class="vi">Làm thế nào tạo và chỉnh sửa file trong shell?</span></summary>
           <div class="body">
-            <p>Easiest editors on Ubuntu:</p>
-            <ul>
-              <li><code>nano ~/watch-memory.sh</code> — beginner-friendly. Save with <code>Ctrl+O</code> then Enter, exit with <code>Ctrl+X</code>.</li>
-              <li><code>vim ~/watch-memory.sh</code> — powerful but has a learning curve. Press <code>i</code> to start typing, <code>Esc</code> then <code>:wq</code> to save and quit.</li>
-            </ul>
-            <p>To make a script executable: <code>chmod +x ~/watch-memory.sh</code>. To run it: <code>~/watch-memory.sh</code> or <code>bash ~/watch-memory.sh</code>.</p>
+            <p><span class="en">Use <code>nano ~/watch-memory.sh</code> (beginner-friendly). Save with Ctrl+O then Enter; exit with Ctrl+X. Make executable: <code>chmod +x ~/watch-memory.sh</code>. Run it: <code>bash ~/watch-memory.sh</code>.</span><span class="vi">Dùng <code>nano ~/watch-memory.sh</code> (thân thiện với người mới). Lưu bằng Ctrl+O rồi Enter; thoát bằng Ctrl+X. Đặt quyền thực thi: <code>chmod +x ~/watch-memory.sh</code>. Chạy: <code>bash ~/watch-memory.sh</code>.</span></p>
           </div>
         </details>
         <details class="hint">
-          <summary>💭 Hint — how do I get memory usage as a number?</summary>
+          <summary>💭 <span class="en">Hint — how do I get memory usage as a number?</span><span class="vi">Gợi ý — làm thế nào lấy % bộ nhớ dưới dạng số?</span></summary>
           <div class="body">
-            <p><code>free</code> shows memory; you can pipe its output into <code>awk</code> to extract a percentage:</p>
+            <p><span class="en">Pipe <code>free</code> through <code>awk</code>:</span><span class="vi">Dùng <code>awk</code> với <code>free</code>:</span></p>
             <pre><code>free | awk '/Mem:/ {printf "%.0f", $3/$2*100}'</code></pre>
-            <p>That gives a single number like <code>23</code>. Compare it with <code>-gt 85</code> in an <code>if</code>:</p>
-            <pre><code>USE=$(free | awk '/Mem:/ {printf "%.0f", $3/$2*100}')
+            <p><span class="en">Full script:</span><span class="vi">Script đầy đủ:</span></p>
+            <pre><code>#!/bin/bash
+USE=$(free | awk '/Mem:/ {printf "%.0f", $3/$2*100}')
 if [ "$USE" -gt 85 ]; then
     echo "$(date) WARN memory at ${USE}%" | sudo tee -a /var/log/ecotrack-memory.log
 fi</code></pre>
-            <p>Save that as <code>~/watch-memory.sh</code> with <code>#!/bin/bash</code> as the first line.</p>
           </div>
         </details>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">7</div><div class="ex-title">Schedule it to run every 5 minutes via cron.</div></div>
-        <pre><code>crontab -e   <span class="cmt"># opens your personal cron schedule in an editor</span></code></pre>
-        <p>Add this line at the bottom, save, and quit:</p>
+        <div class="ex-head"><div class="ex-num">7</div><div class="ex-title"><span class="en">Schedule it every 5 minutes via cron.</span><span class="vi">Lên lịch chạy mỗi 5 phút qua cron.</span></div></div>
+        <pre><code>crontab -e   <span class="cmt"># mở lịch cron cá nhân trong trình soạn thảo</span></code></pre>
+        <p><span class="en">Add this line at the bottom, save, and quit:</span><span class="vi">Thêm dòng này ở cuối, lưu và thoát:</span></p>
         <pre><code>*/5 * * * * /home/ubuntu/watch-memory.sh</code></pre>
         <details class="term">
-          <summary>💡 How do I read cron schedule syntax?</summary>
+          <summary>💡 <span class="en">How do I read cron schedule syntax?</span><span class="vi">Cách đọc cú pháp lịch cron?</span></summary>
           <div class="body">
-            <p>Five fields, space-separated: <code>minute hour day-of-month month day-of-week command</code>.</p>
-            <ul>
-              <li><code>*</code> = "any"</li>
-              <li><code>*/5</code> = "every 5"</li>
-              <li><code>0 3 * * 1</code> = "at 03:00 every Monday"</li>
-              <li><code>*/5 * * * *</code> = "every 5 minutes, every hour, every day"</li>
-            </ul>
-            <p>Try <a href="https://crontab.guru" target="_blank" rel="noopener" style="color:var(--accent2)">crontab.guru</a> — paste any cron expression and it tells you in English what it means.</p>
-          </div>
-        </details>
-        <details class="hint">
-          <summary>💭 Hint — how do I check it actually ran?</summary>
-          <div class="body">
-            <p>Wait 5 minutes, then check: <code>sudo cat /var/log/syslog | grep CRON | tail</code>. You should see lines for <code>watch-memory.sh</code>. If memory is below 85%, the log file may be empty — that's correct (no warning needed). To force-trigger a write, run the script directly: <code>bash ~/watch-memory.sh</code>.</p>
+            <p><span class="en">Five fields: <code>minute hour day-of-month month day-of-week command</code>. <code>*</code> = "any". <code>*/5</code> = "every 5". Try <a href="https://crontab.guru" target="_blank" rel="noopener" style="color:var(--accent2)">crontab.guru</a> — paste any expression, it explains in plain English.</span><span class="vi">Năm trường: <code>phút giờ ngày-trong-tháng tháng ngày-trong-tuần lệnh</code>. <code>*</code> = "bất kỳ". <code>*/5</code> = "mỗi 5". Thử <a href="https://crontab.guru" target="_blank" rel="noopener" style="color:var(--accent2)">crontab.guru</a> — dán bất kỳ biểu thức nào, nó giải thích bằng ngôn ngữ thông thường.</span></p>
           </div>
         </details>
       </div>
 
       <div class="verify">
-        <div class="check-label">✅ Verify — you're done when</div>
+        <div class="check-label">✅ <span class="en">Verify — you're done when</span><span class="vi">Kiểm tra — bạn xong khi</span></div>
         <ul>
-          <li><code>df -h /</code> shows below 70% used</li>
-          <li><code>systemctl is-active ecotrack-api</code> returns <code>inactive</code></li>
-          <li><code>crontab -l</code> shows your <code>watch-memory</code> entry</li>
-          <li><code>bash ~/watch-memory.sh</code> runs without error (the log file is created if needed)</li>
+          <li><code>df -h /</code> <span class="en">shows below 70% used</span><span class="vi">hiển thị dưới 70% đã dùng</span></li>
+          <li><code>systemctl is-active ecotrack-api</code> <span class="en">returns</span><span class="vi">trả về</span> <code>inactive</code></li>
+          <li><code>crontab -l</code> <span class="en">shows your watch-memory entry</span><span class="vi">hiển thị entry watch-memory của bạn</span></li>
+          <li><code>bash ~/watch-memory.sh</code> <span class="en">runs without error</span><span class="vi">chạy không có lỗi</span></li>
         </ul>
       </div>
 
-      <h4><span class="step-num">3</span>Snapshot &amp; close</h4>
-<pre><code>exit  <span class="cmt"># leave the VM</span>
+      <h4><span class="step-num">3</span><span class="en">Snapshot & close</span><span class="vi">Snapshot & đóng</span></h4>
+<pre><code>exit  <span class="cmt"># thoát khỏi VM</span>
 multipass stop ecotrack
 multipass snapshot ecotrack --name day-1-done</code></pre>
     </div>
 
-    <!-- ─────────────── DAY 2 ─────────────── -->
+    <!-- ─────────────── LAB 2 ─────────────── -->
     <div class="lab" id="lab-2">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>2</strong></div>
         <div class="lab-title">
-          <h3>"A researcher found our open database"</h3>
-          <p>Networking · close the door, audit ports, rotate the password</p>
+          <h3><span class="en">"A researcher found our open database"</span><span class="vi">"Nhà nghiên cứu phát hiện cơ sở dữ liệu bị mở"</span></h3>
+          <p><span class="en">Networking · close the door, audit ports, rotate the password</span><span class="vi">Mạng máy tính · đóng cửa, kiểm tra cổng, thay đổi mật khẩu</span></p>
         </div>
         <div class="lab-meta">
-          <span class="meta-pill level">Beginner</span>
+          <span class="meta-pill level"><span class="en">Beginner</span><span class="vi">Cơ bản</span></span>
           <span class="meta-pill time">45 min</span>
         </div>
       </div>
 
       <div class="primer">
-        <h5>📚 Concept primer — read me first (~2 min)</h5>
+        <h5>📚 <span class="en">Concept primer — read me first (~2 min)</span><span class="vi">Khái niệm cơ bản — đọc trước (~2 phút)</span></h5>
         <div class="primer-grid">
-          <div class="primer-term"><strong>port</strong>A numbered "door" on a network address. SSH uses 22, HTTPS uses 443, Postgres uses 5432. Programs <em>listen</em> on ports.</div>
-          <div class="primer-term"><strong>listen address</strong>Which network interface a program accepts traffic on. <code>127.0.0.1</code> = only this machine. <code>0.0.0.0</code> = anyone, anywhere.</div>
-          <div class="primer-term"><strong>localhost / 127.0.0.1</strong>The machine itself. A program listening on 127.0.0.1 can only be reached by other programs on the same machine.</div>
-          <div class="primer-term"><strong>firewall</strong>A traffic gate. Decides which incoming packets to allow or drop, regardless of what programs are listening. <code>ufw</code> is Ubuntu's friendly front-end.</div>
-          <div class="primer-term"><strong>PostgreSQL / postgres</strong>A popular open-source database. Listens on port 5432 by default. Should never be exposed to the internet.</div>
-          <div class="primer-term"><strong>pg_hba.conf</strong>Postgres' "who can connect from where" rules. Separate from <code>postgresql.conf</code> (which controls bind, ports, etc.).</div>
-          <div class="primer-term"><strong>nc (netcat)</strong>A Swiss Army knife for networking. <code>nc -zv host port</code> = "is something listening on this port?"</div>
-          <div class="primer-term"><strong>ss</strong>"Socket statistics" — lists open network connections and listeners. Modern replacement for <code>netstat</code>.</div>
+          <div class="primer-term"><strong>port / cổng mạng</strong><span class="en">A numbered "door" on a network address. SSH=22, HTTPS=443, Postgres=5432.</span><span class="vi">Một "cửa" được đánh số trên địa chỉ mạng. SSH=22, HTTPS=443, Postgres=5432.</span></div>
+          <div class="primer-term"><strong>listen address</strong><span class="en">Which interface a program accepts traffic on. <code>127.0.0.1</code> = only this machine. <code>0.0.0.0</code> = anyone, anywhere.</span><span class="vi">Giao diện mạng mà chương trình chấp nhận kết nối. <code>127.0.0.1</code> = chỉ máy này. <code>0.0.0.0</code> = bất kỳ ai, từ đâu.</span></div>
+          <div class="primer-term"><strong>localhost / 127.0.0.1</strong><span class="en">The machine itself. A program on localhost can only be reached by other programs on the same machine.</span><span class="vi">Chính máy này. Chương trình trên localhost chỉ có thể được tiếp cận bởi chương trình khác trên cùng máy.</span></div>
+          <div class="primer-term"><strong>firewall / tường lửa</strong><span class="en">A traffic gate. Decides which incoming packets to allow or drop. <code>ufw</code> is Ubuntu's friendly firewall tool.</span><span class="vi">Cổng kiểm soát lưu lượng. Quyết định cho phép hay chặn gói tin đến. <code>ufw</code> là công cụ tường lửa thân thiện của Ubuntu.</span></div>
+          <div class="primer-term"><strong>PostgreSQL</strong><span class="en">A popular open-source database. Listens on port 5432. Should never be exposed to the internet.</span><span class="vi">Cơ sở dữ liệu mã nguồn mở phổ biến. Lắng nghe trên cổng 5432. Không bao giờ nên để lộ ra internet.</span></div>
+          <div class="primer-term"><strong>pg_hba.conf</strong><span class="en">Postgres' "who can connect from where" rules. Separate from <code>postgresql.conf</code> (which controls bind address and ports).</span><span class="vi">Quy tắc "ai có thể kết nối từ đâu" của Postgres. Tách biệt với <code>postgresql.conf</code> (kiểm soát địa chỉ bind và cổng).</span></div>
+          <div class="primer-term"><strong>nc (netcat)</strong><span class="en">Swiss Army knife for networking. <code>nc -zv host port</code> = "is something listening on this port?"</span><span class="vi">Dao đa năng cho mạng máy tính. <code>nc -zv host cổng</code> = "có gì đang lắng nghe cổng này không?"</span></div>
+          <div class="primer-term"><strong>ss</strong><span class="en">"Socket statistics" — lists open network connections and listeners. Modern replacement for <code>netstat</code>.</span><span class="vi">"Thống kê socket" — liệt kê kết nối mạng và listener đang mở. Thay thế hiện đại cho <code>netstat</code>.</span></div>
         </div>
       </div>
 
-      <h4><span class="step-num">1</span>Set the scene</h4>
-      <p>Make sure the VM is running and you're shelled in: <code>multipass start ecotrack</code> then <code>multipass shell ecotrack</code>. Then paste:</p>
+      <h4><span class="step-num">1</span><span class="en">Set the scene</span><span class="vi">Dựng cảnh</span></h4>
+      <p><span class="en">Start the VM and shell in: <code>multipass start ecotrack && multipass shell ecotrack</code>. Then paste:</span><span class="vi">Khởi động VM và vào shell: <code>multipass start ecotrack && multipass shell ecotrack</code>. Rồi dán:</span></p>
 <pre><code><span class="cmt"># --- Day 2 setup: PostgreSQL exposed to the world, firewall off ---</span>
 sudo apt-get update -qq
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq postgresql ufw netcat-openbsd
 
-<span class="cmt"># Find the active config dir (varies by Postgres version, e.g. /etc/postgresql/14/main)</span>
 PG_DIR=$(sudo find /etc/postgresql -maxdepth 3 -name postgresql.conf | head -1 | xargs dirname)
 
-<span class="cmt"># Bind to all interfaces (the WRONG thing — open to the world)</span>
+<span class="cmt"># Bind vào tất cả giao diện (điều SAI — mở ra toàn thế giới)</span>
 sudo sed -i "s/^#\?listen_addresses.*/listen_addresses = '*'/" "$PG_DIR/postgresql.conf"
 
-<span class="cmt"># Allow password auth from anywhere (the VERY wrong thing)</span>
+<span class="cmt"># Cho phép xác thực mật khẩu từ bất kỳ đâu (điều RẤT SAI)</span>
 echo "host all all 0.0.0.0/0 md5" | sudo tee -a "$PG_DIR/pg_hba.conf" &gt; /dev/null
 
-<span class="cmt"># Set a weak password the "researcher" already guessed</span>
+<span class="cmt"># Đặt mật khẩu yếu mà "nhà nghiên cứu" đã đoán được</span>
 sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'ecotrack123';" &gt;/dev/null
 
 sudo systemctl restart postgresql
 sudo ufw --force disable
 
 echo
-echo "✗ postgres is listening on $(ss -tlnp | awk '/5432/{print $4}'). UFW is OFF."</code></pre>
+echo "✗ postgres đang lắng nghe trên $(ss -tlnp | awk '/5432/{print $4}'). UFW đã TẮT."</code></pre>
 
-      <details class="term">
-        <summary>💡 What did the script just configure?</summary>
-        <div class="body">
-          <p><strong>Postgres</strong> was installed and then deliberately misconfigured:</p>
-          <ul>
-            <li><code>listen_addresses = '*'</code> in <code>postgresql.conf</code> means "accept connections on every network interface" — including the public-facing one.</li>
-            <li>The line in <code>pg_hba.conf</code> says "any host (<code>0.0.0.0/0</code>) can authenticate as any user with a password". That's the "front door wide open" part.</li>
-            <li>The password is <code>ecotrack123</code>. Trivially crackable.</li>
-            <li><code>ufw --force disable</code> turns off the firewall — there's no second line of defense.</li>
-          </ul>
-          <p>Real-world: this exact configuration drift has leaked millions of records. Your job today: make the door unfindable, then add a deadbolt.</p>
-        </div>
-      </details>
-
-      <h4><span class="step-num">2</span>Exercises (~40 min)</h4>
+      <h4><span class="step-num">2</span><span class="en">Exercises (~40 min)</span><span class="vi">Bài tập (~40 phút)</span></h4>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">1</div><div class="ex-title">Verify the problem yourself, from outside the VM.</div></div>
-        <p>From your laptop's shell (<em>not</em> inside the VM), find the VM's IP and probe its Postgres port:</p>
+        <div class="ex-head"><div class="ex-num">1</div><div class="ex-title"><span class="en">Verify the problem yourself, from outside the VM.</span><span class="vi">Tự xác minh vấn đề từ bên ngoài VM.</span></div></div>
+        <p><span class="en">From your laptop's shell (<em>not</em> inside the VM):</span><span class="vi">Từ shell laptop (<em>không phải</em> bên trong VM):</span></p>
         <pre><code>multipass info ecotrack | grep IPv4
-nc -zv &lt;that-ip&gt; 5432</code></pre>
+nc -zv &lt;địa-chỉ-ip&gt; 5432</code></pre>
         <details class="term">
-          <summary>💡 What does <code>nc -zv</code> do exactly?</summary>
+          <summary>💡 <span class="en">What does <code>nc -zv</code> do?</span><span class="vi"><code>nc -zv</code> làm gì?</span></summary>
           <div class="body">
-            <p><code>nc</code> (netcat) tries to make a network connection. <code>-z</code> means "don't send any data, just check if the port is open". <code>-v</code> means "verbose — tell me what happened".</p>
-            <p>If something is listening: <code>Connection to 192.168.x.x 5432 port [tcp/postgresql] succeeded!</code> If not: <code>Connection refused</code> or a timeout.</p>
+            <p><span class="en"><code>nc</code> (netcat) tries to connect to a host:port. <code>-z</code> = don't send data, just check if port is open. <code>-v</code> = verbose, tell me what happened. Success: "Connection to X port succeeded!" Failure: "Connection refused" or timeout.</span><span class="vi"><code>nc</code> (netcat) thử kết nối đến host:port. <code>-z</code> = không gửi dữ liệu, chỉ kiểm tra cổng có mở không. <code>-v</code> = chi tiết, cho biết điều gì xảy ra. Thành công: "Connection to X port succeeded!" Thất bại: "Connection refused" hoặc timeout.</span></p>
           </div>
         </details>
         <details class="hint">
-          <summary>💭 Hint — what's the security risk?</summary>
+          <summary>💭 <span class="en">Hint — why is this dangerous?</span><span class="vi">Gợi ý — tại sao điều này nguy hiểm?</span></summary>
           <div class="body">
-            <p>The connection succeeds, meaning <em>any</em> machine that can reach yours could try to log in. Combined with the weak <code>ecotrack123</code> password, an attacker could brute-force in within seconds. Once in, they have full access to every database table.</p>
+            <p><span class="en">The connection succeeds, meaning any machine on the internet can try to log in. With the weak <code>ecotrack123</code> password, an attacker could brute-force in within seconds and get full access to every database table.</span><span class="vi">Kết nối thành công, nghĩa là bất kỳ máy nào trên internet đều có thể thử đăng nhập. Với mật khẩu yếu <code>ecotrack123</code>, kẻ tấn công có thể brute-force vào trong vài giây và có toàn quyền truy cập mọi bảng cơ sở dữ liệu.</span></p>
           </div>
         </details>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">2</div><div class="ex-title">Audit every listening port on the VM.</div></div>
-        <p>Inside the VM, run:</p>
+        <div class="ex-head"><div class="ex-num">2</div><div class="ex-title"><span class="en">Audit every listening port on the VM.</span><span class="vi">Kiểm tra mọi cổng đang lắng nghe trên VM.</span></div></div>
         <pre><code>sudo ss -tlnp</code></pre>
         <details class="term">
-          <summary>💡 What do those flags mean? How do I read the output?</summary>
+          <summary>💡 <span class="en">How do I read the output?</span><span class="vi">Cách đọc kết quả?</span></summary>
           <div class="body">
-            <p><code>-t</code> = TCP only (skip UDP). <code>-l</code> = listening sockets only. <code>-n</code> = numeric (don't try to translate ports to names). <code>-p</code> = show the program owning the socket.</p>
-            <p>The <strong>Local Address:Port</strong> column tells you what's reachable. If it says <code>0.0.0.0:5432</code> or <code>*:5432</code>, the port is open to the world. If it says <code>127.0.0.1:5432</code>, only the VM itself can reach it.</p>
-          </div>
-        </details>
-        <details class="hint">
-          <summary>💭 Hint — for each listener, ask yourself</summary>
-          <div class="body">
-            <p>"Should the public internet be able to talk to this?" SSH on port 22 — yes (you need to log in). HTTPS on 443 — yes if you serve traffic. Postgres on 5432 — <strong>no</strong>. Anything else binding to <code>0.0.0.0</code> or <code>:::</code> — investigate.</p>
+            <p><span class="en"><code>-t</code>=TCP, <code>-l</code>=listening only, <code>-n</code>=numeric ports, <code>-p</code>=show program. The <strong>Local Address:Port</strong> column tells you what's reachable. <code>0.0.0.0:5432</code> or <code>*:5432</code> = open to the world. <code>127.0.0.1:5432</code> = only this machine can reach it.</span><span class="vi"><code>-t</code>=TCP, <code>-l</code>=chỉ đang lắng nghe, <code>-n</code>=số cổng, <code>-p</code>=hiện chương trình. Cột <strong>Local Address:Port</strong> cho biết gì có thể tiếp cận. <code>0.0.0.0:5432</code> hoặc <code>*:5432</code> = mở ra toàn thế giới. <code>127.0.0.1:5432</code> = chỉ máy này tiếp cận được.</span></p>
           </div>
         </details>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">3</div><div class="ex-title">Lock Postgres to localhost only.</div></div>
-        <p>Two files to fix:</p>
+        <div class="ex-head"><div class="ex-num">3</div><div class="ex-title"><span class="en">Lock Postgres to localhost only.</span><span class="vi">Chỉ cho Postgres lắng nghe trên localhost.</span></div></div>
         <ul>
-          <li><code>/etc/postgresql/&lt;version&gt;/main/postgresql.conf</code> — change <code>listen_addresses = '*'</code> to <code>listen_addresses = 'localhost'</code></li>
-          <li><code>/etc/postgresql/&lt;version&gt;/main/pg_hba.conf</code> — remove the <code>0.0.0.0/0</code> line; allow only <code>127.0.0.1/32</code> (and <code>::1/128</code> for IPv6)</li>
+          <li><span class="en">Edit <code>postgresql.conf</code> → <code>listen_addresses = 'localhost'</code></span><span class="vi">Sửa <code>postgresql.conf</code> → <code>listen_addresses = 'localhost'</code></span></li>
+          <li><span class="en">Edit <code>pg_hba.conf</code> → remove the <code>0.0.0.0/0</code> line</span><span class="vi">Sửa <code>pg_hba.conf</code> → xóa dòng <code>0.0.0.0/0</code></span></li>
         </ul>
-        <p>Then restart Postgres and re-test:</p>
         <pre><code>sudo systemctl restart postgresql
-sudo ss -tlnp | grep 5432         <span class="cmt"># should show only 127.0.0.1:5432 now</span>
-sudo -u postgres psql -c '\l'     <span class="cmt"># local connection still works</span></code></pre>
-        <p>From your laptop again: <code>nc -zv &lt;vm-ip&gt; 5432</code> — should now <strong>fail</strong>.</p>
+sudo ss -tln | grep 5432         <span class="cmt"># phải hiện 127.0.0.1:5432</span>
+sudo -u postgres psql -c '\l'   <span class="cmt"># kết nối local vẫn hoạt động</span></code></pre>
         <details class="term">
-          <summary>💡 How do I edit those config files?</summary>
+          <summary>💡 <span class="en">How do I edit those config files?</span><span class="vi">Làm thế nào sửa các file config đó?</span></summary>
           <div class="body">
-            <p>They're in <code>/etc/postgresql/...</code> — root-owned. Use <code>sudo nano</code> (or <code>sudo vim</code>):</p>
-            <pre><code>sudo nano /etc/postgresql/14/main/postgresql.conf
-sudo nano /etc/postgresql/14/main/pg_hba.conf</code></pre>
-            <p>The version number (e.g. <code>14</code>) might differ — use Tab to autocomplete or <code>ls /etc/postgresql/</code> to check.</p>
+            <p><span class="en">They're root-owned. Use <code>sudo nano /etc/postgresql/14/main/postgresql.conf</code> (the version number may differ — use Tab to autocomplete or <code>ls /etc/postgresql/</code> to check).</span><span class="vi">Chúng thuộc về root. Dùng <code>sudo nano /etc/postgresql/14/main/postgresql.conf</code> (số phiên bản có thể khác — dùng Tab để tự hoàn thành hoặc <code>ls /etc/postgresql/</code> để kiểm tra).</span></p>
           </div>
         </details>
         <details class="hint">
-          <summary>💭 Hint — exact text to search for</summary>
+          <summary>💭 <span class="en">Hint — exact text to find</span><span class="vi">Gợi ý — text cần tìm</span></summary>
           <div class="body">
-            <p>In <code>postgresql.conf</code>, find the line starting with <code>listen_addresses</code>. There may be a <code>#</code> comment in front — remove it. Set the value to <code>'localhost'</code>.</p>
-            <p>In <code>pg_hba.conf</code>, scroll to the bottom. Delete (or comment out with <code>#</code>) the line we appended: <code>host all all 0.0.0.0/0 md5</code>. The default <code>127.0.0.1/32</code> entries that came with the package install are fine.</p>
+            <p><span class="en">In <code>postgresql.conf</code>: find the line starting with <code>listen_addresses</code> (remove any leading <code>#</code>). Set it to <code>'localhost'</code>. In <code>pg_hba.conf</code>: scroll to the bottom, delete (or comment with <code>#</code>) the line we added: <code>host all all 0.0.0.0/0 md5</code>.</span><span class="vi">Trong <code>postgresql.conf</code>: tìm dòng bắt đầu bằng <code>listen_addresses</code> (xóa <code>#</code> ở đầu nếu có). Đặt thành <code>'localhost'</code>. Trong <code>pg_hba.conf</code>: cuộn xuống cuối, xóa (hoặc comment bằng <code>#</code>) dòng chúng ta thêm: <code>host all all 0.0.0.0/0 md5</code>.</span></p>
           </div>
         </details>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">4</div><div class="ex-title">Configure the firewall: deny by default, allow only SSH.</div></div>
+        <div class="ex-head"><div class="ex-num">4</div><div class="ex-title"><span class="en">Configure the firewall: deny by default, allow SSH only.</span><span class="vi">Cấu hình tường lửa: chặn mặc định, chỉ cho phép SSH.</span></div></div>
         <pre><code>sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow 22/tcp
 sudo ufw --force enable
 sudo ufw status verbose</code></pre>
         <details class="term">
-          <summary>💡 Why both "Postgres bound to localhost" AND "firewall blocks 5432"?</summary>
+          <summary>💡 <span class="en">Why both "Postgres bound to localhost" AND "firewall blocks 5432"?</span><span class="vi">Tại sao cần cả hai: "Postgres bind localhost" VÀ "tường lửa chặn 5432"?</span></summary>
           <div class="body">
-            <p><strong>Defense in depth.</strong> Two layers, each independent:</p>
-            <ul>
-              <li>If a future config change accidentally re-binds Postgres to <code>0.0.0.0</code>, the firewall still blocks it.</li>
-              <li>If the firewall is misconfigured, the bind setting still keeps it private.</li>
-            </ul>
-            <p>One layer alone is fragile. Both layers together is robust.</p>
-          </div>
-        </details>
-        <details class="hint">
-          <summary>💭 Hint — what about "I'm SSH'd in, will this kick me out?"</summary>
-          <div class="body">
-            <p>You added the SSH allow rule (<code>ufw allow 22/tcp</code>) before enabling the firewall, so existing SSH sessions stay alive. Multipass also uses its own networking, so even without that rule the <code>multipass shell</code> command would still work. But on a real cloud server: <strong>always allow port 22 BEFORE enabling ufw</strong>, or you'll lock yourself out.</p>
+            <p><span class="en"><strong>Defense in depth.</strong> Two independent layers: if a future config change accidentally re-binds Postgres to <code>0.0.0.0</code>, the firewall still blocks it. If the firewall is misconfigured, the bind setting keeps it private. One layer alone is fragile. Both together is robust.</span><span class="vi"><strong>Bảo vệ theo chiều sâu.</strong> Hai lớp độc lập: nếu thay đổi cấu hình trong tương lai vô tình bind lại Postgres vào <code>0.0.0.0</code>, tường lửa vẫn chặn. Nếu tường lửa bị cấu hình sai, bind setting vẫn giữ nó riêng tư. Một lớp đơn độc là mong manh. Cả hai cùng nhau là vững chắc.</span></p>
           </div>
         </details>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">5</div><div class="ex-title">Rotate the postgres password.</div></div>
-        <p>Generate something strong, set it in Postgres, store it for your app to read — never put it in shell history.</p>
+        <div class="ex-head"><div class="ex-num">5</div><div class="ex-title"><span class="en">Rotate the postgres password.</span><span class="vi">Thay đổi mật khẩu postgres.</span></div></div>
         <details class="hint">
-          <summary>💭 Hint — full sequence</summary>
+          <summary>💭 <span class="en">Hint — full sequence</span><span class="vi">Gợi ý — trình tự đầy đủ</span></summary>
           <div class="body">
-            <p>Generate a strong random password and use a here-string so it doesn't end up in your <code>~/.bash_history</code>:</p>
-            <pre><code>NEW_PW=$(openssl rand -base64 24)
+<pre><code>NEW_PW=$(openssl rand -base64 24)
 sudo -u postgres psql -c "ALTER USER postgres PASSWORD '$NEW_PW';"
 
-<span class="cmt"># Save it to ~/.pgpass (Postgres' standard credentials file)</span>
+<span class="cmt"># Lưu vào ~/.pgpass (file thông tin xác thực chuẩn của Postgres)</span>
 echo "localhost:5432:*:postgres:$NEW_PW" &gt; ~/.pgpass
-chmod 600 ~/.pgpass
-unset NEW_PW   <span class="cmt"># clear it from this shell's environment</span></code></pre>
-            <p><code>chmod 600</code> = "owner can read/write, nobody else can even read". Postgres refuses to use a <code>.pgpass</code> file with looser permissions — that's the protection.</p>
+chmod 600 ~/.pgpass   <span class="cmt"># chỉ chủ sở hữu mới đọc được</span>
+unset NEW_PW          <span class="cmt"># xóa khỏi environment của shell</span></code></pre>
+            <p><span class="en"><code>chmod 600</code> = owner can read/write, nobody else can even read. Postgres refuses to use a <code>.pgpass</code> with looser permissions.</span><span class="vi"><code>chmod 600</code> = chủ sở hữu có thể đọc/ghi, không ai khác có thể đọc. Postgres từ chối dùng <code>.pgpass</code> với quyền lỏng hơn.</span></p>
           </div>
         </details>
-        <div class="callout warn"><strong>⚠️ Tip:</strong> never type a password literally on a command line in production. It ends up in your shell history file, in process listings, and in audit logs. Use environment variables, password managers, or files with strict permissions.</div>
+        <div class="callout warn"><strong>⚠️ <span class="en">Tip:</span><span class="vi">Mẹo:</span></strong> <span class="en">Never type a password literally on a command line in production — it ends up in shell history, process listings, and audit logs.</span><span class="vi">Không bao giờ gõ mật khẩu trực tiếp trên command line trong production — nó sẽ lưu vào history shell, danh sách tiến trình và nhật ký kiểm tra.</span></div>
       </div>
 
       <div class="ex-step">
-        <div class="ex-head"><div class="ex-num">6</div><div class="ex-title">Conceptual checkpoint — write or draw.</div></div>
-        <p>In your own words (notes app, paper, anywhere — but write it), describe what happens network-wise when a packet from the public internet hits port 5432 on this VM:</p>
-        <ul>
-          <li>Before your fixes</li>
-          <li>After your fixes</li>
-        </ul>
-        <p>If you can explain both clearly, you've internalized the lesson. If you can't, that's fine — re-read the primer and try again. The act of writing it out is what builds the understanding.</p>
+        <div class="ex-head"><div class="ex-num">6</div><div class="ex-title"><span class="en">Conceptual checkpoint — write or draw.</span><span class="vi">Kiểm tra khái niệm — viết hoặc vẽ.</span></div></div>
+        <p><span class="en">In your own words, describe what happens when a packet from the internet hits port 5432 on this VM: before your fixes and after. If you can explain both clearly, you've internalized the lesson.</span><span class="vi">Bằng lời của bạn, mô tả điều gì xảy ra khi một gói tin từ internet đến cổng 5432 của VM này: trước khi sửa và sau khi sửa. Nếu bạn giải thích được cả hai rõ ràng, bạn đã hiểu sâu bài học.</span></p>
       </div>
 
       <div class="verify">
-        <div class="check-label">✅ Verify — you're done when</div>
+        <div class="check-label">✅ <span class="en">Verify — you're done when</span><span class="vi">Kiểm tra — bạn xong khi</span></div>
         <ul>
-          <li><code>sudo ss -tln | grep 5432</code> shows only <code>127.0.0.1:5432</code> (no <code>0.0.0.0</code> or <code>:::</code>)</li>
-          <li><code>sudo ufw status</code> shows active, with port 22 allowed and a default deny policy</li>
-          <li>From the host: <code>nc -zv &lt;vm-ip&gt; 5432</code> fails (timeout or refused)</li>
-          <li>From the host: <code>nc -zv &lt;vm-ip&gt; 22</code> succeeds</li>
-          <li><code>ls -l ~/.pgpass</code> shows mode <code>-rw-------</code></li>
+          <li><code>sudo ss -tln | grep 5432</code> <span class="en">shows only <code>127.0.0.1:5432</code></span><span class="vi">chỉ hiển thị <code>127.0.0.1:5432</code></span></li>
+          <li><code>sudo ufw status</code> <span class="en">shows active with default deny</span><span class="vi">hiển thị active với chính sách chặn mặc định</span></li>
+          <li><span class="en">From host:</span><span class="vi">Từ máy host:</span> <code>nc -zv &lt;vm-ip&gt; 5432</code> <span class="en">fails</span><span class="vi">thất bại</span></li>
+          <li><span class="en">From host:</span><span class="vi">Từ máy host:</span> <code>nc -zv &lt;vm-ip&gt; 22</code> <span class="en">succeeds</span><span class="vi">thành công</span></li>
+          <li><code>ls -l ~/.pgpass</code> <span class="en">shows mode <code>-rw-------</code></span><span class="vi">hiển thị quyền <code>-rw-------</code></span></li>
         </ul>
       </div>
 
-      <h4><span class="step-num">3</span>Snapshot &amp; close</h4>
+      <h4><span class="step-num">3</span><span class="en">Snapshot & close</span><span class="vi">Snapshot & đóng</span></h4>
 <pre><code>exit
 multipass stop ecotrack
 multipass snapshot ecotrack --name day-2-done</code></pre>
     </div>
 
-    <!-- ─────────────── DAYS 3–10 placeholders ─────────────── -->
+    <!-- ─────────────── PLACEHOLDERS 3–10 ─────────────── -->
     <div class="lab pending" id="lab-3">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>3</strong></div>
-        <div class="lab-title"><h3>"It works on my laptop"</h3><p>Docker · containerize the EcoTrack API and fix a broken Dockerfile</p></div>
+        <div class="lab-title"><h3><span class="en">"It works on my laptop"</span><span class="vi">"Trên máy tôi chạy bình thường"</span></h3><p>Docker</p></div>
         <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
       </div>
     </div>
     <div class="lab pending" id="lab-4">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>4</strong></div>
-        <div class="lab-title"><h3>"We're on TechCrunch. We're also down."</h3><p>Kubernetes · k3s on the same VM, scale the API to handle the spike</p></div>
+        <div class="lab-title"><h3><span class="en">"We're on TechCrunch. We're also down."</span><span class="vi">"Lên TechCrunch. Cũng đang sập."</span></h3><p>Kubernetes · k3s</p></div>
         <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
       </div>
     </div>
     <div class="lab pending" id="lab-5">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>5</strong></div>
-        <div class="lab-title"><h3>"Sara deployed to prod again"</h3><p>Helm · package the API as a chart with safe upgrade/rollback</p></div>
+        <div class="lab-title"><h3><span class="en">"Sara deployed to prod again"</span><span class="vi">"Sara lại deploy lên production"</span></h3><p>Helm</p></div>
         <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
       </div>
     </div>
     <div class="lab pending" id="lab-6">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>6</strong></div>
-        <div class="lab-title"><h3>"Investors want a security audit"</h3><p>Cloud foundations · IAM, VPC, S3 — using LocalStack inside the VM</p></div>
+        <div class="lab-title"><h3><span class="en">"Investors want a security audit"</span><span class="vi">"Nhà đầu tư muốn kiểm tra bảo mật"</span></h3><p>Cloud · LocalStack</p></div>
         <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
       </div>
     </div>
     <div class="lab pending" id="lab-7">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>7</strong></div>
-        <div class="lab-title"><h3>"I accidentally deleted staging"</h3><p>Terraform · provision against LocalStack, observe drift, modularize</p></div>
+        <div class="lab-title"><h3><span class="en">"I accidentally deleted staging"</span><span class="vi">"Tôi vô tình xóa mất staging"</span></h3><p>Terraform</p></div>
         <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
       </div>
     </div>
     <div class="lab pending" id="lab-8">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>8</strong></div>
-        <div class="lab-title"><h3>"Nobody should SSH to deploy"</h3><p>CI/CD · GitHub Actions runner inside the VM, build &amp; deploy pipeline</p></div>
+        <div class="lab-title"><h3><span class="en">"Nobody should SSH to deploy"</span><span class="vi">"Không ai nên SSH để deploy"</span></h3><p>CI/CD · GitHub Actions</p></div>
         <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
       </div>
     </div>
     <div class="lab pending" id="lab-9">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>9</strong></div>
-        <div class="lab-title"><h3>"We found out from a tweet"</h3><p>Monitoring · Prometheus + Grafana on k3s, alert before users notice</p></div>
+        <div class="lab-title"><h3><span class="en">"We found out from a tweet"</span><span class="vi">"Chúng ta biết từ một cái tweet"</span></h3><p>Monitoring · Prometheus + Grafana</p></div>
         <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
       </div>
     </div>
     <div class="lab pending" id="lab-10">
       <div class="lab-head">
         <div class="lab-num">Lab<strong>10</strong></div>
-        <div class="lab-title"><h3>"Fix it or lose the customer"</h3><p>Capstone · ship a real fix end-to-end with everything you've built</p></div>
+        <div class="lab-title"><h3><span class="en">"Fix it or lose the customer"</span><span class="vi">"Sửa ngay hoặc mất khách hàng"</span></h3><p>Capstone</p></div>
         <div class="lab-meta"><span class="meta-pill pending">coming next</span></div>
       </div>
     </div>
 
+    <!-- ── Cleanup ── -->
     <section id="cleanup">
-      <h2>Cleanup</h2>
-      <p>When you're done with the program (or want to start over):</p>
-<pre><code><span class="cmt"># Roll back to the clean snapshot</span>
+      <h2><span class="en">Cleanup</span><span class="vi">Dọn dẹp</span></h2>
+      <p><span class="en">When you're done with the program or want to start fresh:</span><span class="vi">Khi bạn hoàn thành chương trình hoặc muốn bắt đầu lại:</span></p>
+<pre><code><span class="cmt"># Khôi phục về snapshot sạch</span>
 multipass stop ecotrack
 multipass restore ecotrack.day-0-fresh
 
-<span class="cmt"># Or delete the VM entirely</span>
+<span class="cmt"># Hoặc xóa VM hoàn toàn</span>
 multipass delete ecotrack
 multipass purge
 
-<span class="cmt"># List snapshots to clean up specific ones</span>
+<span class="cmt"># Liệt kê snapshot để xóa cụ thể</span>
 multipass list --snapshots
 multipass delete ecotrack.day-1-done
 multipass purge</code></pre>
     </section>
 
     <footer>
-      <p><a href="index.html">← Home</a> · <a href="ecotrack-story-training.html">Story training</a> · <a href="roadmap.html">Roadmap</a></p>
+      <p><a href="index.html"><span class="en">← Home</span><span class="vi">← Trang chủ</span></a> · <a href="ecotrack-story-training.html"><span class="en">Story training</span><span class="vi">Câu chuyện đào tạo</span></a> · <a href="roadmap.html"><span class="en">Roadmap</span><span class="vi">Lộ trình</span></a></p>
     </footer>
 
   </main>
 </div>
 
 <script>
+  function setLang(lang) {
+    document.body.classList.toggle('lang-vi', lang === 'vi');
+    document.documentElement.lang = lang;
+    localStorage.setItem('lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.lang === lang)
+    );
+  }
+
   // OS tabs
   document.querySelectorAll('.os-tab').forEach(btn => {
     btn.addEventListener('click', () => {
       const os = btn.dataset.os;
       btn.parentElement.querySelectorAll('.os-tab').forEach(b => b.classList.toggle('active', b === btn));
-      const section = btn.closest('section');
-      section.querySelectorAll('.os-panel').forEach(p => p.classList.toggle('active', p.dataset.os === os));
+      btn.closest('section').querySelectorAll('.os-panel').forEach(p => p.classList.toggle('active', p.dataset.os === os));
     });
   });
 
@@ -1248,6 +1084,10 @@ multipass purge</code></pre>
     });
   }, { rootMargin: '-80px 0px -60% 0px' });
   targets.forEach(t => observer.observe(t));
+
+  // Init language
+  const _lang = localStorage.getItem('lang') || 'en';
+  if (_lang === 'vi') setLang('vi');
 </script>
 
 </body>

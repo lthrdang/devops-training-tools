@@ -28,8 +28,56 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 32px 16px 64px;
+    padding: 80px 16px 64px;
   }
+  .mini-topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+.lang-switch {
+    display: flex;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .lang-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.15s, color 0.15s;
+  }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .lang-btn:hover:not(.active) { background: #2e3245; color: var(--text); }
+  .vi { display: none; }
+  body.lang-vi .vi { display: inline; }
+  body.lang-vi .en { display: none; }
+  .lang-banner {
+    display: none;
+    width: 100%;
+    max-width: 640px;
+    background: linear-gradient(135deg, #1e1b4b, #312e81);
+    border: 1px solid #4338ca;
+    color: #a5b4fc;
+    padding: 9px 16px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  body.lang-vi .lang-banner { display: block; }
 
   /* ── Header ── */
   .header {
@@ -409,16 +457,53 @@
     transition: opacity 0.15s;
   }
   .start-btn:hover { opacity: 0.9; }
+
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+    padding: 0 24px;
+  }
+  .tnav-link {
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted2, #94a3b8);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .tnav-link:hover { background: var(--surface2); color: var(--text); }
+  .tnav-link.active { background: var(--surface2); color: var(--text); font-weight: 600; }
+  @media (max-width: 768px) { .topbar-nav { display: none; } }
 </style>
 </head>
 <body>
+
+<div class="mini-topbar">
+  <nav class="topbar-nav">
+    <a class="tnav-link" href="index.html">Home</a>
+    <a class="tnav-link active" href="devops-pretest.html">Pre-Assessment</a>
+    <a class="tnav-link" href="roadmap.html">Roadmap</a>
+    <a class="tnav-link" href="ecotrack-story-training.html">Story Training</a>
+    <a class="tnav-link" href="labs.html">Labs</a>
+  </nav>
+  <div class="lang-switch">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">VI</button>
+  </div>
+</div>
+
+<div class="lang-banner">🇻🇳 Bản dịch tiếng Việt đầy đủ cho trang này đang được chuẩn bị. · Full Vietnamese translation coming soon.</div>
 
 <!-- ── Welcome Screen ── -->
 <div id="welcome">
   <div class="header">
     <div class="badge">DevOps & Cloud Team</div>
     <h1>Skills Pre-Assessment</h1>
-    <p class="sub">~15 minutes · 24 questions · No pressure — this calibrates your learning path, not your worth.</p>
+    <p class="sub">~15 minutes · 26 questions · No pressure — this calibrates your learning path, not your worth.</p>
   </div>
 
   <div class="welcome-card">
@@ -802,7 +887,7 @@ function renderQuestion() {
 
   // Progress
   document.getElementById('progress-label').textContent = `Question ${current + 1} of ${total}`;
-  const pct = Math.round((current / total) * 100);
+  const pct = Math.round(((current + 1) / total) * 100);
   document.getElementById('progress-pct').textContent = pct + '%';
   document.getElementById('progress-fill').style.width = pct + '%';
 
@@ -1056,9 +1141,21 @@ function restartTest() {
   revealed = new Array(QUESTIONS.length).fill(false);
   document.getElementById('results').style.display = 'none';
   document.getElementById('results').innerHTML = '';
-  document.getElementById('quiz').style.display = 'block';
-  renderQuestion();
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('welcome').style.display = 'block';
 }
+
+function setLang(lang) {
+  document.body.classList.toggle('lang-vi', lang === 'vi');
+  document.documentElement.lang = lang;
+  localStorage.setItem('lang', lang);
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang)
+  );
+}
+const _lang = localStorage.getItem('lang') || 'en';
+if (_lang === 'vi') setLang('vi');
 </script>
+
 </body>
 </html>

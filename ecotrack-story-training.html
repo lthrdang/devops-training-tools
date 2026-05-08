@@ -60,6 +60,15 @@ body{
 .progress-summary{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);}
 .progress-mini{width:120px;height:4px;background:var(--surface3);border-radius:999px;overflow:hidden;}
 .progress-mini-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:999px;transition:width 0.4s;}
+.lang-switch{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden;flex-shrink:0;}
+.lang-btn{padding:5px 10px;font-size:12px;font-weight:700;border:none;background:none;color:var(--muted);cursor:pointer;letter-spacing:0.05em;transition:background 0.15s,color 0.15s;}
+.lang-btn.active{background:var(--accent);color:#fff;}
+.lang-btn:hover:not(.active){background:var(--surface3);color:var(--text);}
+.vi{display:none;}
+body.lang-vi .vi{display:inline;}
+body.lang-vi .en{display:none;}
+.lang-banner{display:none;background:linear-gradient(135deg,#1e1b4b,#312e81);border-bottom:1px solid #4338ca;color:#a5b4fc;padding:9px 20px;text-align:center;font-size:13px;}
+body.lang-vi .lang-banner{display:block;}
 
 /* ── Hero ── */
 .hero{
@@ -350,6 +359,27 @@ body{
   .chapter{padding-left:44px;}
   .body-section{padding:18px 20px;}
 }
+
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  padding: 0 24px;
+}
+.tnav-link {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted2, #94a3b8);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.tnav-link:hover { background: var(--surface2); color: var(--text); }
+.tnav-link.active { background: var(--surface2); color: var(--text); font-weight: 600; }
+@media (max-width: 768px) { .topbar-nav { display: none; } }
 </style>
 </head>
 <body>
@@ -363,6 +393,13 @@ body{
       <span>DevOps Story Training</span>
     </div>
   </div>
+  <nav class="topbar-nav">
+    <a class="tnav-link" href="index.html">Home</a>
+    <a class="tnav-link" href="devops-pretest.html">Pre-Assessment</a>
+    <a class="tnav-link" href="roadmap.html">Roadmap</a>
+    <a class="tnav-link active" href="ecotrack-story-training.html">Story Training</a>
+    <a class="tnav-link" href="labs.html">Labs</a>
+  </nav>
   <div class="progress-summary">
     <span id="done-count">0</span>&nbsp;/ 10 chapters
     <div class="progress-mini"><div class="progress-mini-fill" id="topbar-fill" style="width:0%"></div></div>
@@ -376,8 +413,14 @@ body{
       style="padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--muted2);font-size:12px;font-weight:600;cursor:pointer;transition:border-color 0.15s;"
       onmouseover="this.style.borderColor='#6366f1'" onmouseout="this.style.borderColor='var(--border)'">📂 Load</button>
     <input type="file" id="story-load-input" accept=".json" style="display:none" onchange="loadProgressFile(event)"/>
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">VI</button>
+    </div>
   </div>
 </div>
+
+<div class="lang-banner">🇻🇳 Bản dịch tiếng Việt đầy đủ cho trang này đang được chuẩn bị. · Full Vietnamese translation coming soon.</div>
 
 <!-- ── Hero ── -->
 <div class="hero">
@@ -1153,8 +1196,14 @@ async function saveProgressFile() {
   let existing = {};
   try { existing = JSON.parse(localStorage.getItem('ecotrack-full-progress') || '{}'); } catch {}
   const story = buildStoryProgress();
+  const existingDates = existing?.story?.chapter_dates || {};
+  const dates = {};
+  state.done.forEach(n => {
+    const key = String(n);
+    dates[key] = existingDates[key] || new Date().toISOString().split('T')[0];
+  });
   const merged = Object.assign({}, story, existing, {
-    story: story.story,
+    story: { ...story.story, chapter_dates: dates },
     last_updated: story.last_updated,
     trainee: story.trainee
   });
@@ -1183,6 +1232,8 @@ async function saveProgressFile() {
 
 function triggerLoad() { document.getElementById('story-load-input').click(); }
 
+function stripTags(s) { return String(s ?? '').replace(/<[^>]*>/g, ''); }
+
 function loadProgressFile(evt) {
   const file = evt.target.files[0]; if (!file) return;
   const reader = new FileReader();
@@ -1195,8 +1246,8 @@ function loadProgressFile(evt) {
         state.open = [];
       }
       if (d.trainee?.name) {
-        localStorage.setItem('ecotrack-trainee-name', d.trainee.name);
-        localStorage.setItem('ecotrack-start-date', d.trainee.start_date || '');
+        localStorage.setItem('ecotrack-trainee-name', stripTags(d.trainee.name));
+        localStorage.setItem('ecotrack-start-date', stripTags(d.trainee.start_date || ''));
       }
       localStorage.setItem('ecotrack-full-progress', JSON.stringify(d));
       save(); applyState();
@@ -1206,6 +1257,18 @@ function loadProgressFile(evt) {
   reader.readAsText(file);
   evt.target.value = '';
 }
+
+function setLang(lang) {
+  document.body.classList.toggle('lang-vi', lang === 'vi');
+  document.documentElement.lang = lang;
+  localStorage.setItem('lang', lang);
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang)
+  );
+}
+const _lang = localStorage.getItem('lang') || 'en';
+if (_lang === 'vi') setLang('vi');
 </script>
+
 </body>
 </html>

@@ -36,6 +36,32 @@
     line-height: 1.6;
   }
 
+  /* ── Language toggle ── */
+  .vi { display: none; }
+  body.lang-vi .vi { display: inline; }
+  body.lang-vi .en { display: none; }
+  .lang-switch {
+    display: flex;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .lang-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.15s, color 0.15s;
+  }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .lang-btn:hover:not(.active) { background: var(--surface3); color: var(--text); }
+
   /* ── Topbar ── */
   .topbar {
     background: var(--surface);
@@ -58,17 +84,7 @@
   }
   .logo h2 { font-size: 16px; font-weight: 700; }
   .logo span { font-size: 12px; color: var(--muted); }
-  .topbar-links { display: flex; gap: 8px; }
-  .topbar-links a {
-    color: var(--muted2);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 6px 12px;
-    border-radius: 6px;
-    transition: background 0.15s, color 0.15s;
-  }
-  .topbar-links a:hover { background: var(--surface2); color: var(--text); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
 
   /* ── Wrap ── */
   .wrap { max-width: 1100px; margin: 0 auto; padding: 48px 24px 80px; }
@@ -97,19 +113,8 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .hero .tagline {
-    font-size: 18px;
-    color: var(--muted2);
-    max-width: 640px;
-    margin: 0 auto 8px;
-  }
-  .hero .sub {
-    font-size: 14px;
-    color: var(--muted);
-    max-width: 640px;
-    margin: 0 auto;
-    font-style: italic;
-  }
+  .hero .tagline { font-size: 18px; color: var(--muted2); max-width: 640px; margin: 0 auto 8px; }
+  .hero .sub { font-size: 14px; color: var(--muted); max-width: 640px; margin: 0 auto; font-style: italic; }
 
   /* ── Flow strip ── */
   .flow {
@@ -126,22 +131,17 @@
   .flow-step:not(:last-child)::after {
     content: '→';
     position: absolute;
-    right: -10px;
-    top: 24px;
-    color: var(--muted);
-    font-size: 18px;
+    right: -10px; top: 24px;
+    color: var(--muted); font-size: 18px;
   }
   .flow-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-flex; align-items: center; justify-content: center;
     width: 36px; height: 36px;
     border-radius: 50%;
     background: var(--surface2);
     border: 1.5px solid var(--accent);
     color: var(--accent2);
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: 700; font-size: 15px;
     margin-bottom: 10px;
   }
   .flow-step h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
@@ -154,11 +154,7 @@
   .section-header p { color: var(--muted); font-size: 14px; }
 
   /* ── Tool cards ── */
-  .tools {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
-  }
+  .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
   .tool {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -167,8 +163,7 @@
     text-decoration: none;
     color: inherit;
     transition: border-color 0.15s, transform 0.15s;
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
   }
   .tool:hover { border-color: var(--accent); transform: translateY(-2px); }
   .tool-icon {
@@ -176,132 +171,95 @@
     border-radius: 10px;
     background: var(--surface2);
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    margin-bottom: 14px;
+    font-size: 22px; margin-bottom: 14px;
   }
   .tool-tag {
     display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 999px;
-    margin-bottom: 10px;
-    width: fit-content;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 999px;
+    margin-bottom: 10px; width: fit-content;
   }
   .tool-tag.trainee { background: var(--green-dim); color: var(--green); }
-  .tool-tag.trainer { background: var(--blue-dim); color: var(--blue); }
   .tool-tag.reference { background: var(--surface3); color: var(--muted2); }
   .tool h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
   .tool p { color: var(--muted2); font-size: 13px; line-height: 1.55; flex: 1; }
-  .tool-cta {
-    margin-top: 16px;
-    color: var(--accent2);
-    font-size: 13px;
-    font-weight: 600;
-  }
+  .tool-cta { margin-top: 16px; color: var(--accent2); font-size: 13px; font-weight: 600; }
 
   /* ── Story chapters ── */
-  .chapters {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 10px;
-  }
+  .chapters { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
   .chapter {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    display: flex; align-items: center; gap: 12px;
   }
   .chapter-day {
-    flex-shrink: 0;
-    width: 38px; height: 38px;
-    border-radius: 8px;
-    background: var(--surface2);
+    flex-shrink: 0; width: 38px; height: 38px;
+    border-radius: 8px; background: var(--surface2);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    font-size: 10px;
-    color: var(--muted);
-    line-height: 1;
+    font-size: 10px; color: var(--muted); line-height: 1;
   }
   .chapter-day strong { font-size: 14px; color: var(--text); margin-top: 2px; }
   .chapter-body { flex: 1; min-width: 0; }
   .chapter-incident {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
+    font-size: 13px; font-weight: 500; color: var(--text);
     margin-bottom: 2px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .chapter-skill { font-size: 11px; color: var(--accent2); font-weight: 600; }
   .chapter.capstone { border-color: var(--accent); background: linear-gradient(135deg, var(--surface), var(--surface2)); }
 
   /* ── Stack table ── */
-  .stack {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
+  .stack { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
   .stack-row {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
+    display: grid; grid-template-columns: 200px 1fr;
+    padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 14px;
   }
   .stack-row:last-child { border-bottom: none; }
   .stack-row .area { font-weight: 600; color: var(--accent2); }
   .stack-row .tools-list { color: var(--muted2); }
 
   /* ── AI rules ── */
-  .ai-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .ai-col {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px;
-  }
+  .ai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ai-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
   .ai-col.do { border-left: 3px solid var(--green); }
   .ai-col.dont { border-left: 3px solid var(--red); }
-  .ai-col h4 {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
+  .ai-col h4 { font-size: 14px; font-weight: 700; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
   .ai-col.do h4 { color: var(--green); }
   .ai-col.dont h4 { color: var(--red); }
   .ai-col ul { list-style: none; }
-  .ai-col li {
-    padding: 8px 0;
-    font-size: 14px;
-    color: var(--muted2);
-    border-bottom: 1px solid var(--border);
-  }
+  .ai-col li { padding: 8px 0; font-size: 14px; color: var(--muted2); border-bottom: 1px solid var(--border); }
   .ai-col li:last-child { border-bottom: none; }
 
   /* ── Footer ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 0;
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-  }
+  footer { border-top: 1px solid var(--border); padding: 32px 0; text-align: center; color: var(--muted); font-size: 13px; }
   footer a { color: var(--accent2); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
+
+  /* ── Topbar nav ── */
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+    padding: 0 24px;
+  }
+  .tnav-link {
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted2, #94a3b8);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .tnav-link:hover { background: var(--surface2); color: var(--text); }
+  .tnav-link.active { background: var(--surface2); color: var(--text); font-weight: 600; }
+  @media (max-width: 768px) { .topbar-nav { display: none; } }
 
   /* ── Responsive ── */
   @media (max-width: 720px) {
@@ -311,7 +269,6 @@
     .ai-grid { grid-template-columns: 1fr; }
     .stack-row { grid-template-columns: 1fr; gap: 4px; }
     .topbar { padding: 14px 16px; }
-    .topbar-links { display: none; }
   }
 </style>
 </head>
@@ -322,86 +279,118 @@
     <div class="logo-icon">⚡</div>
     <div>
       <h2>DevOps & Cloud Training</h2>
-      <span>New member onboarding</span>
+      <span class="en">New member onboarding</span>
+      <span class="vi">Đào tạo nhân viên mới</span>
     </div>
   </div>
-  <nav class="topbar-links">
-    <a href="#tools">Tools</a>
-    <a href="#chapters">Story</a>
-    <a href="#stack">Stack</a>
-    <a href="#ai">AI Rules</a>
+  <nav class="topbar-nav">
+    <a class="tnav-link active" href="index.html">Home</a>
+    <a class="tnav-link" href="devops-pretest.html">Pre-Assessment</a>
+    <a class="tnav-link" href="roadmap.html">Roadmap</a>
+    <a class="tnav-link" href="ecotrack-story-training.html">Story Training</a>
+    <a class="tnav-link" href="labs.html">Labs</a>
   </nav>
+  <div class="topbar-right">
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">VI</button>
+    </div>
+  </div>
 </div>
 
 <div class="wrap">
 
   <div class="hero">
-    <div class="badge">2-Week Sprint · Practice First</div>
-    <h1>From day one to first real task.</h1>
-    <p class="tagline">A complete onboarding system for new DevOps and Cloud team members — pre-assessment, story-driven labs, and a final capstone evaluation.</p>
-    <p class="sub">Practice over theory. Doing over memorizing. AI as a tool, not a shortcut.</p>
+    <div class="badge">
+      <span class="en">2-Week Sprint · Practice First</span>
+      <span class="vi">Sprint 2 tuần · Thực hành là ưu tiên</span>
+    </div>
+    <h1>
+      <span class="en">From day one to first real task.</span>
+      <span class="vi">Từ ngày đầu tiên đến nhiệm vụ thực sự.</span>
+    </h1>
+    <p class="tagline">
+      <span class="en">A complete onboarding system for new DevOps and Cloud team members — pre-assessment, story-driven labs, and a final capstone evaluation.</span>
+      <span class="vi">Hệ thống đào tạo toàn diện cho thành viên DevOps & Cloud mới — kiểm tra đầu vào, bài học qua câu chuyện thực tế và đánh giá tổng kết.</span>
+    </p>
+    <p class="sub">
+      <span class="en">Practice over theory. Doing over memorizing. AI as a tool, not a shortcut.</span>
+      <span class="vi">Thực hành hơn lý thuyết. Làm hơn ghi nhớ. AI là công cụ, không phải lối tắt.</span>
+    </p>
   </div>
 
   <div class="flow">
     <div class="flow-step">
       <div class="flow-num">1</div>
-      <h4>Pre-test</h4>
-      <p>Find out where to start</p>
+      <h4><span class="en">Pre-test</span><span class="vi">Kiểm tra đầu vào</span></h4>
+      <p><span class="en">Find out where to start</span><span class="vi">Xác định điểm xuất phát</span></p>
     </div>
     <div class="flow-step">
       <div class="flow-num">2</div>
-      <h4>EcoTrack Story</h4>
-      <p>Solve one problem per day</p>
+      <h4><span class="en">EcoTrack Story</span><span class="vi">EcoTrack Story</span></h4>
+      <p><span class="en">Solve one problem per day</span><span class="vi">Giải một vấn đề mỗi ngày</span></p>
     </div>
     <div class="flow-step">
       <div class="flow-num">3</div>
-      <h4>Roadmap</h4>
-      <p>Reference alongside chapters</p>
+      <h4><span class="en">Roadmap</span><span class="vi">Lộ trình</span></h4>
+      <p><span class="en">Reference alongside chapters</span><span class="vi">Tài liệu tham khảo song song</span></p>
     </div>
     <div class="flow-step">
       <div class="flow-num">4</div>
-      <h4>Capstone</h4>
-      <p>Trainer assessment at Day 10</p>
+      <h4><span class="en">Capstone</span><span class="vi">Bài tổng kết</span></h4>
+      <p><span class="en">Trainer assessment at Day 10</span><span class="vi">Huấn luyện viên đánh giá ngày 10</span></p>
     </div>
   </div>
 
   <section id="tools">
     <div class="section-header">
-      <h2>The Tools</h2>
-      <p>Each is a self-contained app — open it directly in your browser.</p>
+      <h2><span class="en">The Tools</span><span class="vi">Các công cụ</span></h2>
+      <p><span class="en">Each is a self-contained app — open it directly in your browser.</span><span class="vi">Mỗi công cụ là ứng dụng độc lập — mở thẳng trong trình duyệt.</span></p>
     </div>
     <div class="tools">
 
       <a class="tool" href="devops-pretest.html">
         <div class="tool-icon">🚦</div>
-        <span class="tool-tag trainee">Trainee · Step 1</span>
-        <h3>Pre-Assessment</h3>
-        <p>24 scenario-based questions across 8 skill areas (~15 min). Tells you which days to do in full, skim, or skip.</p>
-        <div class="tool-cta">Start the pre-test →</div>
+        <span class="tool-tag trainee"><span class="en">Trainee · Step 1</span><span class="vi">Học viên · Bước 1</span></span>
+        <h3><span class="en">Pre-Assessment</span><span class="vi">Kiểm tra đầu vào</span></h3>
+        <p>
+          <span class="en">26 scenario-based questions across 8 skill areas (~15 min). Tells you which days to do in full, skim, or skip.</span>
+          <span class="vi">26 câu hỏi tình huống trên 8 lĩnh vực kỹ năng (~15 phút). Cho biết ngày nào học đầy đủ, lướt qua hoặc bỏ qua.</span>
+        </p>
+        <div class="tool-cta"><span class="en">Start the pre-test →</span><span class="vi">Bắt đầu kiểm tra →</span></div>
       </a>
 
       <a class="tool" href="ecotrack-story-training.html">
         <div class="tool-icon">🌿</div>
-        <span class="tool-tag trainee">Trainee · Step 2</span>
-        <h3>EcoTrack Story Training</h3>
-        <p>You've joined a 4-person startup with 7 things wrong with their stack. Fix one per day, over 10 days.</p>
-        <div class="tool-cta">Open the story →</div>
+        <span class="tool-tag trainee"><span class="en">Trainee · Step 2</span><span class="vi">Học viên · Bước 2</span></span>
+        <h3><span class="en">EcoTrack Story Training</span><span class="vi">EcoTrack Story Training</span></h3>
+        <p>
+          <span class="en">You've joined a 4-person startup with 7 things wrong with their stack. Fix one per day, over 10 days.</span>
+          <span class="vi">Bạn vừa gia nhập startup 4 người với 7 vấn đề trong hệ thống. Sửa một vấn đề mỗi ngày, trong 10 ngày.</span>
+        </p>
+        <div class="tool-cta"><span class="en">Open the story →</span><span class="vi">Mở câu chuyện →</span></div>
       </a>
 
       <a class="tool" href="labs.html">
         <div class="tool-icon">🧪</div>
-        <span class="tool-tag trainee">Trainee · Hands-on</span>
-        <h3>Hands-on Labs</h3>
-        <p>One lab per chapter (~30–60 min) on a local Ubuntu VM via Multipass. Each comes with a setup script that recreates the chapter's broken state.</p>
-        <div class="tool-cta">Set up the VM →</div>
+        <span class="tool-tag trainee"><span class="en">Trainee · Hands-on</span><span class="vi">Học viên · Thực hành</span></span>
+        <h3><span class="en">Hands-on Labs</span><span class="vi">Bài thực hành</span></h3>
+        <p>
+          <span class="en">One lab per chapter (~30–60 min) on a local Ubuntu VM via Multipass. Each comes with a setup script that recreates the chapter's broken state.</span>
+          <span class="vi">Một bài thực hành mỗi chương (~30–60 phút) trên máy ảo Ubuntu qua Multipass. Mỗi bài có script dựng lại tình huống hỏng hóc từ câu chuyện.</span>
+        </p>
+        <div class="tool-cta"><span class="en">Set up the VM →</span><span class="vi">Cài đặt máy ảo →</span></div>
       </a>
 
       <a class="tool" href="roadmap.html">
         <div class="tool-icon">📋</div>
-        <span class="tool-tag reference">Reference</span>
-        <h3>Day-by-Day Roadmap</h3>
-        <p>Theory minimum, lab tasks, AI prompts, and checkpoint questions for each of the 10 days.</p>
-        <div class="tool-cta">Read the roadmap →</div>
+        <span class="tool-tag reference"><span class="en">Reference</span><span class="vi">Tham khảo</span></span>
+        <h3><span class="en">Day-by-Day Roadmap</span><span class="vi">Lộ trình từng ngày</span></h3>
+        <p>
+          <span class="en">Theory minimum, lab tasks, AI prompts, and checkpoint questions for each of the 10 days.</span>
+          <span class="vi">Lý thuyết tối thiểu, nhiệm vụ thực hành, gợi ý AI và câu hỏi kiểm tra cho từng ngày.</span>
+        </p>
+        <div class="tool-cta"><span class="en">Read the roadmap →</span><span class="vi">Đọc lộ trình →</span></div>
       </a>
 
     </div>
@@ -409,75 +398,158 @@
 
   <section id="chapters">
     <div class="section-header">
-      <h2>The 10-Day Story</h2>
-      <p>Each chapter is a real incident triggered by the previous one. The skills you learn on Day 3 are what you need to solve Day 4.</p>
+      <h2><span class="en">The 10-Day Story</span><span class="vi">Câu chuyện 10 ngày</span></h2>
+      <p>
+        <span class="en">Each chapter is a real incident triggered by the previous one. The skills you learn on Day 3 are what you need to solve Day 4.</span>
+        <span class="vi">Mỗi chương là một sự cố thực sự được gây ra bởi chương trước. Kỹ năng học ở Ngày 3 chính là giải pháp cho Ngày 4.</span>
+      </p>
     </div>
     <div class="chapters">
-      <div class="chapter"><div class="chapter-day">Day<strong>1</strong></div><div class="chapter-body"><div class="chapter-incident">"The server keeps crashing"</div><div class="chapter-skill">Linux & Shell</div></div></div>
-      <div class="chapter"><div class="chapter-day">Day<strong>2</strong></div><div class="chapter-body"><div class="chapter-incident">"A researcher found our open DB"</div><div class="chapter-skill">Networking</div></div></div>
-      <div class="chapter"><div class="chapter-day">Day<strong>3</strong></div><div class="chapter-body"><div class="chapter-incident">"It works on my laptop"</div><div class="chapter-skill">Docker</div></div></div>
-      <div class="chapter"><div class="chapter-day">Day<strong>4</strong></div><div class="chapter-body"><div class="chapter-incident">"On TechCrunch. Also down."</div><div class="chapter-skill">Kubernetes</div></div></div>
-      <div class="chapter"><div class="chapter-day">Day<strong>5</strong></div><div class="chapter-body"><div class="chapter-incident">"Sara deployed to prod again"</div><div class="chapter-skill">Helm + K8s Advanced</div></div></div>
-      <div class="chapter"><div class="chapter-day">Day<strong>6</strong></div><div class="chapter-body"><div class="chapter-incident">"Investors want a security audit"</div><div class="chapter-skill">Cloud Foundations</div></div></div>
-      <div class="chapter"><div class="chapter-day">Day<strong>7</strong></div><div class="chapter-body"><div class="chapter-incident">"I accidentally deleted staging"</div><div class="chapter-skill">Terraform / IaC</div></div></div>
-      <div class="chapter"><div class="chapter-day">Day<strong>8</strong></div><div class="chapter-body"><div class="chapter-incident">"Nobody should SSH to deploy"</div><div class="chapter-skill">CI/CD Pipeline</div></div></div>
-      <div class="chapter"><div class="chapter-day">Day<strong>9</strong></div><div class="chapter-body"><div class="chapter-incident">"We found out from a tweet"</div><div class="chapter-skill">Monitoring & Alerting</div></div></div>
-      <div class="chapter capstone"><div class="chapter-day">Day<strong>10</strong></div><div class="chapter-body"><div class="chapter-incident">"Fix it or lose the customer"</div><div class="chapter-skill">Capstone</div></div></div>
+      <div class="chapter">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>1</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"The server keeps crashing"</span><span class="vi">"Máy chủ cứ bị sập"</span></div>
+          <div class="chapter-skill">Linux & Shell</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>2</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"A researcher found our open DB"</span><span class="vi">"Nhà nghiên cứu phát hiện CSDL bị mở"</span></div>
+          <div class="chapter-skill">Networking</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>3</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"It works on my laptop"</span><span class="vi">"Trên máy tôi chạy bình thường"</span></div>
+          <div class="chapter-skill">Docker</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>4</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"On TechCrunch. Also down."</span><span class="vi">"Lên TechCrunch. Cũng đang sập."</span></div>
+          <div class="chapter-skill">Kubernetes</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>5</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"Sara deployed to prod again"</span><span class="vi">"Sara lại deploy lên production"</span></div>
+          <div class="chapter-skill">Helm + K8s Advanced</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>6</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"Investors want a security audit"</span><span class="vi">"Nhà đầu tư muốn kiểm tra bảo mật"</span></div>
+          <div class="chapter-skill"><span class="en">Cloud Foundations</span><span class="vi">Nền tảng Cloud</span></div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>7</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"I accidentally deleted staging"</span><span class="vi">"Tôi vô tình xóa mất staging"</span></div>
+          <div class="chapter-skill">Terraform / IaC</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>8</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"Nobody should SSH to deploy"</span><span class="vi">"Không ai nên SSH để deploy"</span></div>
+          <div class="chapter-skill">CI/CD Pipeline</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>9</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"We found out from a tweet"</span><span class="vi">"Chúng ta biết từ một cái tweet"</span></div>
+          <div class="chapter-skill"><span class="en">Monitoring & Alerting</span><span class="vi">Giám sát & Cảnh báo</span></div>
+        </div>
+      </div>
+      <div class="chapter capstone">
+        <div class="chapter-day"><span class="en">Day</span><span class="vi">Ngày</span><strong>10</strong></div>
+        <div class="chapter-body">
+          <div class="chapter-incident"><span class="en">"Fix it or lose the customer"</span><span class="vi">"Sửa ngay hoặc mất khách hàng"</span></div>
+          <div class="chapter-skill"><span class="en">Capstone</span><span class="vi">Bài tổng kết</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="stack">
     <div class="section-header">
-      <h2>The Stack Covered</h2>
-      <p>Everything a DevOps engineer touches in their first quarter.</p>
+      <h2><span class="en">The Stack Covered</span><span class="vi">Công nghệ được học</span></h2>
+      <p><span class="en">Everything a DevOps engineer touches in their first quarter.</span><span class="vi">Tất cả công nghệ một kỹ sư DevOps sử dụng trong quý đầu tiên.</span></p>
     </div>
     <div class="stack">
-      <div class="stack-row"><span class="area">OS & Shell</span><span class="tools-list">Linux (Ubuntu), Bash</span></div>
-      <div class="stack-row"><span class="area">Containers</span><span class="tools-list">Docker, Docker Compose</span></div>
-      <div class="stack-row"><span class="area">Orchestration</span><span class="tools-list">Kubernetes, Helm</span></div>
+      <div class="stack-row"><span class="area"><span class="en">OS & Shell</span><span class="vi">Hệ điều hành & Shell</span></span><span class="tools-list">Linux (Ubuntu), Bash</span></div>
+      <div class="stack-row"><span class="area"><span class="en">Containers</span><span class="vi">Container</span></span><span class="tools-list">Docker, Docker Compose</span></div>
+      <div class="stack-row"><span class="area"><span class="en">Orchestration</span><span class="vi">Điều phối</span></span><span class="tools-list">Kubernetes, Helm</span></div>
       <div class="stack-row"><span class="area">Cloud</span><span class="tools-list">AWS + GCP / Azure</span></div>
-      <div class="stack-row"><span class="area">IaC</span><span class="tools-list">Terraform</span></div>
-      <div class="stack-row"><span class="area">Monitoring</span><span class="tools-list">Prometheus, Grafana, CloudWatch</span></div>
+      <div class="stack-row"><span class="area"><span class="en">IaC</span><span class="vi">Hạ tầng dưới dạng mã</span></span><span class="tools-list">Terraform</span></div>
+      <div class="stack-row"><span class="area"><span class="en">Monitoring</span><span class="vi">Giám sát</span></span><span class="tools-list">Prometheus, Grafana, CloudWatch</span></div>
       <div class="stack-row"><span class="area">CI/CD</span><span class="tools-list">GitHub Actions</span></div>
-      <div class="stack-row"><span class="area">Problem-Solving</span><span class="tools-list">Debugging mindset, incident analysis</span></div>
+      <div class="stack-row"><span class="area"><span class="en">Problem-Solving</span><span class="vi">Tư duy giải quyết vấn đề</span></span><span class="tools-list"><span class="en">Debugging mindset, incident analysis</span><span class="vi">Tư duy debug, phân tích sự cố</span></span></div>
     </div>
   </section>
 
   <section id="ai">
     <div class="section-header">
-      <h2>AI Usage Ground Rules</h2>
-      <p>Use AI throughout — but as a senior engineer who asks you guiding questions, not as a solution vending machine.</p>
+      <h2><span class="en">AI Usage Ground Rules</span><span class="vi">Quy tắc sử dụng AI</span></h2>
+      <p>
+        <span class="en">Use AI throughout — but as a senior engineer who asks you guiding questions, not as a solution vending machine.</span>
+        <span class="vi">Dùng AI xuyên suốt — nhưng như một kỹ sư senior hỏi bạn câu hỏi định hướng, không phải máy bán giải pháp.</span>
+      </p>
     </div>
     <div class="ai-grid">
       <div class="ai-col do">
-        <h4>✓ Use AI to</h4>
+        <h4>✓ <span class="en">Use AI to</span><span class="vi">Dùng AI để</span></h4>
         <ul>
-          <li>Explain an error you don't understand</li>
-          <li>Review your code and explain the issues</li>
-          <li>Quiz you at the end of a day</li>
-          <li>Simulate an incident for you to diagnose</li>
-          <li>Generate boilerplate you then modify</li>
+          <li><span class="en">Explain an error you don't understand</span><span class="vi">Giải thích lỗi bạn chưa hiểu</span></li>
+          <li><span class="en">Review your code and explain the issues</span><span class="vi">Review code và giải thích vấn đề</span></li>
+          <li><span class="en">Quiz you at the end of a day</span><span class="vi">Kiểm tra kiến thức cuối ngày</span></li>
+          <li><span class="en">Simulate an incident for you to diagnose</span><span class="vi">Mô phỏng sự cố để bạn chẩn đoán</span></li>
+          <li><span class="en">Generate boilerplate you then modify</span><span class="vi">Tạo boilerplate để bạn chỉnh sửa tiếp</span></li>
         </ul>
       </div>
       <div class="ai-col dont">
-        <h4>✗ Don't use AI to</h4>
+        <h4>✗ <span class="en">Don't use AI to</span><span class="vi">Không dùng AI để</span></h4>
         <ul>
-          <li>Get the answer without understanding it</li>
-          <li>Write code you can't explain line by line</li>
-          <li>Skip the hands-on lab</li>
-          <li>Do the diagnosis for you</li>
-          <li>Generate and submit without reading</li>
+          <li><span class="en">Get the answer without understanding it</span><span class="vi">Lấy đáp án mà không hiểu tại sao</span></li>
+          <li><span class="en">Write code you can't explain line by line</span><span class="vi">Viết code không thể giải thích từng dòng</span></li>
+          <li><span class="en">Skip the hands-on lab</span><span class="vi">Bỏ qua bài thực hành</span></li>
+          <li><span class="en">Do the diagnosis for you</span><span class="vi">Chẩn đoán vấn đề thay bạn</span></li>
+          <li><span class="en">Generate and submit without reading</span><span class="vi">Tạo ra rồi nộp mà không đọc</span></li>
         </ul>
       </div>
     </div>
   </section>
 
   <footer>
-    <p>The 10-minute rule: struggle alone for 10 minutes before asking. Productive struggle builds the instinct.</p>
-    <p style="margin-top:8px;"><a href="README.md">README</a> · <a href="trainer/">Trainer console</a></p>
+    <p>
+      <span class="en">The 10-minute rule: struggle alone for 10 minutes before asking. Productive struggle builds the instinct.</span>
+      <span class="vi">Quy tắc 10 phút: tự mình vật lộn 10 phút trước khi hỏi. Sự vật lộn có mục đích xây dựng bản năng.</span>
+    </p>
+    <p style="margin-top:8px;"><a href="README.md">README</a> · <a href="trainer/"><span class="en">Trainer console</span><span class="vi">Bảng huấn luyện viên</span></a></p>
   </footer>
 
 </div>
+
+<script>
+  function setLang(lang) {
+    document.body.classList.toggle('lang-vi', lang === 'vi');
+    document.documentElement.lang = lang;
+    localStorage.setItem('lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.lang === lang)
+    );
+  }
+  // Apply saved language on load
+  const _lang = localStorage.getItem('lang') || 'en';
+  if (_lang === 'vi') setLang('vi');
+</script>
 
 </body>
 </html>

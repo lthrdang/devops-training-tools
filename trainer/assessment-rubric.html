@@ -299,6 +299,27 @@ textarea:focus { outline: none; border-color: var(--accent); }
   content: ''; flex: 1; height: 1px; background: var(--border);
 }
 
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  padding: 0 24px;
+}
+.tnav-link {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted2, #94a3b8);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.tnav-link:hover { background: var(--surface2); color: var(--text); }
+.tnav-link.active { background: var(--surface2); color: var(--text); font-weight: 600; }
+@media (max-width: 768px) { .topbar-nav { display: none; } }
+
 /* Responsive */
 @media (max-width: 640px) {
   .info-grid { grid-template-columns: 1fr; }
@@ -320,10 +341,17 @@ textarea:focus { outline: none; border-color: var(--accent); }
       <span>DevOps & Cloud · Day 10 Capstone</span>
     </div>
   </div>
+  <nav class="topbar-nav">
+    <a class="tnav-link" href="index.html">Trainer Home</a>
+    <a class="tnav-link" href="dashboard.html">Dashboard</a>
+    <a class="tnav-link active" href="assessment-rubric.html">Assessment Rubric</a>
+  </nav>
   <div class="topbar-actions">
     <button class="btn-sm btn-outline" onclick="resetAll()">↺ Reset</button>
+    <button class="btn-sm btn-outline" onclick="exportToJson()">💾 Export to JSON</button>
     <button class="btn-sm btn-primary" onclick="window.print()">🖨 Print / Export PDF</button>
   </div>
+  <input type="file" id="export-progress-input" accept=".json" style="display:none" onchange="mergeAndDownload(event)"/>
 </div>
 
 <div class="wrap">
@@ -1119,6 +1147,78 @@ document.querySelectorAll('.rating-btn').forEach(btn => {
   }
 });
 
+function exportToJson() {
+  document.getElementById('export-progress-input').click();
+}
+
+function mergeAndDownload(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const progress = JSON.parse(e.target.result);
+
+      // Build section_scores from rubric criteria scores
+      const sectionScores = {};
+      Object.entries(CRITERIA).forEach(([area, crits]) => {
+        let areaScore = 0;
+        crits.forEach(c => {
+          const key = area + '.' + c;
+          if (scores[key] !== undefined) areaScore += scores[key];
+        });
+        sectionScores[area] = areaScore;
+      });
+
+      // Calculate totals
+      let totalScore = 0, totalMax = 0;
+      Object.entries(CRITERIA).forEach(([area, crits]) => {
+        totalScore += sectionScores[area];
+        totalMax += crits.length * 3;
+      });
+      const scorePct = totalMax > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
+
+      // Read fields and notes
+      const traineeName = document.getElementById('field-name')?.value || '';
+      const trainerName = document.getElementById('field-trainer')?.value || '';
+      const assessDate = document.getElementById('field-date')?.value || new Date().toISOString().split('T')[0];
+      const focusNotes = document.getElementById('note-focus')?.value || '';
+      const overallNotes = document.getElementById('note-overall')?.value || '';
+      const notes = [focusNotes, overallNotes].filter(Boolean).join('\n\n');
+
+      // Merge into progress JSON
+      progress.assessment = {
+        completed: true,
+        date: assessDate,
+        trainer: trainerName,
+        total_score: totalScore,
+        total_max: totalMax,
+        score_pct: scorePct,
+        recommendation: recommendation || null,
+        section_scores: sectionScores,
+        notes: notes
+      };
+      progress.last_updated = new Date().toISOString();
+      if (traineeName && !progress.trainee?.name) {
+        progress.trainee = progress.trainee || {};
+        progress.trainee.name = traineeName;
+      }
+
+      const name = (progress.trainee?.name || 'trainee').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const filename = name + '.json';
+      const json = JSON.stringify(progress, null, 2);
+      const a = document.createElement('a');
+      a.href = 'data:application/json,' + encodeURIComponent(json);
+      a.download = filename;
+      a.click();
+    } catch {
+      alert('Could not read progress file — make sure it is a valid progress JSON.');
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
 // Set today's date as default
 const dateField = document.getElementById('field-date');
 if (dateField && !dateField.value) {
@@ -1127,5 +1227,8 @@ if (dateField && !dateField.value) {
 
 load();
 </script>
+
+</div>
+
 </body>
 </html>
